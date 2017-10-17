@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Matcha";
+    src: url('/font/Enlighten your Destiny.ttf');
+}
+
+#header {
+    text-align: center;
+}
+
+#logo {
+    color: #900C3F;
+    text-decoration: none; 
+}
+
+@media (max-width: 768px) {
+    #logo {
+        font-family: Matcha;
+        font-size: 80px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    #logo {
+        font-family: Matcha;
+        font-size: 80px;
+    }
+}
+
+@media (min-width: 993px) and (max-width: 1200px) {
+    #logo {
+        font-family: Matcha;
+        font-size: 100px;
+    }
+}
+
+@media (min-width: 1201px) {
+    #logo {
+        font-family: Matcha;
+        font-size: 130px;
+    }
+}

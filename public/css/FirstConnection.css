@@ -1,0 +1,28 @@
+.border {
+    border: 1px solid;
+    border-radius: 5px;
+    padding-bottom: 20px;
+}
+
+#test {
+	height: 200px;
+}
+
+#profile {
+    width: 100px;
+    height: 100px;
+}
+
+#formtitle {
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+#formpad {
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #900C3F;
+    border-color: #900C3F;
+}

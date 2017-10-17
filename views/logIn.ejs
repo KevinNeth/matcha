@@ -1,0 +1,45 @@
+<% include perm/BigHeader %>
+
+<div class="container">
+ 	<% if (errors) { %>
+ 		<% for(var i=0; i < errors.length; i++) { %>
+ 			<div class="alert alert-danger">&nbsp;<%- errors[i]['msg'] %></div>
+ 		<% } %>
+ 	<% } %>
+</div>
+<div class="container">
+ 	<% if (success) { %>
+ 		<% for(var i=0; i < success.length; i++) { %>
+ 			<div class="alert alert-success">&nbsp;<%- success[i]['msg'] %></div>
+ 		<% } %>
+ 	<% } %>
+</div>
+
+<div class="container" id="divlog">
+    <div class="row">
+        <div class="form-group col-xs-6 col-xs-offset-3 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center border">
+            <form action="/logIn/submit" method="post">
+                <h1 id="formtitle">Connect to find love !</h1>
+                <div class="form-group">
+                    <label for="">Login</label>
+                    <input type="login" class="form-control" name="login" placeholder="Enter login" required>
+                </div>
+                <div class="form-group">
+                    <label for="">Password</label>
+                    <input name="password" type="password" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Connect</button>
+            </form>
+            <div style="text-align: right;">
+                <a href="/forgotpass">Forgot your password?</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-xs-6 col-xs-offset-3 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center border2">
+            <p class="changeform">Don't have an account? <a href="/">Sign Up</a></p>
+        </div>
+    </div>
+</div>
+
+<% include perm/Footer %>

@@ -1,0 +1,25 @@
+<% include perm/BigHeader %>
+
+<div class="container">
+   <% if (errors) { %>
+	   <% for(var i=0; i < errors.length; i++) { %>
+		   <div class="alert alert-danger">&nbsp;<%- errors[i]['msg'] %></div>
+	   <% } %>
+   <% } %>
+</div>
+<div class="container" id="divforgot">
+	<div class="row">
+		<div class="form-group col-xs-6 col-xs-offset-3 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center border">
+			<form action='/reset/<%= id %>/submit' method='post'>
+				<h1 id="formtitle">Enter new password</h1>
+				<div class="form-group">
+					<label for="">New password</label>
+					<input type="password" class="form-control" name="password" placeholder="Enter new password" required>
+				</div>
+				<button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<% include perm/Footer %>

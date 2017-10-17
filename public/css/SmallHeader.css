@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "Matcha";
+    src: url('/font/Enlighten your Destiny.ttf');
+}
+
+#logo {
+	font-family: Matcha;
+	font-size: 50px;
+	color: white;
+	padding: 0px 50px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.bg-light {
+	background-color: #900C3F!important;
+}
+
+.nav-link {
+	color: white!important;
+}
+
+.btn-outline-success {
+	color: #ffe484;
+	border-color: #ffe484;
+}
+
+.btn-outline-success:hover {
+	color: #900C3F;
+    background-color: #ffe484;
+    border-color: #ffe484;
+}
+
+#navbor {
+	margin-bottom: 40px;
+}

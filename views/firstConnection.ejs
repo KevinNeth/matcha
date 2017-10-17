@@ -1,0 +1,42 @@
+<% include perm/SmallHeader %>
+
+<!-- FIRST NAME -->
+
+<!-- LAST NAME -->
+
+<!-- BIO -->
+
+<!-- LIST OF INTEREST -->
+
+<!-- PICTURE -->
+
+<!-- GEOLOCALISATION -->
+
+<div class="container" id="divforgot">
+     <div class="row justify-content-center">
+         <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center border">
+             <form action='/firstConnection/submit' method='post' enctype="multipart/form-data">
+                 <h1 id="formtitle">It's your first connection !</h1>
+                 <div class="form-group">
+                     <label for="">First name</label>
+                     <input type="text" class="form-control" id="formpad" name="firstname" required>
+                     <label for="">Last name</label>
+                     <input type="text" class="form-control" id="formpad" name="lastname" required>
+                     <label for="">Biographie</label>
+                     <textarea type="text" class="form-control" id="formpad" name="bio" required></textarea>
+                     <label for="">Interest</label>
+                     <textarea type="text" class="form-control" id="formpad" name="interest" required></textarea>
+                     <label for="">ProfilePic</label><br/>
+                     <div class= "row justify-content-center">
+                         <img src="/img/ProfilePic.png" class="img-thumbnail" style="display:inline-block;"id ="profile">
+                    </div>
+                    <input name="profilpic" type="file" id="formpad" required></input>
+                 </div>
+                 <button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
+             </form>
+         </div>
+     </div>
+ </div>
+<script src="/script/SfirstConnection.js"></script>
+
+<% include perm/Footer %>
