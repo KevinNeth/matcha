@@ -13,7 +13,7 @@ router.post('/getAddress', async (req, res) => {
     }});
     let db = await model.connectToDatabase();
     let user = await db.collection('users').findOne({ login: req.session.login });
-    if (user['location']) {
+    if (user['location'] === undefined) {
         await model.updateData('users', { login: req.session.login }, { $set: {
             location: {
                 type: "Point",
@@ -31,7 +31,7 @@ router.post('/getAddress', async (req, res) => {
 
 router.get('/forceGetPos', function(req, res, next){
     if (req.session.login !== undefined) {
-        request('http://freegeoip.net/json/', function(error, response, body){
+        request('http://freegeoip.net/json/', function(error, response, body) {
             let data = JSON.parse(body);
             request('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + data.latitude + ',' + data.longitude, async function(error, response, body){
                 let infos = JSON.parse(body);

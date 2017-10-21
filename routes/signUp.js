@@ -48,7 +48,6 @@ router.post('/submit', async (req, res, next) => {
 	let valueLog = await db.collection('users').findOne({login: req.body.login.toLowerCase()});
 	let valueEmail = await db.collection('users').findOne({email: req.body.email.toLowerCase()});
 
-	console.log(valueEmail);
 	if (valueLog)
 		req.session.errors.push({msg: 'Login is already taken'});
 	if (valueEmail)

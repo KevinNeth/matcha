@@ -267,11 +267,17 @@
     </div>
     <h1>Suggestion</h1>
     <div class="container border">
-        <form method="post" action="/home/sort">
+        <form method="post" action="/home/location">
             <button type="submit" name="location" class="btn btn-outline-primary">Location</button>
-            <button type="submit" name="location" class="btn btn-outline-primary">Age</button>
-            <button type="submit" name="location" class="btn btn-outline-primary">Popularity</button>
-            <button type="submit" name="location" class="btn btn-outline-primary">Interest</button>
+        </form>
+        <form method="post" action="/home/age">
+            <button type="submit" name="age" class="btn btn-outline-primary">Age</button>
+        </form>
+        <form method="post" action="/home/popularity">
+            <button type="submit" name="popularity" class="btn btn-outline-primary">Popularity</button>
+        </form>
+        <form method="post" action="/home/interest">
+            <button type="submit" name="interest" class="btn btn-outline-primary">Interest</button>
         </form>
     </div>
     <div class="container">
@@ -281,7 +287,7 @@
             else { 
                 for(var i=0; i < info.length; i++) { %>
                 <div class="row border" id ="bordersug">
-                    <img src=" <%- info[i]['profilepicpath'].replace('public/', '') %>" class="img-thumbnail col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2" style="height:150px; margin-top: 15px;">
+                    <img src="/<%- info[i]['profilepicpath'].replace('public/', '') %>" class="img-thumbnail col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2" style="height:150px; margin-top: 15px;">
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                         <p>Name : <%- info[i]['firstname'] %> <%- info[i]['lastname'] %></p>
                         <p>Birth Date: <%- info[i]['month'] %>/<%- info[i]['day'] %>/<%- info[i]['year'] %></p>
