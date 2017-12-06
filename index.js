@@ -1,22 +1,11 @@
-let express = require('express');
-let app = express();
-let bodyParser = require('body-parser');
-let session = require('express-session');
-
-//Variable des middleware.
-let signUp = require("./routes/signUp");
-let logIn = require("./routes/logIn");
-let forgotPass = require("./routes/forgotPass");
-let reset = require("./routes/reset");
-let home = require("./routes/home");
-let firstConnection = require("./routes/firstConnection");
-let settings = require("./routes/settings");
-let disconnections = require("./routes/disconnections");
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('express-flash');
 
 //Moteur de template
 app.set("view engine", "ejs");
-
-// Middleware
 
 // Definie le dossier static
 app.use(express.static('public'));
@@ -33,18 +22,21 @@ app.use(session({
     }
 }));
 
-//Route
-app.use('/', signUp);
-app.use('/login', logIn);
-app.use('/forgotpass', forgotPass);
-app.use('/reset', reset);
-app.use('/home', home);
-app.use('/firstConnection', firstConnection);
-app.use('/settings', settings);
-app.use('/disconnections', disconnections);
+// Middleware
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.flashMessages = req.flash();
+    next();
+});
 
-
-
-
+//Routes de base
+app.use('/', require("./routes/signUp"));
+app.use('/login', require("./routes/logIn"));
+app.use('/forgotpass', require("./routes/forgotPass"));
+app.use('/reset', require("./routes/reset"));
+app.use('/home', require("./routes/home"));
+app.use('/firstConnection', require("./routes/firstConnection"));
+app.use('/settings', require("./routes/settings"));
+app.use('/disconnections', require("./routes/disconnections"));
 
 app.listen(8080);
