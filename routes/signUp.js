@@ -61,15 +61,14 @@ router.post('/submit', async (req, res, next) => {
 // Insert les infos verifier.
 
 router.post('/submit', (req, res) => {
+	console.log(req.body.birthday);
 	let info = {
 		login: req.body.login,
 		email: req.body.email,
 		password: passwordHash.generate(req.body.password),
 		gender: req.body.gender,
 		orientation: req.body.orientation,
-		day: req.body.day,
-		month: req.body.month,
-		year: req.body.year,
+		birthday: Date(req.body.birthday),
 		firstConnection: "yes"
 	};
 	req.session.success = [];
