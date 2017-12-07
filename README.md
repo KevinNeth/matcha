@@ -6,6 +6,8 @@ TODO LIST
 
 - Methode de recherche
   
+- Page profile
+
 - Search bar users
 
 - Chat
