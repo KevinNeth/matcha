@@ -1,0 +1,102 @@
+<% include perm/SmallHeader %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <img src="/upload/<%- profilepic %>" class="img-thumbnail"/>
+            <%- login %>
+        </div>
+        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- firstname %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="firstname">Change firstname</span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- lastname %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="lastname">Change lastname</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- email %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="email">Change email</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span class="change"><%- gender %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="gender">Change gender</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span class="change"><%- orientation %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="orientation">Change orientation</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- bio %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="bio">Change your bio</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- interest %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="change" id="interest">Change your interest</span>
+                </div>
+            </div>
+            <!-- img -->
+            <!-- geo -->
+        </div>
+    </div>
+</div>
+<script>
+    let allchange = Array.from(document.getElementsByClassName('change'));
+    allchange.forEach(function(change) {
+        change.addEventListener("click", function() {
+            let parent = change.parentNode.parentNode;
+            let id =  change.id;
+            // console.log("<%-"[id]"%>");
+            while (parent.hasChildNodes()) {
+                parent.removeChild(parent.lastChild);
+            }
+            let input = document.createElement('input');
+            input.setAttribute("type", "submit");
+            input.setAttribute("value","change");
+            let input2 = document.createElement('input');
+            input2.setAttribute("type", "text");
+            input2.setAttribute("name", id);
+            
+            let form = document.createElement('form');
+            form.setAttribute("action", "myaccount/submit");
+            form.setAttribute("method", "post");
+
+            form.appendChild(input2);
+            form.appendChild(input);
+            let halfdiv = document.createElement("div");
+            halfdiv.classList.add("col-6", "col-sm-6", "col-md-6", "col-lg-6", "col-xl-6");
+            halfdiv.appendChild(form);
+            parent.appendChild(halfdiv);
+        });
+    });
+</script>
+
+<% include perm/Footer %>

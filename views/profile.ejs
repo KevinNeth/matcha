@@ -1,0 +1,49 @@
+<% include perm/SmallHeader %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <img src= "/uploads/<%- profilepic %>" class="img-thumbnail"/>
+        </div>
+        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+            <p><%- login %></p>
+            <p><%- firstname %> <%- lastname %></p>
+            <p><%- birthday %></p>
+            <p><%- gender %></p>
+            <p>Interest by: <%- orientation %></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p><%- bio %></p>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <p><%- interest %></p>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div id="map" style="height: 300px; width: 100%;"></div>
+        </div>    
+    </div>
+</div>
+        
+<script>
+    function initMap() {
+        var uluru = {lat: <%- location.coordinates[1] %>, lng: <%- location.coordinates[0] %>};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: uluru
+        });
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU&callback=initMap">
+</script>
+
+<% include perm/Footer %>

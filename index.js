@@ -38,5 +38,8 @@ app.use('/home', require("./routes/home"));
 app.use('/firstConnection', require("./routes/firstConnection"));
 app.use('/settings', require("./routes/settings"));
 app.use('/disconnections', require("./routes/disconnections"));
+app.use('/chat', require("./routes/chat"));
+app.use('/profile', require("./routes/profile"));
+app.use('/myaccount', require("./routes/myaccount"));
 
 app.listen(8080);
