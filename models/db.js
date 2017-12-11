@@ -3,7 +3,8 @@ const objectId = require('mongodb').ObjectID;
 const options = require('../config/db');
 
 /* Usage:
-const User = await db.prepare('users'); */
+const User = await db.prepare('users');
+*/
 
 connect = async () => {
     let mongoUri = 'mongodb://' + options.user + ':' + options.pwd + '@' + options.host + ':' + options.port + '/' + options.dbName;

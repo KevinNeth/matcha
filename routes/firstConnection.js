@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let db = require('../models/db');
+let User = require('../models/user');
 let multer = require('multer');
 let path = require('path');
 
@@ -31,34 +32,38 @@ router.get('/',  async (req, res) => {
 	let errors = req.session.errors;
 
 	req.session.errors = [];
-	if (req.session.login === undefined)
-		res.redirect('/');
-	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
-		if (valueLog) {
+	try {
+		let user = await User.get(req.session.login);
+		if (user.firstConnection === true) {
 			res.render('firstConnection', {
 				errors: errors
-			});
+			});	
+		} else {
+			res.redirect('/home');				
 		}
-		else {
-			res.redirect('/home');
-		}
+	} catch(e) {
+		res.redirect('/logIn');
 	}
 });
 
 router.post('/submit', upload.single('profilpic'), async (req, res) => {
-	await db.updateOne('users', { login: req.session.login }, {
-		$set: {
-			firstname: req.body.firstname,
-			lastname: req.body.lastname,
-			bio: req.body.bio,
-			interest: req.body.interest,
-			profilepic: req.file.filename,
-			profilepicpath: req.file.path,
-			firstConnection: "no"
-		}
-	})
-	res.redirect('/home');
-})
+	try {
+		await db.updateOne('users', { login: req.session.login }, {
+			$set: {
+				firstname: req.body.firstname,
+				lastname: req.body.lastname,
+				bio: req.body.bio,
+				interest: req.body.interest,
+				profilepic: req.file.filename,
+				profilepicpath: req.file.path,
+				firstConnection: false
+			}
+		});
+		res.redirect('/home');
+	} catch(e) {
+		console.log("MongoDB connection error.");
+		res.redirect('/firstConnection');
+	}
+});
 
 module.exports = router;

@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 			res.redirect('/firstConnection');
 		}
 		else {
-			let both = await User.findOne({login: req.session.login, orientation: "both"});
+			let both = await db.findOne('user', {login: req.session.login, orientation: "both"});
 			console.log(both);
 			if (both) {
 				let valueMatch = await db.find('users', {
@@ -77,7 +77,7 @@ router.post('/age', async (req, res) => {
 			res.redirect('/firstConnection');
 		}
 		else {
-			let both = await User.findOne({login: req.session.login, orientation: "both"});
+			let both = await db.findOne('user', {login: req.session.login, orientation: "both"});
 			console.log(both);
 			if (both) {
 				let valueMatch = await db.findSort('users', {
