@@ -2,9 +2,11 @@ const mongo = require('mongodb').MongoClient;
 const objectId = require('mongodb').ObjectID;
 const options = require('../config/db');
 
+/* Usage:
+const User = await db.prepare('users'); */
 
 connect = function() {
-    let mongoUri = 'mongodb://' + options.host + ':' + options.port + '/' + options.dbName;
+    let mongoUri = 'mongodb://' + options.user + ':' + options.pwd + '@' + options.host + ':' + options.port + '/' + options.dbName;
     return mongo.connect(mongoUri);
 };
 
