@@ -5,180 +5,81 @@ const options = require('../config/db');
 /* Usage:
 const User = await db.prepare('users'); */
 
-connect = () => {
+connect = async () => {
     let mongoUri = 'mongodb://' + options.user + ':' + options.pwd + '@' + options.host + ':' + options.port + '/' + options.dbName;
     console.log(mongoUri);
     return mongo.connect(mongoUri);
 };
-
-// prepare = (collectionName) => {
-//     return new Promise((resolve, reject) => {
-//         connect()
-//         .catch((err) => {
-//             reject(err);
-//         })
-//         .then((db) => {
-//             resolve(db.collection(collectionName));
-//         })
-//         .catch((err) => {
-//             reject(err);            
-//         });
-//     });
-// };
 
 prepare = async (collectionName) => {
     let db = await connect();
     return (db.collection(collectionName));
 };
 
-insertMany = (collectionName, docs) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.insertMany(docs);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+insertMany = async (collectionName, docs) => {
+    let collection = await prepare(collectionName);
+    return collection.insertMany(docs);
 }
 
-insertOne = (collectionName, doc) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.insertOne(doc);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+insertOne = async (collectionName, doc) => {
+    let collection = await prepare(collectionName);
+    return collection.insertOne(doc);
 }
 
-updateMany = (collectionName, condition, update) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.updateMany(condition, update);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+updateMany = async (collectionName, condition, update) => {
+    let collection = await prepare(collectionName);
+    return collection.updateMany(condition, update);
 }
 
-updateOne = (collectionName, condition, update) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.updateOne(condition, update);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+updateOne = async (collectionName, condition, update) => {
+    let collection = await prepare(collectionName);
+    return collection.updateOne(condition, update);
 }
 
-setField = (collectionName, condition, field, value) => {
-    return updateOne(collectionName, condition, { $set: { field: value } });
+setField = async (collectionName, condition, field, value) => {
+    let collection = await prepare(collectionName);
+    return collection.updateOne(collectionName, condition, { $set: { field: value } });
 }
 
-deleteMany = (collectionName, condition) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.deleteMany(condition, update);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+deleteMany = async (collectionName, condition) => {
+    let collection = await prepare(collectionName);
+    return collection.deleteMany(condition, update);
 }
 
-deleteOne = (collectionName, condition) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.deleteOne(condition, update);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+deleteOne = async (collectionName, condition) => {
+    let collection = await prepare(collectionName);
+    return collection.deleteOne(condition, update);
 }
 
-find = (collectionName, condition) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.find(condition).toArray();
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+find = async (collectionName, condition) => {
+    let collection = await prepare(collectionName);
+    return collection.find(condition).toArray();
 }
 
-findOne = (collectionName, condition) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.findOne(condition);
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+findOne = async (collectionName, condition) => {
+    let collection = await prepare(collectionName);
+    return collection.findOne(condition);
 }
 
-findOneById = (collectionName, id) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-            .then((collection) => {
-                return collection.findOne({ _id: objectId(id) });
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+findOneById = async (collectionName, id) => {
+    let collection = await prepare(collectionName);
+    return collection.findOne({ _id: objectId(id) });
 }
 
-findOneAndUpdate = (collectionName, condition, update) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-        .then((collection) => {
-            return collection.findOneAndUpdate(condition, update, { returnNewDocument: true });
-        })
-        .catch((err) => {
-            reject(err);
-        });
-    });
+findOneAndUpdate = async (collectionName, condition, update) => {
+    let collection = await prepare(collectionName);
+    return collection.findOneAndUpdate(condition, update, { returnNewDocument: true });
 }
 
-findOneProjection = (collectionName, condition, projection) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-            .then((collection) => {
-                return collection.findOne(condition, projection);
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+findOneProjection = async (collectionName, condition, projection) => {
+    let collection = await prepare(collectionName);
+    return collection.findOne(condition, projection);
 }
 
-findSort = (collectionName, findCondition, sortCondition) => {
-    return new Promise((resolve, reject) => {
-        prepare(collectionName)
-            .then((collection) => {
-                return collection.find(findCondition).sort(sortCondition).toArray();
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+findSort = async (collectionName, findCondition, sortCondition) => {
+    let collection = await prepare(collectionName);
+    return collection.find(findCondition).sort(sortCondition).toArray();
 }
-
 
 module.exports = {
     connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection

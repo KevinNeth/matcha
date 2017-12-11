@@ -1,12 +1,12 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let model = require('../models/db');
 
 router.get('/', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let db = await model.connectToDatabase();
+		let db = await model.connect();
 		let valueLog = await db.collection('users').findOne({login: req.session.login, firstConnection: "no"});
 		console.log(valueLog);
 		if (!valueLog) {
