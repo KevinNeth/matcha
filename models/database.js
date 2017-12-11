@@ -65,13 +65,18 @@ const insertData = (collection, item) => {
 };
 
 const updateData = (collection, field, item) => {
-	mongo.connect(url, (err, db) => {
-		assert.equal(null, err);
-		db.collection(collection).update(field, item, (err, result) => {
-			assert.equal(null, err);
-			db.close();
+	return new Promise((resolve, reject) => {
+		mongo.connect(url, (err, db) => {
+			if (assert.equal(null, err))
+				reject ("error");
+			db.collection(collection).update(field, item, (err, result) => {
+				if (assert.equal(null, err))
+					reject ("error");
+				db.close();
+			});
 		});
-	});
+		resolve("OK");
+	})
 };
 
 module.exports = {

@@ -6,7 +6,7 @@ let path = require('path');
 
 let imageFilter = function (req, file, cb) {
     // accept image only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/)) {
         return cb(new Error('Only image files are allowed!'), false);
     }
     cb(null, true);

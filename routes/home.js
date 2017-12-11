@@ -8,6 +8,7 @@ router.get('/', async (req, res) => {
 	else {
 		let db = await model.connectToDatabase();
 		let valueLog = await db.collection('users').findOne({login: req.session.login, firstConnection: "no"});
+		console.log(valueLog);
 		if (!valueLog) {
 			res.redirect('/firstConnection');
 		}
