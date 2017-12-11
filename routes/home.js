@@ -1,22 +1,21 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/db');
+let db = require('../models/db');
 
 router.get('/', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let db = await model.connect();
-		let valueLog = await db.collection('users').findOne({login: req.session.login, firstConnection: "no"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "no"});
 		console.log(valueLog);
 		if (!valueLog) {
 			res.redirect('/firstConnection');
 		}
 		else {
-			let both = await db.collection('users').findOne({login: req.session.login, orientation: "both"});
+			let both = await User.findOne({login: req.session.login, orientation: "both"});
 			console.log(both);
 			if (both) {
-				let valueMatch = await model.getData('users', {
+				let valueMatch = await db.find('users', {
 					firstConnection: "no",
 					orientation: {$in: [both.gender, "both"]},
 					login: {$ne: req.session.login}, 
@@ -37,7 +36,7 @@ router.get('/', async (req, res) => {
 				});
 			}
 			else {
-				let valueMatch = await model.getData('users', {
+				let valueMatch = await db.find('users', {
 					firstConnection: "no",
 					gender: valueLog.orientation,
 					orientation: {$in: [valueLog.gender, "both"]},
@@ -73,16 +72,15 @@ router.post('/age', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let db = await model.connectToDatabase();
-		let valueLog = await db.collection('users').findOne({login: req.session.login, firstConnection: "no"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "no"});
 		if (!valueLog) {
 			res.redirect('/firstConnection');
 		}
 		else {
-			let both = await db.collection('users').findOne({login: req.session.login, orientation: "both"});
+			let both = await User.findOne({login: req.session.login, orientation: "both"});
 			console.log(both);
 			if (both) {
-				let valueMatch = await model.getDataSorted('users', {
+				let valueMatch = await db.findSort('users', {
 					firstConnection: "no",
 					orientation: {$in: [both.gender, "both"]},
 					login: {$ne: req.session.login}
@@ -94,7 +92,7 @@ router.post('/age', async (req, res) => {
 				});
 			}
 			else {
-				let valueMatch = await model.getDataSorted('users', {
+				let valueMatch = await db.findSort('users', {
 					firstConnection: "no",
 					gender: valueLog.orientation,
 					orientation: {$in: [valueLog.gender, "both"]},

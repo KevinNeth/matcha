@@ -1,0 +1,16 @@
+{
+    user1: user1,
+    user2: user2,
+    messages: [
+        {
+            author: user1,
+            text: blahblah,
+            datetime: Date()
+        },
+        {
+            author: user1,
+            text: blahblah
+        },
+    ]
+}
+

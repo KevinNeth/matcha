@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let db = require('../models/db');
 const mongo = require('mongodb').MongoClient;
 const objectId = require('mongodb').ObjectID;
 let passwordHash = require('password-hash');
@@ -44,8 +44,7 @@ router.post('/:id/submit', async (req, res) => {
         res.redirect('/reset/' + req.params.id);
 	}
 	else {
-		let db = await model.connectToDatabase();
-		let user = await db.collection('users').findOne({_id: objectId(req.params.id)});
+		let user = await db.findOne('users', {_id: objectId(req.params.id)});
 
 		if (!user) {
 			req.session.errors.push({msg: 'User not found'});
@@ -57,7 +56,7 @@ router.post('/:id/submit', async (req, res) => {
 				res.redirect('/reset/' + req.params.id);
 			}
 			else {
-				await model.updateData('users', { _id: objectId(req.params.id) }, { $set: { password: passwordHash.generate(req.body.password)} })
+				await db.updateOne('users', { _id: objectId(req.params.id) }, { $set: { password: passwordHash.generate(req.body.password)} })
             	req.session.success.push({msg: 'Your password has been changed'});
             	res.redirect('/login');
 		 	}

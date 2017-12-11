@@ -1,20 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const model = require('../models/database');
+const db = require('../models/db');
 const request = require('request');
 // const socketIO = require('../core/controllers/socket');
 const passwordHash = require('password-hash');
 
 router.post('/getAddress', async (req, res) => {
-    await model.updateData('users', { login: req.session.login }, { $set: {
+    await db.updateOne('users', { login: req.session.login }, { $set: {
         tmpAddress: req.body.tmpAddress, 
         tmpLat: req.body.tmpLat,
         tmpLng: req.body.tmpLng
     }});
-    let db = await model.connectToDatabase();
-    let user = await db.collection('users').findOne({ login: req.session.login });
+    let user = await db.findOne('users', { login: req.session.login });
     if (user['location'] === undefined) {
-        await model.updateData('users', { login: req.session.login }, { $set: {
+        await db.updateOne('users', { login: req.session.login }, { $set: {
             location: {
                 type: "Point",
                 coordinates: [
@@ -35,17 +34,16 @@ router.get('/forceGetPos', function(req, res, next){
             let data = JSON.parse(body);
             request('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + data.latitude + ',' + data.longitude, async function(error, response, body){
                 let infos = JSON.parse(body);
-                await model.updateData('users', { login: req.session.login }, {
+                await db.updateOne('users', { login: req.session.login }, {
                     $set: {
                         tmpAddress: infos['results'][0]['formatted_address'],
                         tmpLat: data.latitude,
                         tmpLng: data.longitude
                     }
                 })
-                let db = await model.connectToDatabase();
-                let user = await db.collection('users').findOne({ login: req.session.login });
+                let user = await db.findOne('users', { login: req.session.login });
                 if (user['lat'] === undefined) {
-                    await model.updateData('users', { login: req.session.login }, { $set: {
+                    await db.updateOne('users', { login: req.session.login }, { $set: {
                         location: {
                             type: "Point",
                             coordinates: [

@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let db = require('../models/db');
 let passwordHash = require('password-hash');
 
 router.get('/', (req, res) => {
@@ -44,9 +44,8 @@ router.post('/submit', (req, res, next) => {
 // 2eme check des inputs par rapport a la base de donnee
 
 router.post('/submit', async (req, res, next) => {
-	let db = await model.connectToDatabase();
-	let valueLog = await db.collection('users').findOne({login: req.body.login.toLowerCase()});
-	let valueEmail = await db.collection('users').findOne({email: req.body.email.toLowerCase()});
+	let valueLog = await db.findOne('users', {login: req.body.login.toLowerCase()});
+	let valueEmail = await db.findOne('users', {email: req.body.email.toLowerCase()});
 
 	if (valueLog)
 		req.session.errors.push({msg: 'Login is already taken'});
@@ -73,7 +72,7 @@ router.post('/submit', (req, res) => {
 	};
 	req.session.success = [];
 	req.session.success.push({msg: 'Registration success, you can now login.'});
-	model.insertData('users', info);
+	db.insertOne('users', info);
 	res.redirect('/login');
 })
 

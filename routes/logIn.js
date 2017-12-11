@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let db = require('../models/db');
 let passwordHash = require('password-hash');
 
 router.get('/', (req, res) => {
@@ -21,8 +21,7 @@ router.get('/', (req, res) => {
 
 router.post('/submit', async (req, res, next) => {
 	req.session.errors = [];
-	let db = await model.connectToDatabase();
-	let info = await db.collection('users').findOne({login: req.body.login});
+	let info = await db.findOne('users', {login: req.body.login});
 
 	if (info) {
 		if (passwordHash.verify(req.body.password, info['password']) === true) {

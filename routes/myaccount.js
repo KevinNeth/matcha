@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models/db.js");
+const db = require("../models/db");
 
 function validEmail(email) {
 	let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     if (req.session.login === undefined)
         res.redirect('/logIn');
     else {
-        const user = await db.findOne("users", { login: req.session.login });
+        const user = await db.findOne('users', { login: req.session.login });
         console.log(user);
         res.render("myaccount", {
             login: user.login,

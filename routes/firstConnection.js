@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let db = require('../models/db');
 let multer = require('multer');
 let path = require('path');
 
@@ -34,8 +34,7 @@ router.get('/',  async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let db = await model.connectToDatabase();
-		let valueLog = await db.collection('users').findOne({login: req.session.login, firstConnection: "yes"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
 		if (valueLog) {
 			res.render('firstConnection', {
 				errors: errors
@@ -48,7 +47,7 @@ router.get('/',  async (req, res) => {
 });
 
 router.post('/submit', upload.single('profilpic'), async (req, res) => {
-	await model.updateData('users', { login: req.session.login }, {
+	await db.updateOne('users', { login: req.session.login }, {
 		$set: {
 			firstname: req.body.firstname,
 			lastname: req.body.lastname,

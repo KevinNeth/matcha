@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/database');
+let db = require('../models/db');
 let nodemailer = require('nodemailer');
 let smtpTransport = require('nodemailer-smtp-transport');
 
@@ -21,10 +21,9 @@ router.get('/', (req, res) => {
 router.post('/submit', async (req, res) => {
 	req.session.errors = [];
 	req.session.success = [];
-	let db = await model.connectToDatabase();
-	let email = await db.collection('users').findOne({email: req.body.email});
+	let user = await db.findOne('users', {email: req.body.email});
 
-	if (!email) {
+	if (!user) {
 		req.session.errors.push({msg: "Email not found."});
 		res.redirect('/forgotpass');
 	}

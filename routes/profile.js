@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models/db.js");
+const db = require("../models/db");
 
 router.get('/:user', async (req, res) => {
     if (req.session.login === undefined)
@@ -10,7 +10,7 @@ router.get('/:user', async (req, res) => {
             res.redirect("/myaccount");
         else {
             console.log(req.params.user);
-            const user = await db.findOne("users", {login: req.params.user});
+            const user = await db.findOne('users', {login: req.params.user});
             console.log(user);
             res.render("profile", {
                 login: user.login,
