@@ -1,8 +1,17 @@
 const express = require('express');
 const app = express();
+const server = require('http').Server(app);
 const bodyParser = require('body-parser');
-const session = require('express-session');
 const flash = require('express-flash');
+const io = require('socket.io')(server);
+
+const session = require('express-session')({
+    secret: 'balek',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+});
+const sharedSession = require("express-socket.io-session");
 
 //Moteur de template
 app.set("view engine", "ejs");
@@ -13,14 +22,9 @@ app.use(express.static('public'));
 // Parse les information recu
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({
-    secret: 'balek',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false
-    }
-}));
+
+app.use(session);
+io.use(sharedSession(session));
 
 // Middleware
 app.use(flash());
@@ -40,3 +44,4 @@ app.use('/settings', require("./routes/settings"));
 app.use('/disconnections', require("./routes/disconnections"));
 
 app.listen(8080);
+console.log("Listening...");

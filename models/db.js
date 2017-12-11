@@ -4,13 +4,8 @@ const options = require('../config/db');
 
 
 connect = function() {
-    return new Promise((resolve, reject) => {
-        let mongoUri = 'mongodb://' + options.host + ':' + options.port + '/' + options.dbName;
-        mongo.connect(mongoUri, (err, db) => {
-            if (err) reject(err);
-            else resolve(db);
-        });
-    });
+    let mongoUri = 'mongodb://' + options.host + ':' + options.port + '/' + options.dbName;
+    return mongo.connect(mongoUri);
 };
 
 prepare = function(collectionName) {
@@ -86,7 +81,7 @@ updateOne = function (collectionName, condition, update) {
 }
 
 setField = function (collectionName, condition, field, value) {
-    return updateOne(collectionName, condition, { $set: { field: value } })
+    return updateOne(collectionName, condition, { $set: { field: value } });
 }
 
 deleteMany = function (collectionName, condition) {
