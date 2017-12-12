@@ -6,7 +6,7 @@ router.get('/', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: true});
 		console.log(valueLog);
 		if (!valueLog) {
 			console.log("bizare");
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 			console.log(both);
 			if (both) {
 				let valueMatch = await db.find('users', {
-					firstConnection: "no",
+					firstConnection: false,
 					orientation: {$in: [both.gender, "both"]},
 					login: {$ne: req.session.login}, 
 					location: {
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 			}
 			else {
 				let valueMatch = await db.find('users', {
-					firstConnection: "no",
+					firstConnection: false,
 					gender: valueLog.orientation,
 					orientation: {$in: [valueLog.gender, "both"]},
 					location: {
@@ -76,7 +76,7 @@ router.post('/age', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: true});
 		if (!valueLog) {
 			res.redirect('/firstConnection');
 		}
@@ -85,7 +85,7 @@ router.post('/age', async (req, res) => {
 			console.log(both);
 			if (both) {
 				let valueMatch = await db.findSort('users', {
-					firstConnection: "no",
+					firstConnection: false,
 					orientation: {$in: [both.gender, "both"]},
 					login: {$ne: req.session.login}
 				},
@@ -97,7 +97,7 @@ router.post('/age', async (req, res) => {
 			}
 			else {
 				let valueMatch = await db.findSort('users', {
-					firstConnection: "no",
+					firstConnection: false,
 					gender: valueLog.orientation,
 					orientation: {$in: [valueLog.gender, "both"]},
 					login: {$ne: req.session.login}

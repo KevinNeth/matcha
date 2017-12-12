@@ -71,7 +71,7 @@ router.post('/submit', (req, res) => {
 		gender: req.body.gender,
 		orientation: req.body.orientation,
 		birthday: Date(req.body.birthday),
-		firstConnection: "yes"
+		firstConnection: true
 	};
 	req.session.success = [];
 	req.session.success.push({msg: 'Registration success, you can now login.'});
