@@ -46,12 +46,22 @@ router.post('/submit', async (req, res) => {
     req.session.errors = [];
     req.session.success = [];
     // console.log(req.session.login);
+    console.log(req.body);
     const change = Object.keys(req.body)[0];
+    console.log(change);
     const modif = req.body[change];
-    // console.log(modif);
-    // console.log(modif.length);
+    console.log(modif);
+    console.log(modif.length);
     if (modif.length < 1 && change !== 'email')
         req.session.errors.push({msg: 'Too short modif'});
+    if (change === "gender") {
+        if (modif !== "man" && modif !== "woman")
+            req.session.errors.push({msg: "Don't try to modif me !"});
+    }
+    if (change === "orientation") {
+        if (modif !== "man" && modif !== "woman" && modif !== "both")
+            req.session.errors.push({msg: "Don't try to modif me !"});
+    }
     if (change === 'email')
         if (!validEmail(modif))
             req.session.errors.push({msg: 'Invalid email.'});

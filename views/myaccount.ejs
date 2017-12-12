@@ -1,9 +1,17 @@
 <% include perm/SmallHeader %>
 
 <div class="container">
+    <% if (errors) { %>
+        <% for(var i=0; i < errors.length; i++) { %>
+            <div class="alert alert-danger">&nbsp;<%= errors[i]['msg'] %></div>
+        <% } %>
+    <% } %>
+</div>
+
+<div class="container">
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-            <img src="/upload/<%- profilepic %>" class="img-thumbnail"/>
+            <img src="/uploads/<%- profilepic %>" class="img-thumbnail"/>
             <%- login %>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
@@ -33,18 +41,18 @@
             </div>
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span class="change"><%- gender %></span>
+                    <span><%- gender %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
-                    <span class="change" id="gender">Change gender</span>
+                    <span class="changeGO" id="gender">Change gender</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span class="change"><%- orientation %></span>
+                    <span><%- orientation %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
-                    <span class="change" id="orientation">Change orientation</span>
+                    <span class="changeGO" id="orientation">Change orientation</span>
                 </div>
             </div>
             <div class="row">
@@ -74,7 +82,6 @@
         change.addEventListener("click", function() {
             let parent = change.parentNode.parentNode;
             let id =  change.id;
-            // console.log("<%-"[id]"%>");
             while (parent.hasChildNodes()) {
                 parent.removeChild(parent.lastChild);
             }
@@ -97,6 +104,58 @@
             parent.appendChild(halfdiv);
         });
     });
+
+    let changeGO = Array.from(document.getElementsByClassName('changeGO'));
+    changeGO.forEach(function(change) {
+        change.addEventListener("click", function() {
+            let parent = change.parentNode.parentNode;
+            console.log(parent);
+            let id =  change.id;
+            console.log(id);
+            while (parent.hasChildNodes()) {
+                parent.removeChild(parent.lastChild);
+            }
+
+            let select = document.createElement('select');
+            select.setAttribute("name", id);
+
+            let man = document.createElement('option');
+            man.setAttribute("value", "man");
+            let textman = document.createTextNode("man");
+            man.appendChild(textman);
+            select.appendChild(man);
+
+            let woman = document.createElement('option');
+            woman.setAttribute("value", "woman");
+            let textwoman = document.createTextNode("woman");
+            woman.appendChild(textwoman);
+            select.appendChild(woman);
+
+            if (id === "orientation") {
+                let both = document.createElement('option');
+                both.setAttribute("value", "both");
+                let textboth = document.createTextNode("both");
+                both.appendChild(textboth);
+                select.appendChild(both);
+            }
+            
+            let input = document.createElement('input');
+            input.setAttribute("type", "submit");
+            input.setAttribute("value","change");
+
+            let form = document.createElement('form');
+            form.setAttribute("action", "myaccount/submit");
+            form.setAttribute("method", "post");
+            form.appendChild(select);
+            form.appendChild(input);
+
+            let halfdiv = document.createElement("div");
+            halfdiv.classList.add("col-6", "col-sm-6", "col-md-6", "col-lg-6", "col-xl-6");
+            halfdiv.appendChild(form);
+            parent.appendChild(halfdiv);
+        })
+    })
+
 </script>
 
 <% include perm/Footer %>
