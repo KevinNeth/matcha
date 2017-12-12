@@ -6,12 +6,16 @@ router.get('/', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "no"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
 		console.log(valueLog);
 		if (!valueLog) {
+			console.log("bizare");
+			console.log(valueLog);
+			console.log("pas ici");
 			res.redirect('/firstConnection');
 		}
 		else {
+			console.log("quepasa ?");
 			let both = await db.findOne('user', {login: req.session.login, orientation: "both"});
 			console.log(both);
 			if (both) {
@@ -72,7 +76,7 @@ router.post('/age', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "no"});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: "yes"});
 		if (!valueLog) {
 			res.redirect('/firstConnection');
 		}

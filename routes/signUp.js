@@ -29,6 +29,7 @@ function validPassword(pwd) {
 // 1er check des inputs
 
 router.post('/submit', (req, res, next) => {
+	console.log("purer");
 	req.session.errors = [];
 	if (!validEmail(req.body.email))
 		req.session.errors.push({msg: 'Invalid email.'});
@@ -44,6 +45,7 @@ router.post('/submit', (req, res, next) => {
 // 2eme check des inputs par rapport a la base de donnee
 
 router.post('/submit', async (req, res, next) => {
+	console.log("purermdrxd");
 	let valueLog = await db.findOne('users', {login: req.body.login.toLowerCase()});
 	let valueEmail = await db.findOne('users', {email: req.body.email.toLowerCase()});
 
@@ -60,7 +62,8 @@ router.post('/submit', async (req, res, next) => {
 // Insert les infos verifier.
 
 router.post('/submit', (req, res) => {
-	console.log(req.body.birthday);
+	// console.log(req.body.birthday);
+	console.log("putain");
 	let info = {
 		login: req.body.login,
 		email: req.body.email,

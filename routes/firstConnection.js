@@ -56,7 +56,7 @@ router.post('/submit', upload.single('profilpic'), async (req, res) => {
 				interest: req.body.interest,
 				profilepic: req.file.filename,
 				profilepicpath: req.file.path,
-				firstConnection: false
+				firstConnection: "no"
 			}
 		});
 		res.redirect('/home');
