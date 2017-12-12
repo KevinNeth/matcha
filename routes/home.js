@@ -6,7 +6,7 @@ router.get('/', async (req, res) => {
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: true});
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: false});
 		console.log(valueLog);
 		if (!valueLog) {
 			console.log("bizare");
