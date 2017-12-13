@@ -8,7 +8,7 @@ const User = await db.prepare('users');
 
 connect = async () => {
     let mongoUri = 'mongodb://' + options.user + ':' + options.pwd + '@' + options.host + ':' + options.port + '/' + options.dbName;
-    console.log(mongoUri);
+    // console.log(mongoUri);
     return mongo.connect(mongoUri);
 };
 
@@ -32,14 +32,9 @@ updateMany = async (collectionName, condition, update) => {
     return collection.updateMany(condition, update);
 }
 
-updateOne = async (collectionName, condition, update) => {
+updateOne = async (collectionName, condition, update, options = {}) => {
     let collection = await prepare(collectionName);
-    return collection.updateOne(condition, update);
-}
-
-setField = async (collectionName, condition, field, value) => {
-    let collection = await prepare(collectionName);
-    return collection.updateOne(collectionName, condition, { $set: { field: value } });
+    return collection.updateOne(condition, update, options);
 }
 
 deleteMany = async (collectionName, condition) => {
@@ -83,5 +78,5 @@ findSort = async (collectionName, findCondition, sortCondition) => {
 }
 
 module.exports = {
-    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection
+    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection, findSort
 };

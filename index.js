@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
-const io = require('socket.io')(server);
+const io = require('socket.io').listen(server);
 
 const session = require('express-session')({
     secret: 'balek',
@@ -32,6 +32,12 @@ app.use((req, res, next) => {
     res.locals.flashMessages = req.flash();
     next();
 });
+require('./controllers/notifications')(io);
+
+// io.on('connection', (socket) => {
+//     console.log("A user connected.");
+//     console.log(socket);
+// });
 
 //Routes de base
 app.use('/', require("./routes/signUp"));
@@ -46,5 +52,5 @@ app.use('/chat', require("./routes/chat"));
 app.use('/profile', require("./routes/profile"));
 app.use('/myaccount', require("./routes/myaccount"));
 
-app.listen(8080);
+server.listen(8080);
 console.log("Listening...");

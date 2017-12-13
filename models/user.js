@@ -19,19 +19,44 @@ find = async (condition) => {
 };
 
 // when user connects with socket.io
-online = (username, socket) => {
-    return db.setField('users', {
-        username: username
-    }, 'online', socket);
+comesOnline = async (login, socket) => {
+    try {
+        await db.updateOne('users', {
+            login: login
+        }, { $set: { online: socket }});
+    } catch(e) {
+        console.log(e);
+    }
 };
 
 //when user disconnects from socket.io
-offline = (socket) => {
-    return db.setField('users', {
-        online: socket
-    }, 'online', false);
+goesOffline = async (socket) => {
+    if (!socket) {
+        return ;
+    } else {
+        try {
+            await db.updateOne('users', {
+                online: socket
+            }, { $set: { online: false }});
+        } catch(e) {
+            console.log(e);            
+        }
+    }
+};
+
+isOnline = async (login) => {
+    try {
+        let user = await module.exports.get(login);
+        if (user.online)
+            return user.online;
+        else
+            return false;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
 };
 
 module.exports = {
-    get, find, online, offline
+    get, find, comesOnline, goesOffline, isOnline
 };

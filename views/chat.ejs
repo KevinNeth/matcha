@@ -1,8 +1,59 @@
 <% include perm/SmallHeader %>
 
 <div class="container">
-    <h1>CHAT</h1>
-
+    <div class="card">
+        <div class="card-header">
+             Chat with 
+             <%- to %>
+        </div>
+        <div id="messages" class="card-body" style="overflow: scroll;">
+            <% messages.forEach(function(message) { %>
+                <% var className = (message.author === from) ? "message-sent" : "message-received" %>
+                <div class="row>">
+                    <div class="message-bubble <%- className %>">
+                        <%- message.text %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+        <div class="card-footer">
+            <form action="" autocomplete="off">
+                <div class="input-group">
+                    <input type="text" id="message-text" name="message-text" class="form-control" placeholder="Type your message here" aria-label="Message">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit">Send</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <% include perm/Footer %>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    $(function () {
+        var socket = io({ query: "to=<%- to %>"});
+
+        $('form').submit(function () {
+            socket.emit('message-send', $('#message-text').val());
+            $('#message-text').val('');
+            return false;
+        });
+
+        socket.on('auth-error', function (error) {
+            $('#messages').text(error);
+            $('#message-text').prop('disabled', true);
+            $('button').prop('disabled', true);
+        });
+
+        socket.on('message-sent', function(message) {
+            $('#messages').append('<div class="row"></div>').append($('<div class="message-bubble message-sent"></div>').text(message));
+        });
+
+        socket.on('message-received', function (message) {
+            $('#messages').append($('<div class="message-bubble message-received"></div>').text(message));
+        });
+    });
+</script>
