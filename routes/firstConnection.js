@@ -47,13 +47,15 @@ router.get('/',  async (req, res) => {
 });
 
 router.post('/submit', upload.single('profilpic'), async (req, res) => {
+	// const interestbit = req.body.interest.split(" ");
+	// console.log(interestbit);
 	try {
 		await db.updateOne('users', { login: req.session.login }, {
 			$set: {
 				firstname: req.body.firstname,
 				lastname: req.body.lastname,
 				bio: req.body.bio,
-				interest: req.body.interest,
+				interest: req.body.interest.split(" "),
 				profilepic: req.file.filename,
 				profilepicpath: req.file.path,
 				firstConnection: false

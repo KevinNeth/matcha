@@ -293,9 +293,9 @@
                         <p>Birth Date: <%- info[i]['month'] %>/<%- info[i]['day'] %>/<%- info[i]['year'] %></p>
                         <p>Bio : <%- info[i]['bio'].slice(0, 30) %> ...</p>
                         <p>Interest : 
-                            <% var arrtest = info[i]['interest'].split(" "); 
-                            for(var j=0; j < arrtest.length; j++) { %>
-                                #<%- arrtest[j] %>
+                            <% var arrInter = info[i]['interest']; 
+                            for(var j=0; j < arrInter.length; j++) { %>
+                                #<%- arrInter[j] %>
                             <% } %>
                         </p>
                     </div>
