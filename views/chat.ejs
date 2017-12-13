@@ -34,10 +34,15 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     $(function () {
-        var socket = io({ query: "to=<%- to %>"});
+        var socket = io();
 
         $('form').submit(function () {
-            socket.emit('message-send', $('#message-text').val());
+            var message = {
+                to: "<%- to %>",
+                text: $('#message-text').val()
+            };
+            console.log(message);
+            socket.emit('message-send', message);
             $('#message-text').val('');
             return false;
         });
@@ -52,8 +57,9 @@
             $('#messages').append('<div class="row"></div>').append($('<div class="message-bubble message-sent"></div>').text(message));
         });
 
-        socket.on('message-received', function (message) {
-            $('#messages').append($('<div class="message-bubble message-received"></div>').text(message));
+        socket.on('message', function (message) {
+            console.log(message);
+            // $('#messages').append($('<div class="message-bubble message-received"></div>').text(message));
         });
     });
 </script>

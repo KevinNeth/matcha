@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
-const io = require('socket.io').listen(server);
+io = require('socket.io').listen(server);
 
 const session = require('express-session')({
     secret: 'balek',
@@ -32,7 +32,8 @@ app.use((req, res, next) => {
     res.locals.flashMessages = req.flash();
     next();
 });
-require('./controllers/notifications')(io);
+
+require('./controllers/incoming');
 
 // io.on('connection', (socket) => {
 //     console.log("A user connected.");

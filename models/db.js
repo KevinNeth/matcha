@@ -77,6 +77,11 @@ findSort = async (collectionName, findCondition, sortCondition) => {
     return collection.find(findCondition).sort(sortCondition).toArray();
 }
 
+count = async (collectionName, condition) => {
+    let collection = await prepare(collectionName);
+    return collection.count(condition);
+}
+
 module.exports = {
-    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection, findSort
+    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection, findSort, count
 };

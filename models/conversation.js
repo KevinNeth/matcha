@@ -16,20 +16,17 @@ criteria = (user1, user2) => {
     });
 };
 
-addMessage = (to, from, text) => {
-    if (!text || text === "")
-        return ;
-
-    let message = {
-        author: from,
-        time: new Date(),
-        text: text
-    };
-
-    return db.updateOne('conversations', criteria(to, from), {
-        $push: { messages: message },
-        $setOnInsert: { user1: to, user2: from }
-    }, { upsert: true });
+addMessage = async (to, from, message) => {
+    try {
+        await db.updateOne('conversations', criteria(to, from), {
+            $push: { messages: message },
+            $setOnInsert: { user1: to, user2: from }
+        }, { upsert: true });
+        return message;
+    } catch(e) {
+        console.log(e);
+        return false;
+    }
 };
 
 get = async (user1, user2) => {
