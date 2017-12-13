@@ -9,7 +9,6 @@ function validEmail(email) {
 }
 
 router.get('/', async (req, res) => {
-    // req.session.login = 'tanguy';
     let errors = [];
     let success = [];
     if (req.session.errors) {
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
         res.redirect('/logIn');
     else {
         const user = await db.findOne("users", { login: req.session.login });
-        // console.log(user);
         res.render("myaccount", {
             errors: errors,
             success: success,
@@ -46,13 +44,8 @@ router.get('/', async (req, res) => {
 router.post('/submit', async (req, res) => {
     req.session.errors = [];
     req.session.success = [];
-    // console.log(req.session.login);
-    console.log(req.body);
     const change = Object.keys(req.body)[0];
-    console.log(change);
     const modif = req.body[change];
-    console.log(modif);
-    console.log(modif.length);
     if (modif.length < 1 && change !== 'email')
         req.session.errors.push({msg: 'Too short modif'});
     if (change === "gender") {
@@ -90,5 +83,20 @@ router.post("/deleteInterest", async (req, res) => {
         console.log(e);
     }
 });
+
+router.post("/addInterest", async (req, res) => {
+    try {
+        let user = await User.get(req.session.login);
+        let interest = user.interest;
+        let newinterest = req.body.interest;
+        newinterest = newinterest.replace(/\s\s+/g, ' ').split(" ");
+        let finalinterest = interest.concat(newinterest);
+        await db.updateOne("users", { login: req.session.login }, { $set: { interest: finalinterest } });
+        res.redirect('/myaccount');
+    }
+    catch(e) {
+        console.log(e);
+    }
+})
 
 module.exports = router;
