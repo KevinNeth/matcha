@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
+const User = require("../models/user.js");
 
 function validEmail(email) {
 	let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -76,6 +77,18 @@ router.post('/submit', async (req, res) => {
     }
     res.redirect('/myaccount');
     
+});
+
+router.post("/deleteInterest", async (req, res) => {
+    try {
+        let user = await User.get(req.session.login);
+        let interest = user.interest;
+        interest.splice(req.body.id, 1);
+        await db.updateOne("users", { login: req.session.login }, { $set: { interest: interest } });
+    }
+    catch(e) {
+        console.log(e);
+    }
 });
 
 module.exports = router;

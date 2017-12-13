@@ -65,7 +65,12 @@
             </div>
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- interest %></span>
+                    <% let tab = interest;
+                    for(var i=0; i < tab.length; i++) { %>
+                        <button class="deleteInter" id="<%- i %>">
+                            #<%- tab[i] %>
+                        </button>
+                    <% } %>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="change" id="interest">Change your interest</span>
@@ -77,6 +82,12 @@
     </div>
 </div>
 <script>
+    function url(){
+	var url =  window.location.href;
+	url = url.split("/");
+	return(url[0] + '//' + url[2] + '');
+}
+
     let allchange = Array.from(document.getElementsByClassName('change'));
     allchange.forEach(function(change) {
         change.addEventListener("click", function() {
@@ -156,6 +167,18 @@
         })
     })
 
+    let deleteInter = Array.from(document.getElementsByClassName('deleteInter'));
+    deleteInter.forEach(function(inter) {
+        let id = inter.id;
+        inter.addEventListener("click", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url() + '/myaccount/deleteInterest', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send('id=' + id);
+            let parent = inter.parentNode;
+            parent.removeChild(inter);
+        });
+    });
 </script>
 
 <% include perm/Footer %>
