@@ -24,15 +24,17 @@ io.on('connection', async (socket) => {
 
     socket.on('message-send', async (data) => {
         if (login) {
-            let message = {
-                author: login,
-                time: new Date(),
-                text: data.text
-            };
+            let to = data.to,
+                message = {
+                    author: login,
+                    time: new Date(),
+                    text: data.text
+                };
 
-            if (data.to && message.text && message.text !== "") {
-                Promise.all([ Conversation.addMessage(data.to, login, message),
-                    notify('message', data.to, login, message) ])
+            if (to && message.text && message.text !== "") {
+                console.log("ready to send");
+                Promise.all([ Conversation.addMessage(to, login, message),
+                    notify('message', data.to, login, message.text) ])
                 .then(() => {
                     io.to(login).emit('message-sent', message.text);
                 });

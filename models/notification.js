@@ -4,21 +4,18 @@ const db = require('./db');
 types: message, like, visit
 */
 
-add = async (type, to, from, data = {}) => {
+add = async (type, to, from) => {
     let notification = {
         type: type,
         to: to,
         from: from,
-        data: data,
         unread: true,
         time: new Date()
     };
     try{
         await db.insertOne('notifications', notification);
-        return notification;
     } catch(e) {
         console.log(e);
-        return false;
     }
 };
 

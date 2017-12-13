@@ -52,6 +52,7 @@ app.use('/disconnections', require("./routes/disconnections"));
 app.use('/chat', require("./routes/chat"));
 app.use('/profile', require("./routes/profile"));
 app.use('/myaccount', require("./routes/myaccount"));
+app.use('/notifications', require("./routes/notifications"));
 
 server.listen(8080);
 console.log("Listening...");

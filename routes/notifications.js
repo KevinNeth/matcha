@@ -1,20 +1,18 @@
 let express = require('express');
 let router = express.Router();
 const Conversation = require('../models/conversation');
+const Notification = require('../models/notification');
 const User = require('../models/user');
 
-router.get('/:to', async (req, res) => {
-    console.log(req.params);
-    if (!req.session.login || !req.params.to)
+router.get('/', async (req, res) => {
+    if (!req.session.login)
         res.redirect('/home');
     else {
         try {
-            let messages = await Conversation.get(req.session.login, req.params.to);
-            
-            res.render("chat", {
-                from: req.session.login,
-                to: req.params.to,
-                messages: messages
+            let notifications = await Notification.getAll(req.session.login);
+            console.log(notifications);
+            res.render("notifications", {
+                notifications: notifications
             });
         } catch(e) {
             console.log(e);

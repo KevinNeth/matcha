@@ -1,36 +1,32 @@
 <% include perm/SmallHeader %>
 
+
+<%var text = {%>
+<%    message: ' sent you a message.',%>
+<%    like: ' liked your profile.',%>
+<%    visit: ' visited your profile.'%>
+<%};%>
+
 <div class="container">
     <div class="card">
         <div class="card-header">
-             Chat with 
-             <%- to %>
+            Notifications
         </div>
-        <div id="messages" class="card-body" style="overflow: scroll;">
-            <% messages.forEach(function(message) { %>
-                <% var className = (message.author === from) ? "message-sent" : "message-received" %>
-                <div class="row>">
-                    <div class="message-bubble <%- className %>">
-                        <%- message.text %>
-                    </div>
-                </div>
-            <% }); %>
-        </div>
-        <div class="card-footer">
-            <form action="" autocomplete="off">
-                <div class="input-group">
-                    <input type="text" id="message-text" name="message-text" class="form-control" placeholder="Type your message here" aria-label="Message">
-                    <span class="input-group-btn">
-                        <button class="btn btn-secondary" type="submit">Send</button>
-                    </span>
-                </div>
-            </form>
+        <div class="card-body">
+            <ul class="list-group">
+                <% notifications.forEach(function(notification) { %>
+                    <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>
+                    <li class="list-group-item"><a href="<%- link %>">
+                        <%- (notification.from + text[notification.type]) %>
+                    </li></a>
+                <% }); %>
+            </ul>
         </div>
     </div>
 </div>
 
 <% include perm/Footer %>
-
+<!-- 
 <script src="/socket.io/socket.io.js"></script>
 <script>
     $(function () {
@@ -65,4 +61,4 @@
             }
         });
     });
-</script>
+</script> -->
