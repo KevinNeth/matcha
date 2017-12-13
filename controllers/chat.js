@@ -33,5 +33,4 @@ module.exports = (io) => {
 
         console.log(online);
     });
-    io.sockets.to('nlowe').emit('hello');
 }
