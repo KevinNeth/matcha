@@ -2,8 +2,20 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
 const User = require("../models/user.js");
-let multer = require('multer');
-let path = require('path');
+const multer = require('multer');
+const path = require('path');
+const NodeGeocoder = require('node-geocoder');
+
+const options = {
+    provider: 'google',
+   
+    // Optional depending on the providers
+    httpAdapter: 'https', // Default
+    apiKey: 'AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU', // for Mapquest, OpenCage, Google Premier
+    formatter: null         // 'gpx', 'string', ...
+};
+
+const geocoder = NodeGeocoder(options);
 
 let imageFilter = function (req, file, cb) {
     // accept image only
@@ -165,6 +177,20 @@ router.post("/addpic4", upload.single('pic4'), async (req, res) => {
     catch (e) {
         console.log(e);
     }
+})
+
+router.post("/modifLocation", async (req, res) => {
+    console.log(req.body.location);
+    try {
+        const info = await geocoder.geocode(req.body.location);
+        console.log(info);
+    }
+    catch (e) {
+        console.log('salut');
+        console.log(e);
+    }
+    console.log('bite');
+    console.log('grose');
 })
 
 module.exports = router;
