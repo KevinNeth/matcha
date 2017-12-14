@@ -49,6 +49,7 @@ router.get('/',  async (req, res) => {
 router.post('/submit', upload.single('profilpic'), async (req, res) => {
 	// const interestbit = req.body.interest.split(" ");
 	// console.log(interestbit);
+	console.log(req.file);
 	try {
 		await db.updateOne('users', { login: req.session.login }, {
 			$set: {
@@ -67,5 +68,10 @@ router.post('/submit', upload.single('profilpic'), async (req, res) => {
 		res.redirect('/firstConnection');
 	}
 });
+
+router.post('/addPicture', upload.single('profilpic'), async (req, res) => {
+	console.log(req.body.picture);
+	console.log(req.file);
+})
 
 module.exports = router;

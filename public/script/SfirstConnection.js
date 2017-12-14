@@ -4,6 +4,18 @@ function url(){
 	return(url[0] + '//' + url[2] + '');
 }
 
+let actionImg = Array.from(document.getElementsByClassName("imgprof"));
+actionImg.forEach(function(test) {
+  test.addEventListener("change", function() {
+    console.log(test);
+    var xhr = new XMLHttpRequest();
+    
+      xhr.open('POST', url() + '/firstConnection/addPicture', true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.send('picture=' + test.value);
+  });
+})
+
 function success(pos) {
     var crd = pos.coords;
     var xhr = new XMLHttpRequest();
