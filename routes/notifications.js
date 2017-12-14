@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     else {
         try {
             let notifications = await Notification.getAll(req.session.login);
-            console.log(notifications);
+            Notification.markAllRead(req.session.login);
             res.render("notifications", {
                 notifications: notifications
             });

@@ -1,11 +1,6 @@
 <% include perm/SmallHeader %>
 
-
-<%var text = {%>
-<%    message: ' sent you a message.',%>
-<%    like: ' liked your profile.',%>
-<%    visit: ' visited your profile.'%>
-<%};%>
+<% var text = { message: ' sent you a message.', like: ' liked your profile.', visit: ' visited your profile.', mutual: ' liked you back!', unlike: ' no longer likes you. Sorry.' }; %>
 
 <div class="container">
     <div class="card">
@@ -13,12 +8,12 @@
             Notifications
         </div>
         <div class="card-body">
-            <ul class="list-group">
+            <ul id="notifications" class="list-group">
                 <% notifications.forEach(function(notification) { %>
                     <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>
                     <li class="list-group-item"><a href="<%- link %>">
                         <%- (notification.from + text[notification.type]) %>
-                    </li></a>
+                    </a></li>
                 <% }); %>
             </ul>
         </div>
@@ -26,39 +21,30 @@
 </div>
 
 <% include perm/Footer %>
-<!-- 
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     $(function () {
-        var socket = io(),
-            to = "<%- to %>";
+        var socket = io();
 
-        $('form').submit(function () {
-            var message = {
-                to: to,
-                text: $('#message-text').val()
-            };
-            console.log(message);
-            socket.emit('message-send', message);
-            $('#message-text').val('');
-            return false;
+        socket.on('message', function (from) {
+            $('#notifications').prepend('<li class="list-group-item"><a href="/chat/' + from + '"> ' + from + ' sent you a message.</a></li>' );
         });
 
-        socket.on('auth-error', function (error) {
-            $('#messages').text(error);
-            $('#message-text').prop('disabled', true);
-            $('button').prop('disabled', true);
+        socket.on('like', function (from) {
+            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + ' liked your profile.</a></li>');
         });
 
-        socket.on('message-sent', function(message) {
-            $('#messages').append('<div class="row"></div>').append($('<div class="message-bubble message-sent"></div>').text(message));
+        socket.on('view', function (from) {
+            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + ' visited your profile.</a></li>');
         });
 
-        socket.on('message', function (from, message) {
-            console.log(from, message);
-            if (from === to) {
-                $('#messages').append($('<div class="message-bubble message-received"></div>').text(message));
-            }
+        socket.on('mutual', function (from) {
+            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + '  liked you back!.</a></li>');
+        });
+
+        socket.on('unlike', function (from) {
+            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + '  no longer likes you. Sorry.</a></li>');
         });
     });
-</script> -->
+</script>

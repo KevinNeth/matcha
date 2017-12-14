@@ -1,7 +1,7 @@
 const db = require('./db');
 
 /*
-types: message, like, visit
+types: message, like, visit, mutual, unlike
 */
 
 add = async (type, to, from) => {
