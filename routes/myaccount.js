@@ -2,6 +2,30 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
 const User = require("../models/user.js");
+let multer = require('multer');
+let path = require('path');
+
+let imageFilter = function (req, file, cb) {
+    // accept image only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads');
+    },
+    filename: function(req, file, cb) {
+        cb(null, req.session.login + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    fileFilter: imageFilter,
+    storage: storage
+});
 
 function validEmail(email) {
 	let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -36,7 +60,11 @@ router.get('/', async (req, res) => {
             location: user.location,
             bio: user.bio,
             interest: user.interest,
-            profilepic: user.profilepic
+            profilepic: user.profilepic,
+            pic1: user.pic1,
+            pic2: user.pic2,
+            pic3: user.pic3,
+            pic4: user.pic4
         });
     }
 });
@@ -95,6 +123,46 @@ router.post("/addInterest", async (req, res) => {
         res.redirect('/myaccount');
     }
     catch(e) {
+        console.log(e);
+    }
+})
+
+router.post("/addpic1", upload.single('pic1'), async (req, res) => {
+    try {
+        await db.updateOne("users", { login: req.session.login }, { $set: { pic1: req.file.filename } });
+        res.redirect('/myaccount');
+    }
+    catch (e) {
+        console.log(e);
+    }
+})
+
+router.post("/addpic2", upload.single('pic2'), async (req, res) => {
+    try {
+        await db.updateOne("users", { login: req.session.login }, { $set: { pic2: req.file.filename } });
+        res.redirect('/myaccount');
+    }
+    catch (e) {
+        console.log(e);
+    }
+})
+
+router.post("/addpic3", upload.single('pic3'), async (req, res) => {
+    try {
+        await db.updateOne("users", { login: req.session.login }, { $set: { pic3: req.file.filename } });
+        res.redirect('/myaccount');
+    }
+    catch (e) {
+        console.log(e);
+    }
+})
+
+router.post("/addpic4", upload.single('pic4'), async (req, res) => {
+    try {
+        await db.updateOne("users", { login: req.session.login }, { $set: { pic4: req.file.filename } });
+        res.redirect('/myaccount');
+    }
+    catch (e) {
         console.log(e);
     }
 })

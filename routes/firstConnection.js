@@ -71,6 +71,7 @@ router.post('/submit', upload.single('profilpic'), async (req, res) => {
 
 router.post('/addPicture', upload.single('profilpic'), async (req, res) => {
 	console.log(req.body.picture);
+	upload.single(req.body.picture);
 	console.log(req.file);
 })
 

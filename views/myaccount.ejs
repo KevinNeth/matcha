@@ -87,12 +87,67 @@
                         <span id="interest">Add interest</span>
                 </div>
             </div>
-            <!-- img -->
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <% if (!pic1) { %>
+                        <img src="img/empty-image.png" class="img-thumbnail"/>
+                    <% } else { %>
+                        <img src="/uploads/<%- pic1 %>" class="img-thumbnail"/>
+                    <% } %>
+                    <form action="/myaccount/addpic1" enctype="multipart/form-data" method="post">
+                        <input type="file" name="pic1">
+                        <input type="submit" value="change">
+                    </form>
+                </div>
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <% if (!pic2) { %>
+                        <img src="img/empty-image.png" class="img-thumbnail"/>
+                    <% } else { %>
+                        <img src="/uploads/<%- pic2 %>" class="img-thumbnail"/>
+                    <% } %>
+                    <form action="/myaccount/addpic2" enctype="multipart/form-data" method="post">
+                        <input type="file" name="pic2">
+                        <input type="submit" value="change">
+                    </form>
+                </div>
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <% if (!pic3) { %>
+                        <img src="img/empty-image.png" class="img-thumbnail"/>
+                    <% } else { %>
+                        <img src="/uploads/<%- pic3 %>" class="img-thumbnail"/>
+                    <% } %>
+                    <form action="/myaccount/addpic3" enctype="multipart/form-data" method="post">
+                        <input type="file" name="pic3">
+                        <input type="submit" value="change">
+                    </form>
+                </div>
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <% if (!pic4) { %>
+                        <img src="img/empty-image.png" class="img-thumbnail"/>
+                    <% } else { %>
+                        <img src="/uploads/<%- pic4 %>" class="img-thumbnail"/>
+                    <% } %>
+                    <form action="/myaccount/addpic4" enctype="multipart/form-data" method="post">
+                        <input type="file" name="pic4">
+                        <input type="submit" value="change">
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box" required>
+            </div>
             <!-- geo -->
         </div>
     </div>
 </div>
 <script src="/script/Smyaccount.js"></script>
+<script>
+    function initAutocomplete() {
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU&libraries=places&callback=initAutocomplete" async defer></script>
 
 <% include perm/Footer %>
 
