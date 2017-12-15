@@ -181,16 +181,33 @@ router.post("/addpic4", upload.single('pic4'), async (req, res) => {
 
 router.post("/modifLocation", async (req, res) => {
     console.log(req.body.location);
-    try {
-        const info = await geocoder.geocode(req.body.location);
-        console.log(info);
+    console.log("----");
+    const info = await geocoder.geocode(req.body.location);
+    console.log(info);
+    
+    console.log("----");
+    console.log(info[0].formattedAddress);
+    console.log("----");
+    if (info) {
+        console.log(info[0].formattedAddress);
+        console.log(info[0].latitude);
+        console.log(info[0].longitude);
+        await db.updateOne("users", { login: req.session.login }, {
+             $set: {
+                tmpAddress: info[0].formattedAddress,
+                tmpLat: info[0].latitude,
+                tmpLng: info[0].longitude,
+                location: {
+                    type: "Point",
+                    coordinates: [
+                        parseFloat(info[0].longitude),
+                        parseFloat(info[0].latitude)
+                    ]
+                }
+            }
+        });
+        res.redirect('/myaccount');
     }
-    catch (e) {
-        console.log('salut');
-        console.log(e);
-    }
-    console.log('bite');
-    console.log('grose');
 })
 
 module.exports = router;
