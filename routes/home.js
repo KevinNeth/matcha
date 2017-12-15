@@ -3,21 +3,21 @@ let router = express.Router();
 let db = require('../models/db');
 
 router.get('/', async (req, res) => {
+	errors = [];
+	if (req.session.errors) {
+		errors = req.session.errors;
+		req.session.errors = [];
+	}
+
 	if (req.session.login === undefined)
 		res.redirect('/');
 	else {
-		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: false});
-		console.log(valueLog);
+		let valueLog = await db.findOne('users', {login: req.session.login, firstConnection: false})
 		if (!valueLog) {
-			console.log("bizare");
-			console.log(valueLog);
-			console.log("pas ici");
 			res.redirect('/firstConnection');
 		}
 		else {
-			console.log("quepasa ?");
 			let both = await db.findOne('user', {login: req.session.login, orientation: "both"});
-			console.log(both);
 			if (both) {
 				let valueMatch = await db.find('users', {
 					firstConnection: false,
@@ -34,8 +34,8 @@ router.get('/', async (req, res) => {
 						}
 					}
 				});
-				console.log(valueMatch);
 				res.render('home', {
+					errors: errors,
 					info: valueMatch
 				});
 			}
@@ -55,9 +55,8 @@ router.get('/', async (req, res) => {
 						}
 					}
 				});
-				// let arrtest = valueMatch['interest'].split("");
-				console.log(valueMatch);
 				res.render('home', {
+					errors: errors,
 					info: valueMatch
 				});
 			}
@@ -82,7 +81,6 @@ router.post('/age', async (req, res) => {
 		}
 		else {
 			let both = await db.findOne('user', {login: req.session.login, orientation: "both"});
-			console.log(both);
 			if (both) {
 				let valueMatch = await db.findSort('users', {
 					firstConnection: false,
@@ -90,7 +88,6 @@ router.post('/age', async (req, res) => {
 					login: {$ne: req.session.login}
 				},
 				{ year: -1, month: -1, date: -1});
-				console.log(valueMatch);
 				res.render('home', {
 					info: valueMatch
 				});
@@ -103,7 +100,6 @@ router.post('/age', async (req, res) => {
 					login: {$ne: req.session.login}
 					},
 					{ year: -1, month: -1, date: -1});
-				console.log(valueMatch);
 				res.render('home', {
 					info: valueMatch
 				});

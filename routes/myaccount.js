@@ -130,26 +130,15 @@ router.post("/addInterest", async (req, res) => {
         let newinterest = req.body.interest;
         newinterest = newinterest.replace(/\s\s+/g, ' ').split(" ");
         let finalinterest = interest.concat(newinterest);
-        await db.updateOne("users", { login: req.session.login }, { $set: { interest: finalinterest } });
+        await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
         res.redirect('/myaccount');
     }
     catch(e) {
         console.log(e);
     }
 })
+
 router.post("/profilepic", async (req, res) => {
-    // req.session.success = [];
-    // req.session.errors = [];
-    // try {
-    //     await db.updateOne("users", { login: req.session.login }, { $set: { profilepic: req.file.filename, profilepicpath: req.file.path } });
-    //     req.session.success.push({msg: "Profile picture change !"});
-    //     res.redirect('/myaccount');
-    // }
-    // catch (e) {
-    //     req.session.errors.push({msg: "Un probleme est survenu"});
-    //     res.redirect('/myaccount');
-    //     console.log(e);
-    // }
     req.session.success = [];
     req.session.errors = [];
     const newPic = upload.single('profilepic');
@@ -172,6 +161,7 @@ router.post("/profilepic", async (req, res) => {
         }
     })
 })
+
 router.post("/addpic1", async (req, res) => {
     req.session.success = [];
     req.session.errors = [];

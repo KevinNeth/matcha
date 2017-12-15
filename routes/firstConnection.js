@@ -24,7 +24,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     fileFilter: imageFilter,
-    storage: storage
+	storage: storage,
+	errorHandling: 'manual'
 });
 
 
@@ -46,24 +47,35 @@ router.get('/',  async (req, res) => {
 	}
 });
 
-router.post('/submit', upload.single('profilpic'), async (req, res) => {
-	try {
-		await db.updateOne('users', { login: req.session.login }, {
-			$set: {
-				firstname: req.body.firstname,
-				lastname: req.body.lastname,
-				bio: req.body.bio,
-				interest: req.body.interest.split(" "),
-				profilepic: req.file.filename,
-				profilepicpath: req.file.path,
-				firstConnection: false
+router.post('/submit', async (req, res) => {
+	req.session.errors = [];
+    const newPic = upload.single('profilpic');
+    newPic(req, res, async (err) => {
+		console.log(err);
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/firstConnection');
+        }
+        else {
+			try {
+				await db.updateOne('users', { login: req.session.login }, {
+					$set: {
+						firstname: req.body.firstname,
+						lastname: req.body.lastname,
+						bio: req.body.bio,
+						interest: req.body.interest.split(" "),
+						profilepic: req.file.filename,
+						profilepicpath: req.file.path,
+						firstConnection: false
+					}
+				});
+				res.redirect('/home');
+			} catch(e) {
+				console.log("MongoDB connection error.");
+				res.redirect('/firstConnection');
 			}
-		});
-		res.redirect('/home');
-	} catch(e) {
-		console.log("MongoDB connection error.");
-		res.redirect('/firstConnection');
-	}
+        }
+    })
 });
 
 router.post('/addPicture', upload.single('profilpic'), async (req, res) => {
