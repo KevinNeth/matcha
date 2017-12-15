@@ -8,11 +8,9 @@ const NodeGeocoder = require('node-geocoder');
 
 const options = {
     provider: 'google',
-   
-    // Optional depending on the providers
-    httpAdapter: 'https', // Default
-    apiKey: 'AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU', // for Mapquest, OpenCage, Google Premier
-    formatter: null         // 'gpx', 'string', ...
+    httpAdapter: 'https',
+    apiKey: 'AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU',
+    formatter: null
 };
 
 const geocoder = NodeGeocoder(options);
@@ -36,7 +34,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     fileFilter: imageFilter,
-    storage: storage
+    storage: storage,
+    errorHandling: 'manual'
 });
 
 function validEmail(email) {
@@ -69,7 +68,7 @@ router.get('/', async (req, res) => {
             gender: user.gender,
             birthday: user.birthday,
             orientation: user.orientation,
-            location: user.location,
+            location: user.tmpAddress,
             bio: user.bio,
             interest: user.interest,
             profilepic: user.profilepic,
@@ -138,60 +137,143 @@ router.post("/addInterest", async (req, res) => {
         console.log(e);
     }
 })
-
-router.post("/addpic1", upload.single('pic1'), async (req, res) => {
-    try {
-        await db.updateOne("users", { login: req.session.login }, { $set: { pic1: req.file.filename } });
-        res.redirect('/myaccount');
-    }
-    catch (e) {
-        console.log(e);
-    }
+router.post("/profilepic", async (req, res) => {
+    // req.session.success = [];
+    // req.session.errors = [];
+    // try {
+    //     await db.updateOne("users", { login: req.session.login }, { $set: { profilepic: req.file.filename, profilepicpath: req.file.path } });
+    //     req.session.success.push({msg: "Profile picture change !"});
+    //     res.redirect('/myaccount');
+    // }
+    // catch (e) {
+    //     req.session.errors.push({msg: "Un probleme est survenu"});
+    //     res.redirect('/myaccount');
+    //     console.log(e);
+    // }
+    req.session.success = [];
+    req.session.errors = [];
+    const newPic = upload.single('profilepic');
+    newPic(req, res, async (err) => {
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/myaccount');
+        }
+        else {
+            try {
+                await db.updateOne("users", { login: req.session.login }, { $set: { profilepic: req.file.filename, profilepicpath: req.file.path } });
+                req.session.success.push({msg: "Profile picture change !"});
+                res.redirect('/myaccount');
+            }
+            catch (e) {
+                req.session.errors.push({msg: "Un probleme est survenu"});
+                res.redirect('/myaccount');
+                console.log(e);
+            }
+        }
+    })
+})
+router.post("/addpic1", async (req, res) => {
+    req.session.success = [];
+    req.session.errors = [];
+    const newPic = upload.single('pic1');
+    newPic(req, res, async (err) => {
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/myaccount');
+        }
+        else {
+            try {
+                await db.updateOne("users", { login: req.session.login }, { $set: { pic1: req.file.filename } });
+                req.session.success.push({msg: "1st picture change !"});
+                res.redirect('/myaccount');
+            }
+            catch (e) {
+                req.session.errors.push({msg: "Un probleme est survenu"});
+                res.redirect('/myaccount');
+                console.log(e);
+            }
+        }
+    })
 })
 
-router.post("/addpic2", upload.single('pic2'), async (req, res) => {
-    try {
-        await db.updateOne("users", { login: req.session.login }, { $set: { pic2: req.file.filename } });
-        res.redirect('/myaccount');
-    }
-    catch (e) {
-        console.log(e);
-    }
+router.post("/addpic2", async (req, res) => {
+    req.session.success = [];
+    req.session.errors = [];
+    const newPic = upload.single('pic2');
+    newPic(req, res, async (err) => {
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/myaccount');
+        }
+        else {
+            try {
+                await db.updateOne("users", { login: req.session.login }, { $set: { pic2: req.file.filename } });
+                req.session.success.push({msg: "2nd picture change !"});
+                res.redirect('/myaccount');
+            }
+            catch (e) {
+                req.session.errors.push({msg: "Un probleme est survenu"});
+                res.redirect('/myaccount');
+                console.log(e);
+            }
+        }
+    })
 })
 
-router.post("/addpic3", upload.single('pic3'), async (req, res) => {
-    try {
-        await db.updateOne("users", { login: req.session.login }, { $set: { pic3: req.file.filename } });
-        res.redirect('/myaccount');
-    }
-    catch (e) {
-        console.log(e);
-    }
+router.post("/addpic3", async (req, res) => {
+    req.session.success = [];
+    req.session.errors = [];
+    const newPic = upload.single('pic3');
+    newPic(req, res, async (err) => {
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/myaccount');
+        }
+        else {
+            try {
+                await db.updateOne("users", { login: req.session.login }, { $set: { pic3: req.file.filename } });
+                req.session.success.push({msg: "3rd picture change !"});
+                res.redirect('/myaccount');
+            }
+            catch (e) {
+                req.session.errors.push({msg: "Un probleme est survenu"});
+                res.redirect('/myaccount');
+                console.log(e);
+            }
+        }
+    })
 })
 
-router.post("/addpic4", upload.single('pic4'), async (req, res) => {
-    try {
-        await db.updateOne("users", { login: req.session.login }, { $set: { pic4: req.file.filename } });
-        res.redirect('/myaccount');
-    }
-    catch (e) {
-        console.log(e);
-    }
+router.post("/addpic4", async (req, res) => {
+    req.session.success = [];
+    req.session.errors = [];
+    const newPic = upload.single('pic4');
+    newPic(req, res, async (err) => {
+        if (err) {
+            req.session.errors.push({msg: "Only image allow !"});
+            res.redirect('/myaccount');
+        }
+        else {
+            try {
+                await db.updateOne("users", { login: req.session.login }, { $set: { pic4: req.file.filename } });
+                req.session.success.push({msg: "4th picture change !"});
+                res.redirect('/myaccount');
+            }
+            catch (e) {
+                req.session.errors.push({msg: "Un probleme est survenu"});
+                res.redirect('/myaccount');
+                console.log(e);
+            }
+        }
+    })
 })
 
 router.post("/modifLocation", async (req, res) => {
-    console.log(req.body.location);
-    console.log("----");
+    req.session.success = [];
+    req.session.errors = [];
     const info = await geocoder.geocode(req.body.location);
-    console.log(info);
-    
-    console.log("----");
-    console.log(info[0].formattedAddress);
-    console.log("----");
-    if (info) {
-        console.log(info[0].formattedAddress);
-        console.log(info[0].latitude);
-        console.log(info[0].longitude);
+    if (info[0]) {
+        console.log('ici');
         await db.updateOne("users", { login: req.session.login }, {
              $set: {
                 tmpAddress: info[0].formattedAddress,
@@ -206,6 +288,11 @@ router.post("/modifLocation", async (req, res) => {
                 }
             }
         });
+        req.session.success.push({msg: "Address change !"});
+        res.redirect('/myaccount');
+    }
+    else {
+        req.session.errors.push({msg: "Localisation invalide !"});
         res.redirect('/myaccount');
     }
 })
