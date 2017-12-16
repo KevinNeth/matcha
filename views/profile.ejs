@@ -23,6 +23,26 @@
             <p><%- interest %></p>
         </div>    
     </div>
+    <% if (isBlock !== true) { %>
+    <% if (isLike !== true) { %>
+        <div>
+            <a href="/profile/addLike/<%- user %>" method="post">
+                <img src="/img/heart.png" alt="heart">
+            </a>
+        </div>
+    <% } else { %>
+        <div>
+            <a href="/profile/disLike/<%- user %>" method="post">
+                <img src="/img/black heart.png" alt="blackheart">
+            </a>
+        </div>
+    <% } %>
+    <div>
+        <a href="/profile/block/<%- user %>" method="post">
+            Signaler la personne
+        </a>
+    </div>
+    <% } %>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div id="map" style="height: 300px; width: 100%;"></div>

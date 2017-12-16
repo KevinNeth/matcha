@@ -128,7 +128,7 @@ router.post("/addInterest", async (req, res) => {
         let user = await User.get(req.session.login);
         let interest = user.interest;
         let newinterest = req.body.interest;
-        newinterest = newinterest.replace(/\s\s+/g, ' ').split(" ");
+        newinterest = newinterest.trim().replace(/\s\s+/g, ' ').split(" ");
         let finalinterest = interest.concat(newinterest);
         await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
         res.redirect('/myaccount');
