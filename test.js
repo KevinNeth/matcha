@@ -37,9 +37,15 @@ const SearchHelper = require('./controllers/searchHelper');
         // console.log(search.query);
         // let results = await search.results();
         // console.log(results);
+        let bitches = [];
         let users = await db.prepare('users');
-        let results = await users.aggregate({$unwind: { path: "$interest"}}).find({interest: {$elemMatch: []}}
-            .toArray();
+        let results = await users.aggregate([
+            { $unwind: "$interest" },
+            { $group: {"_id": "$_id", "common": {$sum: 1}}},
+            { $sort: {common: -1} },
+            { $project: {}}
+        ]).toArray();
+        let results = await users.find({}, { "common": {$size: { $setIntersection: ["$interests", ['lol']]}}}).toArray();
         console.log(results);
     } catch(e) {
         console.log(e);
