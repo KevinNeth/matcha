@@ -1,7 +1,8 @@
 .myacc-div {
     padding-top: 25px;
     height: 80px;
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 20px;
 }
 
 .myacc-divinter {
@@ -11,4 +12,8 @@
 
 .deleteInter {
     margin-bottom:5px;
+}
+
+.last-div {
+    padding-bottom: 200px;
 }

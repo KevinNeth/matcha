@@ -27,12 +27,12 @@
                     <input class="btn btn-block btn-primary" type="submit" value="Change">
                 </form>
             </div>
-            <%- login %>
+            <%= login %>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- firstname %></span>
+                    <span><%= firstname %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="change" id="firstname">Change firstname</span>
@@ -40,7 +40,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- lastname %></span>
+                    <span><%= lastname %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="change" id="lastname">Change lastname</span>
@@ -48,7 +48,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- email %></span>
+                    <span><%= email %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="change" id="email">Change email</span>
@@ -56,7 +56,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- gender %></span>
+                    <span><%= gender %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="changeGO" id="gender">Change gender</span>
@@ -64,7 +64,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- orientation %></span>
+                    <span><%= orientation %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="changeGO" id="orientation">Change orientation</span>
@@ -72,7 +72,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- bio %></span>
+                    <span><%= bio %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="change" id="bio">Change your bio</span>
@@ -83,19 +83,23 @@
                     <% let tab = interest;
                     for(var i=0; i < tab.length; i++) { %>
                         <button class="deleteInter btn btn-primary" id="<%- i %>">
-                            #<%- tab[i] %>
+                            #<%= tab[i] %>
                         </button>
                     <% } %>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-right">
-                    <form action="/myaccount/addInterest" method="post">
-                        <textarea type="text" class="form-control" id="formpad" name="interest" required></textarea>
-                        <input type="submit" value="add">
-                    </form>
+            <form action="/myaccount/addInterest" method="post">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="formpad" name="interest" required>
+                            <span class="input-group-btn" style="height:37px">
+                                <input class="btn btn-secondary" type="submit" value="Add Interest">
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="row">
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <% if (!pic1) { %>
@@ -150,17 +154,26 @@
                     </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    Your actual location: <%- location %>
+            <div class="row myacc-div border">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <span><%- location %></span>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                    <span class="changeGO" id="gender">Your actual location</span>
                 </div>
             </div>
-            <div class="row">
-                <form action="/myaccount/modifLocation" method="post">
-                    <input name="location" id="pac-input" class="controls" type="text" placeholder="Insert new location" required>
-                    <input type="submit" value="change">
-                </form>
-            </div>
+            <form action="/myaccount/modifLocation" method="post">
+                <div class="row last-div">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="location" id="pac-input" placeholder="Insert new location" required>
+                            <span class="input-group-btn" style="height:37px">
+                                <input class="btn btn-secondary" type="submit" value="Change Location">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
