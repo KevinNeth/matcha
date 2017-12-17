@@ -23,7 +23,6 @@
             <p><%- interest %></p>
         </div>    
     </div>
-    <% if (isBlock !== true) { %>
     <% if (isLike !== true) { %>
         <div>
             <a href="/profile/addLike/<%- user %>" method="post">
@@ -42,7 +41,6 @@
             Signaler la personne
         </a>
     </div>
-    <% } %>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div id="map" style="height: 300px; width: 100%;"></div>

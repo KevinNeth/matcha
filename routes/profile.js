@@ -13,30 +13,32 @@ router.get('/user/:login', async (req, res) => {
                 const user = await db.findOne('users', {login: req.params.login});
                 if (user) {
                     const findBlock = await db.findOne('users', {login: req.params.login, blocker: [req.session.login]});
-                    let isBlock = false;
-                    if (findBlock)
-                        isBlock = true;
-                    const findLike = await db.findOne('users', {login: req.params.login, liker: [req.session.login]});
-                    let isLike = false;
-                    if (findLike)
-                        isLike = true;
-                    let view = [req.session.login];
-                    await db.updateOne('users', { login: req.params.login }, { $addToSet: { viewers: { $each: view }}});
-                    res.render("profile", {
-                        login: user.login,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        gender: user.gender,
-                        birthday: user.birthday,
-                        orientation: user.orientation,
-                        location: user.location,
-                        bio: user.bio,
-                        interest: user.interest,
-                        profilepic: user.profilepic,
-                        user: req.params.login,
-                        isLike: isLike,
-                        isBlock: isBlock
-                    });
+                    if (!findBlock) {
+                        const findLike = await db.findOne('users', {login: req.params.login, liker: [req.session.login]});
+                        let isLike = false;
+                        if (findLike)
+                            isLike = true;
+                        let view = [req.session.login];
+                        await db.updateOne('users', { login: req.params.login }, { $addToSet: { viewers: { $each: view }}});
+                        res.render("profile", {
+                            login: user.login,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            gender: user.gender,
+                            birthday: user.birthday,
+                            orientation: user.orientation,
+                            location: user.location,
+                            bio: user.bio,
+                            interest: user.interest,
+                            profilepic: user.profilepic,
+                            user: req.params.login,
+                            isLike: isLike
+                        });
+                    }
+                    else {
+                        req.session.errors.push({msg: "User not found"});
+                        res.redirect('/home');
+                    }
                 }
                 else {
                     req.session.errors.push({msg: "User not found"});
