@@ -1,7 +1,7 @@
 const db = require('./models/db.js');
 const User = require('./models/user.js');
 const Conversation = require('./models/conversation.js');
-const search = require('./controllers/search');
+const SearchHelper = require('./controllers/searchHelper');
 
 (async () => {
     // try {
@@ -28,10 +28,20 @@ const search = require('./controllers/search');
         // await db.updateOne('users', { login: 'n8lowe' }, {$set: {$add: { score: 5 }}});
         // await User.addLike('n8lowe', 'natelowe');
         // let user = await User.get('n8lowe');
-        let list = await User.find({ birthday: search.betweenAge(18, 30) });
-        console.log(list);
+        // let user = await User.get('n8lowe');
+        // search = new SearchHelper(user);
+        // search.age(1);
+        // search.filterScore(0, 100);
+        // search.filterDistance(100);
+        // search.sortLocation(1);
+        // console.log(search.query);
+        // let results = await search.results();
+        // console.log(results);
+        let users = await db.prepare('users');
+        let results = await users.aggregate({$unwind: { path: "$interest"}}).find({interest: {$elemMatch: []}}
+            .toArray();
+        console.log(results);
     } catch(e) {
         console.log(e);
     }
 })();
-
