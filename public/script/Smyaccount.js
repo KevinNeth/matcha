@@ -1,49 +1,82 @@
-function url(){
-	var url =  window.location.href;
-	url = url.split("/");
-	return(url[0] + '//' + url[2] + '');
+function url() {
+    var url = window.location.href;
+    url = url.split("/");
+    return (url[0] + '//' + url[2] + '');
 }
 
+/*<form action="/myaccount/modifLocation" method="post">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="location" id="pac-input" placeholder="Insert new location" required>
+                <span class="input-group-btn" style="height:37px">
+                    <input class="btn btn-secondary" type="submit" value="Change Location">
+                </span>
+            </div>
+        </div>
+    </div>
+</form>*/
+
 let allchange = Array.from(document.getElementsByClassName('change'));
-allchange.forEach(function(change) {
-    change.addEventListener("click", function() {
+allchange.forEach(function (change) {
+    change.addEventListener("click", function () {
         let parent = change.parentNode.parentNode;
-        let id =  change.id;
+        let id = change.id;
         while (parent.hasChildNodes()) {
             parent.removeChild(parent.lastChild);
         }
+        
         let input = document.createElement('input');
         input.setAttribute("type", "submit");
-        input.setAttribute("value","change");
+        input.setAttribute("value", "Change " + id);
+        input.classList.add("btn", "btn-secondary");
+
         let input2 = document.createElement('input');
         input2.setAttribute("type", "text");
+        input2.setAttribute("class", "form-control");
         input2.setAttribute("name", id);
+
+        let span = document.createElement("span");
+        span.setAttribute("class", "input-group-btn");
+        span.setAttribute("style", "height: 37px");
+        span.appendChild(input);
+
+        inputdiv = document.createElement("div");
+        inputdiv.setAttribute("class", "input-group");
+        inputdiv.appendChild(input2);
+        inputdiv.appendChild(span);
+
+        let classdiv = document.createElement("div");
+        classdiv.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "col-xl-12");
+        classdiv.appendChild(inputdiv);
+
+        let rowdiv = document.createElement("div");
+        rowdiv.setAttribute("class", "row");
+        rowdiv.appendChild(classdiv);
         
         let form = document.createElement('form');
         form.setAttribute("action", "myaccount/submit");
         form.setAttribute("method", "post");
+        form.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "col-xl-12");
+        form.appendChild(rowdiv);
 
-        form.appendChild(input2);
-        form.appendChild(input);
-        let halfdiv = document.createElement("div");
-        halfdiv.classList.add("col-6", "col-sm-6", "col-md-6", "col-lg-6", "col-xl-6");
-        halfdiv.appendChild(form);
-        parent.appendChild(halfdiv);
+        parent.appendChild(form);
     });
 });
 
 let changeGO = Array.from(document.getElementsByClassName('changeGO'));
-changeGO.forEach(function(change) {
-    change.addEventListener("click", function() {
+changeGO.forEach(function (change) {
+    change.addEventListener("click", function () {
         let parent = change.parentNode.parentNode;
         console.log(parent);
-        let id =  change.id;
+        let id = change.id;
         console.log(id);
         while (parent.hasChildNodes()) {
             parent.removeChild(parent.lastChild);
         }
 
         let select = document.createElement('select');
+        select.setAttribute("class", "custom-select")
         select.setAttribute("name", id);
 
         let man = document.createElement('option');
@@ -65,10 +98,11 @@ changeGO.forEach(function(change) {
             both.appendChild(textboth);
             select.appendChild(both);
         }
-        
+
         let input = document.createElement('input');
         input.setAttribute("type", "submit");
-        input.setAttribute("value","change");
+        input.setAttribute("class", "btn btn-primary");
+        input.setAttribute("value", "Change");
 
         let form = document.createElement('form');
         form.setAttribute("action", "myaccount/submit");
@@ -76,17 +110,17 @@ changeGO.forEach(function(change) {
         form.appendChild(select);
         form.appendChild(input);
 
-        let halfdiv = document.createElement("div");
-        halfdiv.classList.add("col-6", "col-sm-6", "col-md-6", "col-lg-6", "col-xl-6");
-        halfdiv.appendChild(form);
-        parent.appendChild(halfdiv);
+        let div = document.createElement("div");
+        div.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "col-xl-12", "text-right");
+        div.appendChild(form);
+        parent.appendChild(div);
     })
 })
 
 let deleteInter = Array.from(document.getElementsByClassName('deleteInter'));
-deleteInter.forEach(function(inter) {
+deleteInter.forEach(function (inter) {
     let id = inter.id;
-    inter.addEventListener("click", function() {
+    inter.addEventListener("click", function () {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', url() + '/myaccount/deleteInterest', true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
