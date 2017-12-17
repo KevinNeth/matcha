@@ -35,11 +35,6 @@ app.use((req, res, next) => {
 
 require('./controllers/incoming');
 
-// io.on('connection', (socket) => {
-//     console.log("A user connected.");
-//     console.log(socket);
-// });
-
 //Routes de base
 app.use('/', require("./routes/signUp"));
 app.use('/login', require("./routes/logIn"));

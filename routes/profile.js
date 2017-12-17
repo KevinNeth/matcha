@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models/db");
+const User = require('../models/user');
 
 router.get('/user/:login', async (req, res) => {
     if (req.session.login === undefined)
@@ -10,43 +11,30 @@ router.get('/user/:login', async (req, res) => {
             res.redirect("/myaccount");
         else {
             try {
-                const user = await db.findOne('users', {login: req.params.login});
-                if (user) {
-                    const findBlock = await db.findOne('users', {login: req.params.login, blocker: [req.session.login]});
-                    if (!findBlock) {
-                        const findLike = await db.findOne('users', {login: req.params.login, liker: [req.session.login]});
-                        let isLike = false;
-                        if (findLike)
-                            isLike = true;
-                        let view = [req.session.login];
-                        await db.updateOne('users', { login: req.params.login }, { $addToSet: { viewers: { $each: view }}});
-                        res.render("profile", {
-                            login: user.login,
-                            firstname: user.firstname,
-                            lastname: user.lastname,
-                            gender: user.gender,
-                            birthday: user.birthday,
-                            orientation: user.orientation,
-                            location: user.location,
-                            bio: user.bio,
-                            interest: user.interest,
-                            profilepic: user.profilepic,
-                            user: req.params.login,
-                            isLike: isLike
-                        });
-                    }
-                    else {
-                        req.session.errors.push({msg: "User not found"});
-                        res.redirect('/home');
-                    }
+                const user = await User.get(req.params.login);
+                if (User.isBlocked(user, req.session.login)) {
+                    throw new Error('User not found.');
+                } else {
+                    let isLike = User.isLiked(user, req.session.login);
+                    await User.view(req.params.login, req.session.login);
+                    res.render("profile", {
+                        login: user.login,
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        gender: user.gender,
+                        birthday: user.birthday,
+                        orientation: user.orientation,
+                        location: user.location,
+                        bio: user.bio,
+                        interest: user.interest,
+                        profilepic: user.profilepic,
+                        user: req.params.login,
+                        isLike: isLike
+                    });
                 }
-                else {
-                    req.session.errors.push({msg: "User not found"});
-                    res.redirect('/home');
-                }
-            }
-            catch (e) {
-                console.log(e);
+            } catch(e) {
+                req.session.errors.push({msg: "User not found"});
+                res.redirect('/home');
             }
         }
     }
@@ -72,21 +60,11 @@ router.get('/addLike/:login', async (req, res) => {
             res.redirect("/myaccount");
         else {
             try {
-                const user = await db.findOne('users', { login: req.params.login });
-                if (user) {
-                    let liker = [req.session.login];
-                    let like = [req.params.login];
-                    await db.updateOne('users', { login: req.session.login }, { $addToSet: { like: { $each: like }}});
-                    await db.updateOne('users', { login: req.params.login }, { $addToSet: { liker: { $each: liker }}});
-                    res.redirect('/profile/user/' + req.params.login);
-                }
-                else {
-                    req.session.errors.push({msg: "User not found"});
-                    res.redirect('/home');
-                }
-            }
-            catch(e) {
-                console.log(e);
+                await User.addLike(req.params.login, req.session.login);
+                res.redirect('/profile/user/' + req.params.login);                
+            } catch(e) {
+                req.session.errors.push({ msg: "User not found" });
+                res.redirect('/home');
             }
         }
     }
@@ -101,25 +79,15 @@ router.get('/disLike/:login', async (req, res) => {
             res.redirect("/myaccount");
         else {
             try {
-                const user = await db.findOne('users', { login: req.params.login });
-                if (user) {
-                    let liker = req.session.login;
-                    let like = req.params.login;
-                    await db.updateOne('users', { login: req.session.login }, { $pull: { like: like }});
-                    await db.updateOne('users', { login: req.params.login }, { $pull: { liker: liker }});
-                    res.redirect('/profile/user/' + req.params.login);
-                }
-                else {
-                    req.session.errors.push({msg: "User not found"});
-                    res.redirect('/home');
-                }
-            }
-            catch(e) {
-                console.log(e);
+                User.removeLike(req.params.login, req.session.login);
+                res.redirect('/profile/user/' + req.params.login);
+            } catch (e) {
+                req.session.errors.push({ msg: "User not found" });
+                res.redirect('/home');
             }
         }
     }
-})
+});
 
 router.get('/block/:login', async (req, res) => {
     req.session.success = [];

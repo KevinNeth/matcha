@@ -3,14 +3,17 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-             Chat with 
-             <%- to %>
+            Messages with 
+            <a href="/profile/<%- to %>">
+                <%- to %>
+            </a>
         </div>
         <div id="messages" class="card-body" style="overflow: scroll;">
             <% messages.forEach(function(message) { %>
-                <% var className = (message.author === from) ? "message-sent" : "message-received" %>
-                <div class="row>">
-                    <div class="message-bubble <%- className %>">
+                <% var className = (message.author === from) ? "text-right" : "text-left" %>                
+                <% var subClassName = (message.author === from) ? "message-sent" : "message-received" %>
+                <div class="<%- className %>">
+                    <div class="message-bubble <%- subClassName %>">
                         <%- message.text %>
                     </div>
                 </div>
@@ -37,6 +40,8 @@
         var socket = io(),
             to = "<%- to %>";
 
+        $('#messages').scrollTop($('#messages')[0].scrollHeight);
+
         $('form').submit(function () {
             var message = {
                 to: to,
@@ -55,13 +60,13 @@
         });
 
         socket.on('message-sent', function(message) {
-            $('#messages').append('<div class="row"></div>').append($('<div class="message-bubble message-sent"></div>').text(message));
+            $('#messages').append('<div class="text-right"><div class="message-bubble message-sent">' + message + '</div></div>');
         });
 
         socket.on('message', function (from, message) {
             console.log(from, message);
             if (from === to) {
-                $('#messages').append($('<div class="message-bubble message-received"></div>').text(message));
+                $('#messages').append('<div class="text-left"><div class="message-bubble message-received">' + message + '</div></div>');
             }
         });
     });

@@ -52,9 +52,9 @@ find = async (collectionName, condition) => {
     return collection.find(condition).toArray();
 }
 
-findOne = async (collectionName, condition) => {
+findOne = async (collectionName, condition, projection = {}) => {
     let collection = await prepare(collectionName);
-    return collection.findOne(condition);
+    return collection.findOne(condition, projection);
 }
 
 findOneById = async (collectionName, id) => {
@@ -65,11 +65,6 @@ findOneById = async (collectionName, id) => {
 findOneAndUpdate = async (collectionName, condition, update) => {
     let collection = await prepare(collectionName);
     return collection.findOneAndUpdate(condition, update, { returnNewDocument: true });
-}
-
-findOneProjection = async (collectionName, condition, projection) => {
-    let collection = await prepare(collectionName);
-    return collection.findOne(condition, projection);
 }
 
 findSort = async (collectionName, findCondition, sortCondition) => {
@@ -83,5 +78,5 @@ count = async (collectionName, condition) => {
 }
 
 module.exports = {
-    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findOneProjection, findSort, count
+    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findSort, count
 };

@@ -1,3 +1,7 @@
+.card {
+    height: 70vh;
+}
+
 .message-bubble {
     border: 1px solid transparent;
     border-radius: 0.25rem;
@@ -8,11 +12,13 @@
 
 .message-sent {
     text-align: right;
+    right: 0;
     color: white;
     background-color: rgb(81, 164, 243);
 }
 
 .message-received {
     text-align: left;
+    left: 0;
     background-color: rgb(229, 228, 234);    
 }

@@ -70,7 +70,7 @@ router.post('/submit', (req, res) => {
 		password: passwordHash.generate(req.body.password),
 		gender: req.body.gender,
 		orientation: req.body.orientation,
-		birthday: Date(req.body.birthday),
+		birthday: new Date(req.body.birthday),
 		firstConnection: true
 	};
 	req.session.success = [];

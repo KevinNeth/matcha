@@ -11,9 +11,9 @@
             <ul id="notifications" class="list-group">
                 <% notifications.forEach(function(notification) { %>
                     <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>
-                    <li class="list-group-item"><a href="<%- link %>">
+                    <a href="<%- link %>"><li class="list-group-item">
                         <%- (notification.from + text[notification.type]) %>
-                    </a></li>
+                    </li></a>
                 <% }); %>
             </ul>
         </div>
@@ -28,23 +28,23 @@
         var socket = io();
 
         socket.on('message', function (from) {
-            $('#notifications').prepend('<li class="list-group-item"><a href="/chat/' + from + '"> ' + from + ' sent you a message.</a></li>' );
+            $('#notifications').prepend('<a href="/chat/' + from + '"><li class="list-group-item">' + from + ' sent you a message.</li></a>' );
         });
 
         socket.on('like', function (from) {
-            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + ' liked your profile.</a></li>');
+            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + ' liked your profile.</li></a>');
         });
 
         socket.on('view', function (from) {
-            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + ' visited your profile.</a></li>');
+            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + ' visited your profile.</li></a>');
         });
 
         socket.on('mutual', function (from) {
-            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + '  liked you back!.</a></li>');
+            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + '  liked you back!.</li></a>');
         });
 
         socket.on('unlike', function (from) {
-            $('#notifications').prepend('<li class="list-group-item"><a href="/profile/' + from + '"> ' + from + '  no longer likes you. Sorry.</a></li>');
+            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + '  no longer likes you. Sorry.</li></a>');
         });
     });
 </script>
