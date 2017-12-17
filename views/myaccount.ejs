@@ -19,14 +19,18 @@
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
             <img src="/uploads/<%- profilepic %>" class="img-thumbnail"/>
-            <form action="/myaccount/profilepic" enctype="multipart/form-data" method="post">
-                <input type="file" name="profilepic">
-                <input type="submit" value="change">
-            </form>
+            <div class="form-group">
+                <form action="/myaccount/profilepic" enctype="multipart/form-data" method="post">
+                    <label class="btn btn-block btn-primary">
+                        Browse<input type="file" name="profilepic" style="display: none;">
+                    </label>
+                    <input class="btn btn-block btn-primary" type="submit" value="Change">
+                </form>
+            </div>
             <%- login %>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
-            <div class="row">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- firstname %></span>
                 </div>
@@ -34,7 +38,7 @@
                     <span class="change" id="firstname">Change firstname</span>
                 </div>
             </div>
-            <div class="row ">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- lastname %></span>
                 </div>
@@ -42,7 +46,7 @@
                     <span class="change" id="lastname">Change lastname</span>
                 </div>
             </div>
-            <div class="row">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- email %></span>
                 </div>
@@ -50,7 +54,7 @@
                     <span class="change" id="email">Change email</span>
                 </div>
             </div>
-            <div class="row">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- gender %></span>
                 </div>
@@ -58,7 +62,7 @@
                     <span class="changeGO" id="gender">Change gender</span>
                 </div>
             </div>
-            <div class="row">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- orientation %></span>
                 </div>
@@ -66,7 +70,7 @@
                     <span class="changeGO" id="orientation">Change orientation</span>
                 </div>
             </div>
-            <div class="row">
+            <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <span><%- bio %></span>
                 </div>
@@ -74,28 +78,22 @@
                     <span class="change" id="bio">Change your bio</span>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="row myacc-divinter">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <% let tab = interest;
                     for(var i=0; i < tab.length; i++) { %>
-                        <button class="deleteInter" id="<%- i %>">
+                        <button class="deleteInter btn btn-primary" id="<%- i %>">
                             #<%- tab[i] %>
                         </button>
                     <% } %>
                 </div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
-                    <span id="interest">Your interest</span>
-                </div>
             </div>
             <div class="row">
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-right">
                     <form action="/myaccount/addInterest" method="post">
                         <textarea type="text" class="form-control" id="formpad" name="interest" required></textarea>
                         <input type="submit" value="add">
                     </form>
-                </div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
-                        <span id="interest">Add interest</span>
                 </div>
             </div>
             <div class="row">
@@ -106,8 +104,10 @@
                         <img src="/uploads/<%- pic1 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic1" enctype="multipart/form-data" method="post">
-                        <input type="file" name="pic1">
-                        <input type="submit" value="change">
+                        <label class="btn btn-block btn-primary">
+                            Browse<input type="file" name="pic1" style="display: none;">
+                        </label>
+                        <input class="btn btn-block btn-primary" type="submit" value="Change">
                     </form>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -117,8 +117,10 @@
                         <img src="/uploads/<%- pic2 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic2" enctype="multipart/form-data" method="post">
-                        <input type="file" name="pic2">
-                        <input type="submit" value="change">
+                        <label class="btn btn-block btn-primary">
+                            Browse<input type="file" name="pic2" style="display: none;">
+                        </label>
+                        <input class="btn btn-block btn-primary" type="submit" value="Change">
                     </form>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -128,8 +130,10 @@
                         <img src="/uploads/<%- pic3 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic3" enctype="multipart/form-data" method="post">
-                        <input type="file" name="pic3">
-                        <input type="submit" value="change">
+                        <label class="btn btn-block btn-primary">
+                            Browse<input type="file" name="pic3" style="display: none;">
+                        </label>
+                        <input class="btn btn-block btn-primary" type="submit" value="Change">
                     </form>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -139,8 +143,10 @@
                         <img src="/uploads/<%- pic4 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic4" enctype="multipart/form-data" method="post">
-                        <input type="file" name="pic4">
-                        <input type="submit" value="change">
+                        <label class="btn btn-block btn-primary">
+                            Browse<input type="file" name="pic4" style="display: none;">
+                        </label>
+                        <input class="btn btn-block btn-primary" type="submit" value="Change">
                     </form>
                 </div>
             </div>
