@@ -3,41 +3,41 @@
 <div class="container">
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-            <img src= "/uploads/<%- profilepic %>" class="img-thumbnail"/>
+            <img src= "/uploads/<%= profilepic %>" class="img-thumbnail"/>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
-            <p><%- login %></p>
-            <p><%- firstname %> <%- lastname %></p>
-            <p><%- birthday %></p>
-            <p><%- gender %></p>
-            <p>Interest by: <%- orientation %></p>
+            <p><%= login %></p>
+            <p><%= firstname %> <%= lastname %></p>
+            <p><%= birthday %></p>
+            <p><%= gender %></p>
+            <p>Interest by: <%= orientation %></p>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <p><%- bio %></p>
+            <p><%= bio %></p>
         </div>    
     </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <p><%- interest %></p>
+            <p><%= interest %></p>
         </div>    
     </div>
     <% if (isLike !== true) { %>
         <div>
-            <a href="/profile/addLike/<%- user %>" method="post">
+            <a href="/profile/addLike/<%= user %>" method="post">
                 <img src="/img/heart.png" alt="heart">
             </a>
         </div>
     <% } else { %>
         <div>
-            <a href="/profile/disLike/<%- user %>" method="post">
+            <a href="/profile/disLike/<%= user %>" method="post">
                 <img src="/img/black heart.png" alt="blackheart">
             </a>
         </div>
     <% } %>
     <div>
-        <a href="/profile/block/<%- user %>" method="post">
+        <a href="/profile/block/<%= user %>" method="post">
             Signaler la personne
         </a>
     </div>
@@ -50,7 +50,7 @@
         
 <script>
     function initMap() {
-        var uluru = {lat: <%- location.coordinates[1] %>, lng: <%- location.coordinates[0] %>};
+        var uluru = {lat: <%= location.coordinates[1] %>, lng: <%= location.coordinates[0] %>};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: uluru

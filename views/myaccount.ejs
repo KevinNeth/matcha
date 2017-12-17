@@ -18,7 +18,7 @@
 <div class="container">
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-            <img src="/uploads/<%- profilepic %>" class="img-thumbnail"/>
+            <img src="/uploads/<%= profilepic %>" class="img-thumbnail"/>
             <div class="form-group">
                 <form action="/myaccount/profilepic" enctype="multipart/form-data" method="post">
                     <label class="btn btn-block btn-primary">
@@ -82,7 +82,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <% let tab = interest;
                     for(var i=0; i < tab.length; i++) { %>
-                        <button class="deleteInter btn btn-primary" id="<%- i %>">
+                        <button class="deleteInter btn btn-primary" id="<%= i %>">
                             #<%= tab[i] %>
                         </button>
                     <% } %>
@@ -105,7 +105,7 @@
                     <% if (!pic1) { %>
                         <img src="img/empty-image.png" class="img-thumbnail"/>
                     <% } else { %>
-                        <img src="/uploads/<%- pic1 %>" class="img-thumbnail"/>
+                        <img src="/uploads/<%= pic1 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic1" enctype="multipart/form-data" method="post">
                         <label class="btn btn-block btn-primary">
@@ -118,7 +118,7 @@
                     <% if (!pic2) { %>
                         <img src="img/empty-image.png" class="img-thumbnail"/>
                     <% } else { %>
-                        <img src="/uploads/<%- pic2 %>" class="img-thumbnail"/>
+                        <img src="/uploads/<%= pic2 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic2" enctype="multipart/form-data" method="post">
                         <label class="btn btn-block btn-primary">
@@ -131,7 +131,7 @@
                     <% if (!pic3) { %>
                         <img src="img/empty-image.png" class="img-thumbnail"/>
                     <% } else { %>
-                        <img src="/uploads/<%- pic3 %>" class="img-thumbnail"/>
+                        <img src="/uploads/<%= pic3 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic3" enctype="multipart/form-data" method="post">
                         <label class="btn btn-block btn-primary">
@@ -144,7 +144,7 @@
                     <% if (!pic4) { %>
                         <img src="img/empty-image.png" class="img-thumbnail"/>
                     <% } else { %>
-                        <img src="/uploads/<%- pic4 %>" class="img-thumbnail"/>
+                        <img src="/uploads/<%= pic4 %>" class="img-thumbnail"/>
                     <% } %>
                     <form action="/myaccount/addpic4" enctype="multipart/form-data" method="post">
                         <label class="btn btn-block btn-primary">
@@ -156,7 +156,7 @@
             </div>
             <div class="row myacc-div border">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span><%- location %></span>
+                    <span><%= location %></span>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
                     <span class="changeGO" id="gender">Your actual location</span>

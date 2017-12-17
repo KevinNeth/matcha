@@ -11,8 +11,8 @@
             <ul id="notifications" class="list-group">
                 <% notifications.forEach(function(notification) { %>
                     <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>
-                    <a href="<%- link %>"><li class="list-group-item">
-                        <%- (notification.from + text[notification.type]) %>
+                    <a href="<%= link %>"><li class="list-group-item">
+                        <%= (notification.from + text[notification.type]) %>
                     </li></a>
                 <% }); %>
             </ul>

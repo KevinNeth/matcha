@@ -295,15 +295,15 @@
             else { 
                 for(var i=0; i < info.length; i++) { %>
                 <div class="row border" id ="bordersug">
-                    <img src="/<%- info[i]['profilepicpath'].replace('public/', '') %>" class="img-thumbnail col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2" style="height:150px; margin-top: 15px;">
+                    <img src="/<%= info[i]['profilepicpath'].replace('public/', '') %>" class="img-thumbnail col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2" style="height:150px; margin-top: 15px;">
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                        <p>Name : <%- info[i]['firstname'] %> <%- info[i]['lastname'] %></p>
-                        <p>Birth Date: <%- info[i]['month'] %>/<%- info[i]['day'] %>/<%- info[i]['year'] %></p>
-                        <p>Bio : <%- info[i]['bio'].slice(0, 30) %> ...</p>
+                        <p>Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %></p>
+                        <p>Birth Date: <%= info[i]['month'] %>/<%= info[i]['day'] %>/<%= info[i]['year'] %></p>
+                        <p>Bio : <%= info[i]['bio'].slice(0, 30) %> ...</p>
                         <p>Interest : 
                             <% var arrInter = info[i]['interest']; 
                             for(var j=0; j < arrInter.length; j++) { %>
-                                #<%- arrInter[j] %>
+                                #<%= arrInter[j] %>
                             <% } %>
                         </p>
                     </div>

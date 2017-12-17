@@ -3,14 +3,14 @@
 <div class="container">
  	<% if (errors) { %>
  		<% for(var i=0; i < errors.length; i++) { %>
- 			<div class="alert alert-danger">&nbsp;<%- errors[i]['msg'] %></div>
+ 			<div class="alert alert-danger">&nbsp;<%= errors[i]['msg'] %></div>
  		<% } %>
  	<% } %>
 </div>
 <div class="container">
  	<% if (success) { %>
  		<% for(var i=0; i < success.length; i++) { %>
- 			<div class="alert alert-success">&nbsp;<%- success[i]['msg'] %></div>
+ 			<div class="alert alert-success">&nbsp;<%= success[i]['msg'] %></div>
  		<% } %>
  	<% } %>
 </div>

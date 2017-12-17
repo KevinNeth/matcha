@@ -4,17 +4,17 @@
     <div class="card">
         <div class="card-header">
             Messages with 
-            <a href="/profile/<%- to %>">
-                <%- to %>
+            <a href="/profile/<%= to %>">
+                <%= to %>
             </a>
         </div>
         <div id="messages" class="card-body" style="overflow: scroll;">
             <% messages.forEach(function(message) { %>
                 <% var className = (message.author === from) ? "text-right" : "text-left" %>                
                 <% var subClassName = (message.author === from) ? "message-sent" : "message-received" %>
-                <div class="<%- className %>">
-                    <div class="message-bubble <%- subClassName %>">
-                        <%- message.text %>
+                <div class="<%= className %>">
+                    <div class="message-bubble <%= subClassName %>">
+                        <%= message.text %>
                     </div>
                 </div>
             <% }); %>
@@ -38,7 +38,7 @@
 <script>
     $(function () {
         var socket = io(),
-            to = "<%- to %>";
+            to = "<%= to %>";
 
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
 

@@ -3,7 +3,7 @@
 <div class="container">
    <% if (errors) { %>
 	   <% for(var i=0; i < errors.length; i++) { %>
-		   <div class="alert alert-danger">&nbsp;<%- errors[i]['msg'] %></div>
+		   <div class="alert alert-danger">&nbsp;<%= errors[i]['msg'] %></div>
 	   <% } %>
    <% } %>
 </div>
