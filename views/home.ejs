@@ -14,7 +14,7 @@
         <label for="">Age</label>
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/sortAge">
+                <form action="/home/filter" method="post">
                     <div class="row">
                         <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
                             <div id ="slider-handles"></div>
@@ -33,7 +33,7 @@
         <label for="">Popularity</label>
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/sortPopularity">
+                <form action="/home/filter" method="post">
                     <div class="row">
                         <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
                             <div id ="slider-popu"></div>
@@ -52,14 +52,13 @@
         <label>Localisation</label>
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/sortLocalisation">
+                <form action="/home/filter" method="post">
                     <div class="row">
                         <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
                             <div id ="slider-loca"></div>
                         </div>
                         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <select name="locaMin" id="locaMin"></select>
-                            <select name="locaMax" id="locaMax"></select>
+                            <select name="distance" id="distance"></select>
                         </div>
                         <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                             <input class="btn btn-block btn-primary" type="submit" value="Search">
@@ -70,7 +69,7 @@
         </div>
         <div class="form-group">
             <label>Interest</label>
-            <form action="/home/searchInterest">
+            <form action="/home/filter" method="post">
                 <div class="row">
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                         <input name="localisation" type="text" class="form-control" placeholder="Enter tags" required>
@@ -81,11 +80,10 @@
                 </div>
             </form>
         </div>
-
     </div>
     <h1>Suggestion</h1>
     <div class="container border" style="padding-top:20px;">
-        <form method="post" action="/home/location">
+        <form method="post" action="/home/filter">
             <div class="row text-center">
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <button type="submit" name="location" class="btn btn-primary">Location</button>
@@ -250,58 +248,33 @@
 
 
 
-    var selectLocaMin = document.getElementById('locaMin');
+    var selectLoca = document.getElementById('distance');
 
-    for ( var i = 18; i <= 100; i++ ){
+    for ( var i = 0; i <= 1000; i++ ){
 	    var option = document.createElement("option");
 		option.text = i;
 		option.value = i;
 
-	    selectLocaMin.appendChild(option);
+	    selectLoca.appendChild(option);
     }
 
     var handlesLoca = document.getElementById('slider-loca');
 
     noUiSlider.create(handlesLoca, {
-        start: [ 18, 100 ],
+        start: [ 0 ],
         range: {
-            'min': [  18 ],
-            'max': [ 100 ]
+            'min': [  0 ],
+            'max': [ 1000 ]
         }
     });
-
-    var selectLocaMax = document.getElementById('locaMax');
-
-    for ( var i = 19; i <= 100; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectLocaMax.appendChild(option);
-    }
 
     handlesLoca.noUiSlider.on('update', function( values, handle ) {
     var value = values[handle];
-        if ( handle ) {
-            if (values[0] === values[1])
-                selectLocaMax.value = Math.round(value) + 1;
-            else 
-                selectLocaMax.value = Math.round(value);
-        }
-        else {
-            if (values[0] === values[1])
-                selectLocaMin.value = Math.round(value) - 1;
-            else
-                selectLocaMin.value = Math.round(value)
-        }
+        selectLoca.value = Math.round(value);
     });
 
-    popuMin.addEventListener('change', function(){
-        handlesLoca.noUiSlider.set([this.value, null]);
-    });
-
-    popuMax.addEventListener('change', function(){
-        handlesLoca.noUiSlider.set([null, this.value]);
+    selectLoca.addEventListener('change', function(){
+        handlesLoca.noUiSlider.set([this.value]);
     });
 </script>
 
