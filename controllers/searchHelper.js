@@ -11,16 +11,16 @@ class SearchHelper {
             blocker: { $ne: this.user.login },
             gender: ((this.user.orientation === "both") ? { $in: ["woman", "man"] } : this.user.orientation )
         },
-        this.sort = {}
+        this.sortOption = {}
     };
 
     async results() {
         try {
-            if (this.sort instanceof Function) {
+            if (this.sortOption instanceof Function) {
                 let results = await db.find('users', this.query);
-                return this.sort(results);
+                return this.sortOption(results);
             } else {
-                let results = await db.findSort('users', this.query, this.sort);  
+                let results = await db.findSort('users', this.query, this.sortOption);  
                 return results;
             }
         } catch(e) {
@@ -47,7 +47,6 @@ class SearchHelper {
 
     filterDistance(max) {
         if (this.notEmpty(max) && this.user.location) {
-            console.log(this.user.location);
             Object.assign(this.query, {
                 location: {
                     $nearSphere: {
@@ -60,6 +59,7 @@ class SearchHelper {
     };
 
     sort(option) {
+        console.log("SORT");
         let sortOptions = {
             age: this.sortAge,
             score: this.sortScore,
@@ -67,16 +67,16 @@ class SearchHelper {
             interest: this.sortInterests
         };
 
-        if (option && this.sortOptions[option])
-            (this.sortOptions[option])();
+        if (option && sortOptions[option])
+            (sortOptions[option])();
     };
 
     sortAge(order = 1) {
-        this.sort = { birthday: (order * -1) }
+        this.sortOption = { birthday: (order * -1) }
     };
 
     sortScore(order = 1) {
-        this.sort = { score: order };        
+        this.sortOption = { score: order };        
     };
 
     sortLocation() {
@@ -92,7 +92,7 @@ class SearchHelper {
     };
 
     sortInterests() {
-        this.sort = function(results) {
+        this.sortOption = function(results) {
             let sorter = (a, b) => b.common - a.common;
             let tags = this.user.interest || [];
             for (let i = 0; i < results.length; i++) {
