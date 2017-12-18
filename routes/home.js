@@ -128,8 +128,13 @@ router.post('/filter', async (req, res, next) => {
 			search.sort(req.body.sort);
 			let results = await search.results();
 			console.log(results);
+			res.render('home', {
+				errors: errors,
+				info: results
+			});
 		} catch (e) {
-
+			req.session.errors.push({ msg: "An error occurred." });
+			res.redirect('/home');
 		}
 	}
 

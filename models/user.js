@@ -86,7 +86,7 @@ addLike = async (to, from) => {
         let target = await module.exports.get(to),
             type = (target.like && Array.isArray(target.like) && target.like.includes(from)) ? 'mutual' : 'like';
 
-        if (target.liker && Array.isArray(target.liker) && !(target.liker.includes(from))) {
+        if (!(target.liker && Array.isArray(target.liker) && target.liker.includes(from))) {
             await Promise.all([
                 db.updateOne('users', { login: from }, { $addToSet: { like: to } }),
                 db.updateOne('users', { login: to }, { $addToSet: { liker: from }, $set: newScore(target, 'like') }),
