@@ -77,6 +77,20 @@ count = async (collectionName, condition) => {
     return collection.count(condition);
 }
 
+max = async (collectionName, field) => {
+    try {
+        let collection = await prepare(collectionName);
+        let docs = await collection.find().sort({ [field]: -1 }).limit(1).toArray();
+        if (docs[0])
+            return docs[0][field];
+        else
+            return 0;
+    } catch(e) {
+        console.log(e);
+        return 0;
+    }
+}
+
 module.exports = {
-    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findSort, count
+    connect, prepare, objectId, insertMany, insertOne, updateMany, updateOne, find, findOne, findOneAndUpdate, findOneById, findSort, count, max
 };

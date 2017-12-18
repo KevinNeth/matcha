@@ -28,22 +28,25 @@ class SearchHelper {
             return [];
         }
     }
-
+    
     //custom query filters
     filterAge(min, max) {
-        Object.assign(this.query, { birthday: this.between(this.yearsOld(max), this.yearsOld(min)) });
+        if (this.notEmpty(min) || this.notEmpty(max))
+            Object.assign(this.query, { birthday: this.between(this.yearsOld(max), this.yearsOld(min)) });
     };
 
     filterScore(min, max) {
-        Object.assign(this.query, { score: this.between(min, max) });
+        if (this.notEmpty(min) || this.notEmpty(max)) 
+            Object.assign(this.query, { score: this.between(min, max) });
     };
 
-    filterTags(interests) {
-        Object.assign(this.query, { interest: { $all: interests }});
+    filterInterests(interests) {
+        if (this.notEmpty(min) || this.notEmpty(max))
+            Object.assign(this.query, { interest: { $all: interests }});
     };
 
     filterDistance(max) {
-        if (this.user.location) {
+        if (this.notEmpty(max) && this.user.location) {
             console.log(this.user.location);
             Object.assign(this.query, {
                 location: {
@@ -56,13 +59,25 @@ class SearchHelper {
         }
     };
 
+    sort(option) {
+        let sortOptions = {
+            age: this.sortAge,
+            score: this.sortScore,
+            location: this.sortLocation,
+            interest: this.sortInterests
+        };
+
+        if (option && this.sortOptions[option])
+            (this.sortOptions[option])();
+    };
+
     sortAge(order = 1) {
         this.sort = { birthday: (order * -1) }
-    }
+    };
 
     sortScore(order = 1) {
         this.sort = { score: order };        
-    }
+    };
 
     sortLocation() {
         if (!this.query.location) {
@@ -74,7 +89,7 @@ class SearchHelper {
                 }
             });
         }
-    }
+    };
 
     sortInterests() {
         this.sort = function(results) {
@@ -86,15 +101,15 @@ class SearchHelper {
             results.sort(sorter);
             return results;
         };
-    }
+    };
 
     //utility functions
     between(min, max) {
-        if (min && max)
+        if (this.notEmpty(min) && this.notEmpty(max))
             return { $gte: min, $lte: max };
-        else if (min)
+        else if (this.notEmpty(min))
             return { $gte: min };
-        else if (max)
+        else if (this.notEmpty(max))
             return { $lte: max };
         else
             return {};
@@ -105,6 +120,13 @@ class SearchHelper {
         date.setFullYear(date.getFullYear() - years);
         return date;
     };
+
+    notEmpty(value) {
+        if (!value && value !==0)
+            return false;
+        else
+            return true;
+    }
 
     //standard query helpers
     location() {
@@ -118,7 +140,9 @@ class SearchHelper {
         } else {
             return {};
         }
-    }
+    };
 }
+
+
 
 module.exports = SearchHelper;

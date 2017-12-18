@@ -108,4 +108,35 @@ router.post('/age', async (req, res) => {
 	}
 })
 
+router.post('/filter', async (req, res, next) => {
+	if (req.session.login === undefined)
+		res.redirect('/');
+	else {
+		try {
+			let user = await User.get(req.session.login);
+			let search = new SearchHelper(user);
+			if (req.body.minAge || req.body.maxAge)
+				search.filterAge(req.body.minAge, req.body.maxAge);
+			if (req.body.minScore || req.body.maxScore)
+				search.filterScore(req.body.minScore, req.body.maxScore);
+			if (req.body.distance)
+				search.filterDistance(req.body.distance);
+			if (req.body.interest) {
+				let interest = req.body.interest.trim().replace(/\s\s+/g, ' ').split(" ");
+				search.filterInterests(interest);
+			}
+			search.sort(req.body.sort);
+			let results = await search.results();
+			console.log(results);
+		} catch (e) {
+
+		}
+	}
+
+	sort === ["age", "location", "popularity", "interest"];
+	minAge, maxAge, minScore, maxScore, distance, interest
+	newinterest = newinterest.trim().replace(/\s\s+/g, ' ').split(" ");
+
+});
+
 module.exports = router;

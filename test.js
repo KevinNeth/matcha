@@ -90,9 +90,15 @@ const SearchHelper = require('./controllers/searchHelper');
 //         console.log(results);
         let user = await User.get('n8lowe');
         let search = new SearchHelper(user);
-        search.sortInterests();
+        search.filterScore(undefined, 100);
+        console.log(search.query);
         let results = await search.results();
         console.log(results);
+        // search.sortInterests();
+        // let results = await search.results();
+        // console.log(results);
+        // let maxi = await db.max('users', 'shit');
+        // console.log(maxi);
     } catch(e) {
         console.log(e);
     }
