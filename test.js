@@ -89,16 +89,18 @@ const SearchHelper = require('./controllers/searchHelper');
 //         // let results = await users.find({}, { $project: { common: {$size: { $setIntersection: [["lol"], ['lol']]}}}}).toArray();
 //         console.log(results);
         let user = await User.get('n8lowe');
-        let search = new SearchHelper(user);
-        search.filterScore(undefined, 100);
-        console.log(search.query);
-        let results = await search.results();
-        console.log(results);
+        // let search = new SearchHelper(user);
+        // search.filterScore(undefined, 100);
+        // console.log(search.query);
+        // let results = await search.results();
+        // console.log(results);
         // search.sortInterests();
         // let results = await search.results();
         // console.log(results);
         // let maxi = await db.max('users', 'shit');
         // console.log(maxi);
+        console.log(User.age(user.birthday));
+
     } catch(e) {
         console.log(e);
     }

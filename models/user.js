@@ -19,6 +19,12 @@ find = async (condition) => {
     return user;
 };
 
+age = (birthday) => {
+    let diff = Date.now() - birthday.getTime();
+    let age = new Date(diff);
+    return Math.abs(age.getUTCFullYear() - 1970);
+};
+
 // when user connects with socket.io
 comesOnline = async (login) => {
     try {
@@ -100,6 +106,7 @@ removeLike = async (to, from) => {
     try {
         let target = await module.exports.get(to);
         if (target.liker && Array.isArray(target.liker) && target.liker.includes(from)) {
+            console.log("here");
             if (target.like && Array.isArray(target.like) && target.like.includes(from)) {
                 await notify('unlike', to, from);
             }
@@ -122,5 +129,5 @@ view = async (to, from) => {
 };
 
 module.exports = {
-    get, find, comesOnline, goesOffline, isOnline, addLike, removeLike, view, isBlocked, isLiked
+    get, find, comesOnline, goesOffline, isOnline, addLike, removeLike, view, isBlocked, isLiked, age
 };

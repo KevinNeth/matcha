@@ -18,10 +18,10 @@ class SearchHelper {
         try {
             if (this.sort instanceof Function) {
                 let results = await db.find('users', this.query);
-                return this.sort(results);           
+                return this.sort(results);
             } else {
                 let results = await db.findSort('users', this.query, this.sort);  
-                return results;                              
+                return results;
             }
         } catch(e) {
             console.log("Search error: " + e);

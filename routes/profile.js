@@ -30,7 +30,8 @@ router.get('/user/:login', async (req, res) => {
                         interest: user.interest,
                         profilepic: user.profilepic,
                         user: req.params.login,
-                        isLike: isLike
+                        isLike: isLike,
+                        age: User.age(user)
                     });
                 }
             } catch(e) {
