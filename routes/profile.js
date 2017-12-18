@@ -12,6 +12,7 @@ router.get('/user/:login', async (req, res) => {
         else {
             try {
                 const user = await User.get(req.params.login);
+                console.log(user);
                 if (User.isBlocked(user, req.session.login)) {
                     throw new Error('User not found.');
                 } else {
@@ -68,7 +69,7 @@ router.get('/addLike/:login', async (req, res) => {
             }
         }
     }
-})
+});
 
 router.get('/disLike/:login', async (req, res) => {
     console.log('ici');
@@ -79,7 +80,7 @@ router.get('/disLike/:login', async (req, res) => {
             res.redirect("/myaccount");
         else {
             try {
-                User.removeLike(req.params.login, req.session.login);
+                await User.removeLike(req.params.login, req.session.login);
                 res.redirect('/profile/user/' + req.params.login);
             } catch (e) {
                 req.session.errors.push({ msg: "User not found" });
