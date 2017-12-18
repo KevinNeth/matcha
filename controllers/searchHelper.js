@@ -9,15 +9,20 @@ class SearchHelper {
             firstConnection: false,
             orientation: { $in: [this.user.gender, "both"] },
             blocker: { $ne: this.user.login },
-            gender: ((this.user.orientation === "both") ? { gender: { $in: ["woman", "man"] } } : { gender: this.user.orientation })
+            gender: ((this.user.orientation === "both") ? { $in: ["woman", "man"] } : this.user.orientation )
         },
         this.sort = {}
     };
 
     async results() {
         try {
-            let results = await db.findSort('users', this.query, this.sort);
-            return results;
+            if (this.sort instanceof Function) {
+                let results = await db.find('users', this.query);
+                return this.sort(results);           
+            } else {
+                let results = await db.findSort('users', this.query, this.sort);  
+                return results;                              
+            }
         } catch(e) {
             console.log("Search error: " + e);
             return [];
@@ -69,6 +74,18 @@ class SearchHelper {
                 }
             });
         }
+    }
+
+    sortInterests() {
+        this.sort = function(results) {
+            let sorter = (a, b) => b.common - a.common;
+            let tags = this.user.interest || [];
+            for (let i = 0; i < results.length; i++) {
+                results[i]['common'] = (results[i]['interest']) ? ((Array.from(results[i]['interest'])).filter((tag) => tags.includes(tag)).length) : 0;
+            }
+            results.sort(sorter);
+            return results;
+        };
     }
 
     //utility functions

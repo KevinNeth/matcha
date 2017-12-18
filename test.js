@@ -3,6 +3,8 @@ const User = require('./models/user.js');
 const Conversation = require('./models/conversation.js');
 const SearchHelper = require('./controllers/searchHelper');
 
+
+
 (async () => {
     // try {
     //     // Conversation.addMessage('lol3', 'lol4', 'YEA BABY!');
@@ -37,15 +39,59 @@ const SearchHelper = require('./controllers/searchHelper');
         // console.log(search.query);
         // let results = await search.results();
         // console.log(results);
-        let bitches = [];
-        let users = await db.prepare('users');
-        let results = await users.aggregate([
-            { $unwind: "$interest" },
-            { $group: {"_id": "$_id", "common": {$sum: 1}}},
-            { $sort: {common: -1} },
-            { $project: {}}
-        ]).toArray();
-        let results = await users.find({}, { "common": {$size: { $setIntersection: ["$interests", ['lol']]}}}).toArray();
+//         let bitches = [];
+//         let users = await db.prepare('users');
+//         // let results = await users.aggregate([
+//         //     { $project: { "interest": 1, common: {$setIntersection: ["$interest", ['lol', 'lolz']] }}}
+//         // ]).toArray();
+
+//         let tagz = ['42', 'COOKIES'];
+
+//         // let results = await users.aggregate([
+//         //     { $unwind: "$interest" },
+//         //     { $match: { interest: {$in: tags }}},
+//         //     { $group: { "_id": "$_id", "common": { $sum: 1 } } },
+//         //     { $sort: { common: -1 } },
+//         //     { $project: {"common": 1} }
+//         // ]).toArray();
+
+//         // let results = await users.aggregate([
+//         //     // { $project: {"_id": 1, "common": {$setIntersection: ['$interest', tags] }}}
+//         //     // { $count: { $match: { interest: { $in: tags}}}}
+//         //     { $unwind: "$interest" },
+//         //     { $match: { interest: { $in: tags } } },
+//         //     { $group: { _id: "$_id", "common": { $push: '$interest' } } },
+//         //     { $project: { _id: 1, common: 1}}
+//         // ]).toArray();
+
+//         // let results = await users.aggregate([
+//         //     { $project: { 
+//         //         _id: 1,
+//         //         common: {
+//         //             $size: {
+//         //                 $filter: {
+//         //                     input: "$interest",
+//         //                     as: "tags",
+//         //                     cond: { $in: ["$$tags", tagz]}
+//         //                 }
+//         //             }
+//         //         }
+//         //     }}
+//         // ]).toArray();
+//         sortCommon = (a, b) => b.common - a.common;
+// // 
+//         let match = [];
+//         let results = await db.find('users', {});
+//         for (i = 0; i < results.length; i++) {
+//             results[i]['common'] = (results[i]['interest']) ? ((Array.from(results[i]['interest'])).filter((tag) => match.includes(tag)).length) : 0;
+//         }
+//         results.sort(sortCommon);
+//         // let results = await users.find({}, { $project: { common: {$size: { $setIntersection: [["lol"], ['lol']]}}}}).toArray();
+//         console.log(results);
+        let user = await User.get('n8lowe');
+        let search = new SearchHelper(user);
+        search.sortInterests();
+        let results = await search.results();
         console.log(results);
     } catch(e) {
         console.log(e);
