@@ -95,11 +95,10 @@
                 for(var i=0; i < info.length; i++) { %>
                 <div class="row border" id ="bordersug">
                     <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                        <img src="/<%= info[i]['profilepicpath'].replace('public/', '') %>" class="img-thumbnail">
+                        <img src="/uploads/<%= info[i]['profilepic'] %>" class="img-thumbnail home-imgprofile">
                     </div>
-                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 home-imgprofile">
                         Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %><br>
-                        Age: <%= info[i]['month'] %>/<%= info[i]['day'] %>/<%= info[i]['year'] %><br>
                         Bio : <%= info[i]['bio'].slice(0, 30) %> ...<br>
                         Interest : 
                             <% var arrInter = info[i]['interest']; 
