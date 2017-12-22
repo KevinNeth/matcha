@@ -6,6 +6,7 @@ const request = require('request');
 const passwordHash = require('password-hash');
 
 router.post('/getAddress', async (req, res) => {
+    console.log("GETADRESS");
     await db.updateOne('users', { login: req.session.login }, { $set: {
         tmpAddress: req.body.tmpAddress, 
         tmpLat: req.body.tmpLat,
@@ -13,6 +14,7 @@ router.post('/getAddress', async (req, res) => {
     }});
     let user = await db.findOne('users', { login: req.session.login });
     if (user['location'] === undefined) {
+        console.log("GETADRESSSSSSS");
         await db.updateOne('users', { login: req.session.login }, { $set: {
             location: {
                 type: "Point",

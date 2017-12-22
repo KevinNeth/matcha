@@ -23,18 +23,22 @@ router.get('/user/:login', async (req, res) => {
                         firstname: user.firstname,
                         lastname: user.lastname,
                         gender: user.gender,
-                        birthday: user.birthday,
+                        age: User.age(user.birthday),
                         orientation: user.orientation,
                         location: user.location,
                         bio: user.bio,
                         interest: user.interest,
                         profilepic: user.profilepic,
                         user: req.params.login,
-                        isLike: isLike,
-                        age: User.age(user)
+                        pic1: user.pic1,
+                        pic2: user.pic2,
+                        pic3: user.pic3,
+                        pic4: user.pic4,
+                        isLike: isLike
                     });
                 }
             } catch(e) {
+                console.log(e);
                 req.session.errors.push({msg: "User not found"});
                 res.redirect('/home');
             }

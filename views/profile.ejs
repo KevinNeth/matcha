@@ -6,45 +6,79 @@
             <img src= "/uploads/<%= profilepic %>" class="img-thumbnail"/>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
-            <p><%= login %></p>
-            <p><%= firstname %> <%= lastname %></p>
-            <p><%= birthday %></p>
-            <p><%= gender %></p>
-            <p>Interest by: <%= orientation %></p>
+            <div class="border row" id="prodiv_info">
+                <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                    <h4 class="card-title"><%= login %></h4><br>
+                    <%= firstname %> <%= lastname %><br>
+                    Age: <%= age %><br>
+                    I'm a <%= gender %><br>
+                    Interest by: <%= orientation %><br>
+                </div>
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <% if (isLike !== true) { %>
+                        <a href="/profile/addLike/<%= user %>" method="post">
+                            <img src="/img/empty heart.jpg" alt="emptyheart" class="img-fluid">
+                        </a>
+                    <% } else { %>
+                        <a href="/profile/disLike/<%= user %>" method="post">
+                            <img src="/img/heart.jpg" alt="heart" class="img-fluid">
+                        </a>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <p><%= bio %></p>
+            <div class="border" id="prodiv-bio">
+                Biographie:
+                <p><%= bio %></p>
+            </div>
         </div>    
     </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <p><%= interest %></p>
+            <div id="prodiv-inter">
+                <% let tab = interest;
+                for(var i=0; i < tab.length; i++) { %>
+                    <button class="deleteInter btn btn-primary" id="<%= i %>">
+                        #<%= tab[i] %>
+                    </button>
+                <% } %>
+            </div>
         </div>    
     </div>
-    <% if (isLike !== true) { %>
-        <div>
-            <a href="/profile/addLike/<%= user %>" method="post">
-                <img src="/img/heart.png" alt="heart">
-            </a>
-        </div>
-    <% } else { %>
-        <div>
-            <a href="/profile/disLike/<%= user %>" method="post">
-                <img src="/img/black heart.png" alt="blackheart">
-            </a>
-        </div>
-    <% } %>
-    <div>
+    <div class="row">
+        <% if (pic1) { %>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <img src="/uploads/<%= pic1 %>" class="img-thumbnail"/>
+            </div>
+        <% } %>
+        <% if (pic2) { %>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <img src="/uploads/<%= pic2 %>" class="img-thumbnail"/>
+            </div>
+        <% } %>
+        <% if (pic3) { %>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <img src="/uploads/<%= pic3 %>" class="img-thumbnail"/>
+            </div>
+        <% } %>
+        <% if (pic4) { %>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <img src="/uploads/<%= pic4 %>" class="img-thumbnail"/>
+            </div>
+        <% } %>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class= "prodiv-map" id="map"></div>
+        </div>    
+    </div>
+    <div class="text-right">
         <a href="/profile/block/<%= user %>" method="post">
             Signaler la personne
         </a>
-    </div>
-    <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div id="map" style="height: 300px; width: 100%;"></div>
-        </div>    
     </div>
 </div>
         

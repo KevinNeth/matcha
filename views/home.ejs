@@ -16,65 +16,52 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="/home/filter" method="post">
                     <div class="row">
-                        <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                             <div id ="slider-handles"></div>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
                             <select name="ageMin" id="ageMin"></select>
                             <select name="ageMax" id="ageMax"></select>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <input class="btn btn-block btn-primary" type="submit" value="Search">
-                        </div>
                     </div>
-                </form>
             </div>
         </div>
         <label for="">Popularity</label>
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/filter" method="post">
                     <div class="row">
-                        <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                             <div id ="slider-popu"></div>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
                             <select name="popuMin" id="popuMin"></select>
                             <select name="popuMax" id="popuMax"></select>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <input class="btn btn-block btn-primary" type="submit" value="Search">
-                        </div>
                     </div>
-                </form>
             </div>
         </div>
         <label>Localisation</label>
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/filter" method="post">
                     <div class="row">
-                        <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                             <div id ="slider-loca"></div>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
                             <select name="distance" id="distance"></select>
                         </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <input class="btn btn-block btn-primary" type="submit" value="Search">
-                        </div>
                     </div>
-                </form>
             </div>
         </div>
         <div class="form-group">
             <label>Interest</label>
-            <form action="/home/filter" method="post">
-                <div class="row">
-                    <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                        <input name="localisation" type="text" class="form-control" placeholder="Enter tags" required>
+                <div class="row" style="margin-bottom:20px;">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <input name="interest" type="text" class="form-control" placeholder="Enter tags">
                     </div>
-                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <input class="btn btn-block btn-primary" type="submit" value="Search">
                     </div>
                 </div>
@@ -83,7 +70,7 @@
     </div>
     <h1>Suggestion</h1>
     <div class="container border" style="padding-top:20px;">
-        <form method="post" action="/home/filter">
+        <form method="post" action="/home/filter"> 
             <div class="row text-center">
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <button type="submit" name="location" class="btn btn-primary">Location</button>
