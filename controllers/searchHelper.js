@@ -3,15 +3,15 @@ const User = require('../models/user');
 
 class SearchHelper {
     constructor(user) {
-        this.user = user,
+        this.user = user;
         this.query = {
             login: { $ne: this.user.login },
             firstConnection: false,
             orientation: { $in: [this.user.gender, "both"] },
             blocker: { $ne: this.user.login },
             gender: ((this.user.orientation === "both") ? { $in: ["woman", "man"] } : this.user.orientation )
-        },
-        this.sortOption = {}
+        };
+        this.sortOption = {};
     };
 
     async results() {
@@ -27,7 +27,18 @@ class SearchHelper {
             console.log("Search error: " + e);
             return [];
         }
-    }
+    };
+
+    sort(option) {
+        let sortOptions = {
+            age: this.sortAge,
+            score: this.sortScore,
+            location: this.sortLocation,
+            interest: this.sortInterests
+        };
+        if (option && sortOptions[option])
+            (sortOptions[option]).call(this);
+    };
     
     //custom query filters
     filterAge(min, max) {
@@ -58,21 +69,8 @@ class SearchHelper {
         }
     };
 
-    sort(option) {
-        console.log("SORT");
-        let sortOptions = {
-            age: this.sortAge,
-            score: this.sortScore,
-            location: this.sortLocation,
-            interest: this.sortInterests
-        };
-
-        if (option && sortOptions[option])
-            (sortOptions[option])();
-    };
-
     sortAge(order = 1) {
-        this.sortOption = { birthday: (order * -1) }
+        this.sortOption = { birthday: (order * -1) };
     };
 
     sortScore(order = 1) {
@@ -116,9 +114,13 @@ class SearchHelper {
     };
 
     yearsOld(years) {
-        let date = new Date();
-        date.setFullYear(date.getFullYear() - years);
-        return date;
+        if (this.notEmpty(years)) {
+            let date = new Date();
+            date.setFullYear(date.getFullYear() - years);
+            return date;
+        } else {
+            return null;
+        }
     };
 
     notEmpty(value) {
