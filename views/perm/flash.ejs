@@ -1,0 +1,16 @@
+<% var success = flashMessages.success || []; %>
+<% var error = flashMessages.error || []; %>
+
+<% error.forEach(function(message, i) { %>
+    <div class="alert alert-danger"><%= message %></div>
+    <% if (i < error.length - 1) { %>
+        <hr>
+    <% } %>
+<% }); %>
+
+<% success.forEach(function(message, i) { %>
+    <div class="alert alert-success"><%= message %></div>
+    <% if (i < success.length - 1) { %>
+        <hr>
+    <% } %>
+<% }); %>

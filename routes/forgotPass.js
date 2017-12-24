@@ -7,28 +7,18 @@ let smtpTransport = require('nodemailer-smtp-transport');
 router.get('/', (req, res) => {
 	if (req.session.login)
 		res.redirect('/home');
-	let errors = req.session.errors;
-	let success = req.session.success;
-
-	req.session.errors = [];
-	req.session.success = [];
-	res.render("forgotPass", {
-		errors: errors,
-		success: success
-	});
+	res.render("forgotPass");
 });
 
 router.post('/submit', async (req, res) => {
-	req.session.errors = [];
-	req.session.success = [];
 	let user = await db.findOne('users', {email: req.body.email});
 
 	if (!user) {
-		req.session.errors.push({msg: "Email not found."});
+		req.flash('error', "A user with that email was not found");
 		res.redirect('/forgotpass');
 	}
 	else {
-		req.session.success.push({msg: "Email sent."});
+		req.flash('success', "Password reset email sent");
 
 		let transporter = nodemailer.createTransport(smtpTransport({
 			service: 'gmail',

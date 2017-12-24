@@ -7,12 +7,7 @@ router.get('/', (req, res) => {
 	if (req.session.login)
 		res.redirect('/home');
 	else {
-		let errors = req.session.errors;
-	
-		req.session.errors = [];
-		res.render("signUp",{
-			errors: errors
-		});
+		res.render("signUp");
 	}
 });
 
@@ -61,7 +56,7 @@ router.post('/submit', async (req, res, next) => {
 
 // Insert les infos verifier.
 
-router.post('/submit', (req, res) => {
+router.post('/submit', async (req, res) => {
 	// console.log(req.body.birthday);
 	console.log("putain");
 	let info = {
@@ -73,8 +68,7 @@ router.post('/submit', (req, res) => {
 		birthday: new Date(req.body.birthday),
 		firstConnection: true
 	};
-	req.session.success = [];
-	req.session.success.push({msg: 'Registration success, you can now login.'});
+	req.flash('success', "Registration completed successfully, please log in");
 	db.insertOne('users', info);
 	res.redirect('/login');
 })

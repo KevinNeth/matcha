@@ -1,11 +1,12 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
+const auth = require('../controllers/auth');
 const Conversation = require('../models/conversation');
 const User = require('../models/user');
 
-router.get('/:to', async (req, res) => {
+router.get('/:to', auth, async (req, res) => {
     console.log(req.params);
-    if (!req.session.login || !req.params.to)
+    if (!req.params.to)
         res.redirect('/home');
     else {
         try {

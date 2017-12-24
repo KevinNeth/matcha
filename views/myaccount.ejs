@@ -1,21 +1,6 @@
 <% include perm/SmallHeader %>
 
 <div class="container">
-    <% if (errors) { %>
-        <% for(var i=0; i < errors.length; i++) { %>
-            <div class="alert alert-danger">&nbsp;<%= errors[i]['msg'] %></div>
-        <% } %>
-    <% } %>
-</div>
-<div class="container">
-    <% if (success) { %>
-        <% for(var i=0; i < success.length; i++) { %>
-            <div class="alert alert-success">&nbsp;<%= success[i]['msg'] %></div>
-        <% } %>
-    <% } %>
-</div>
-
-<div class="container">
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
             <img src="/uploads/<%= profilepic %>" class="img-thumbnail"/>

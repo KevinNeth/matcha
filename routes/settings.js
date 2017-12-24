@@ -58,8 +58,7 @@ router.get('/forceGetPos', function(req, res, next){
             });
         });
     } else {
-        req.session.errors = [];
-        req.session.errors.push({ msg: 'No access right' });
+        req.flash('error', 'Unauthorized access');
         res.redirect('/');
     }
 });

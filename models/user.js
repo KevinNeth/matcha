@@ -12,8 +12,12 @@ get = async (login) => {
     return user;
 };
 
-find = async (condition) => {
-    let user = await db.findOne('users', condition);
+lookup = async (login, searcher) => {
+    let user = await db.findOne('users', {
+        login: login,
+        firstConnection: false,
+        blocker: { $ne: this.searcher },
+    });
     if (!user)
         throw new Error('No user found.');
     return user;
@@ -89,7 +93,7 @@ newScore = (user, action) => {
 
 addLike = async (to, from) => {
     try {
-        let target = await module.exports.get(to),
+        let target = await module.exports.lookup(to, from),
             type = (target.like && Array.isArray(target.like) && target.like.includes(from)) ? 'mutual' : 'like';
 
         if (!(target.liker && Array.isArray(target.liker) && target.liker.includes(from))) {
@@ -104,7 +108,7 @@ addLike = async (to, from) => {
 
 removeLike = async (to, from) => {
     try {
-        let target = await module.exports.get(to);
+        let target = await module.exports.lookup(to, from);
         if (target.liker && Array.isArray(target.liker) && target.liker.includes(from)) {
             console.log("here");
             if (target.like && Array.isArray(target.like) && target.like.includes(from)) {
@@ -120,7 +124,7 @@ removeLike = async (to, from) => {
 
 view = async (to, from) => {
     try {
-        let target = await module.exports.get(to);
+        let target = await module.exports.lookup(to, from);
         await Promise.all([
             db.updateOne('users', { login: to }, { $addToSet: { viewers: from }, $set: newScore(target, 'view') }),
             notify('view', to, from)

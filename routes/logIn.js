@@ -1,41 +1,29 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
 let db = require('../models/db');
 let passwordHash = require('password-hash');
 
 router.get('/', (req, res) => {
 	if (req.session.login)
-		res.redirect('/home');
-	else {
-		let errors = req.session.errors;
-		let success = req.session.success;
-
-		req.session.errros = [];
-		req.session.success = [];
-		res.render("logIn", {
-			errors: errors,
-			success: success
-		});
-	}
+		res.redirect('/');
+	else
+		res.render("login");
 });
 
 router.post('/submit', async (req, res, next) => {
-	req.session.errors = [];
-	let info = await db.findOne('users', {login: req.body.login});
-
-	if (info) {
-		if (passwordHash.verify(req.body.password, info['password']) === true) {
-			req.session.login = info['login'];
-			res.redirect('/home');
+	try {
+		let user = await User.get(req.body.login);
+		if (passwordHash.verify(req.body.password, user.password) === true) {
+			req.session.login = user.login;
+			req.flash('success', 'Welcome back!');
+			res.redirect('/');
+		} else {
+			throw new Error('Invalid password.');
 		}
-		else {
-			req.session.errors.push({msg: 'Invalid password.'});
-			res.redirect('/login');
-		}
-	}
-	else {
+	} catch(e) {
 		req.session.login = undefined;
-		req.session.errors.push({msg: 'Login does not exist.'});
+		req.flash('error', 'Invalid username or password');
 		res.redirect('/login');
 	}
 });

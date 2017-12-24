@@ -1,92 +1,64 @@
 <% include perm/SmallHeader %>
 
 <div class="container">
-    <% if (errors) { %>
-        <% for(var i=0; i < errors.length; i++) { %>
-            <div class="alert alert-danger">&nbsp;<%= errors[i]['msg'] %></div>
-        <% } %>
-    <% } %>
-</div>
-
-<div class="container">
     <h1>Search</h1>
     <div class="border">
-        <label for="">Age</label>
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="/home/filter" method="post">
-                    <div class="row">
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                            <div id ="slider-handles"></div>
-                        </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
-                            <select name="ageMin" id="ageMin"></select>
-                            <select name="ageMax" id="ageMax"></select>
-                        </div>
-                    </div>
+        <form method="get">
+            <label>Age</label>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div id ="age-slider"></div>
+                    <input id="minAge" type="hidden" name="minAge" value="">
+                    <input id="maxAge" type="hidden" name="maxAge" value="">
+                </div>
             </div>
-        </div>
-        <label for="">Popularity</label>
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="row">
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                            <div id ="slider-popu"></div>
-                        </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
-                            <select name="popuMin" id="popuMin"></select>
-                            <select name="popuMax" id="popuMax"></select>
-                        </div>
-                    </div>
+            <label>Popularity</label>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div id ="score-slider"></div>
+                    <input id="minScore" type="hidden" name="minScore" value="">
+                    <input id="maxScore" type="hidden" name="maxScore" value="">
+                </div>
             </div>
-        </div>
-        <label>Localisation</label>
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="row">
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                            <div id ="slider-loca"></div>
-                        </div>
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
-                            <select name="distance" id="distance"></select>
-                        </div>
-                    </div>
+            <label>Distance (km)</label>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div id ="distance-slider"></div>
+                    <input id="distance" type="hidden" name="distance" value="">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label>Interest</label>
-                <div class="row" style="margin-bottom:20px;">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <input name="interest" type="text" class="form-control" placeholder="Enter tags">
+            <div class="form-group">
+                <label>Interest</label>
+                    <div class="row" style="margin-bottom:20px;">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <input name="interest" type="text" class="form-control" placeholder="Enter tags separated by spaces">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <input class="btn btn-block btn-primary" type="submit" value="Search">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <input class="btn btn-block btn-primary" type="submit" value="Search">
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <h1>Suggestion</h1>
-    <div class="container border" style="padding-top:20px;">
-        <form method="post" action="/home/filter"> 
-            <div class="row text-center">
-                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <button type="submit" name="location" class="btn btn-primary">Location</button>
-                </div>
-                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <button type="submit" name="age" class="btn btn-primary">Age</button>
-                </div>
-                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <button type="submit" name="popularity" class="btn btn-primary">Popularity</button>
-                </div>
-                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <button type="submit" name="interest" class="btn btn-primary">Interest</button>
-                </div>
             </div>
         </form>
     </div>
+        <h1>Suggestion</h1>
+        <div class="container border" style="padding-top:20px;">
+                <div class="row text-center">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <button type="submit" name="location" class="btn btn-primary">Location</button>
+                    </div>
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <button type="submit" name="age" class="btn btn-primary">Age</button>
+                    </div>
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <button type="submit" name="popularity" class="btn btn-primary">Popularity</button>
+                    </div>
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <button type="submit" name="interest" class="btn btn-primary">Interest</button>
+                    </div>
+                </div>
+            </div>
     <div class="container" style="padding-top:20px;">
         <% if (info === "No data") { %>
             <p>NO DATA</p> 
@@ -100,7 +72,7 @@
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 home-imgprofile">
                         Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %><br>
                         Bio : <%= info[i]['bio'].slice(0, 30) %> ...<br>
-                        Interest : 
+                        Interests : 
                             <% var arrInter = info[i]['interest']; 
                             for(var j=0; j < arrInter.length; j++) { %>
                                 #<%= arrInter[j] %>
@@ -115,153 +87,62 @@
 </div>
 
 <script src="/script/nouislider.js"></script>
+<script src="/script/wNumb.js"></script>
 <script>
-    var selectMin = document.getElementById('ageMin');
+    var ageSlider = document.getElementById('age-slider'),
+        scoreSlider = document.getElementById('score-slider'),
+        distanceSlider = document.getElementById('distance-slider');
 
-    for ( var i = 18; i <= 100; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectMin.appendChild(option);
-    }
-
-    var handlesSlider = document.getElementById('slider-handles');
-
-    noUiSlider.create(handlesSlider, {
+    noUiSlider.create(ageSlider, {
         start: [ 18, 100 ],
         range: {
             'min': [  18 ],
             'max': [ 100 ]
-        }
+        },
+        format: wNumb({ decimals: 0 }),
+        tooltips: [true, true],
+        margin: 1,
+        connect: true
     });
 
-    var selectMax = document.getElementById('ageMax');
-
-    for ( var i = 19; i <= 100; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectMax.appendChild(option);
-    }
-
-    handlesSlider.noUiSlider.on('update', function( values, handle ) {
-    var value = values[handle];
-        if ( handle ) {
-            if (values[0] === values[1])
-                selectMax.value = Math.round(value) + 1;
-            else 
-                selectMax.value = Math.round(value);
-        }
-        else {
-            if (values[0] === values[1])
-                selectMin.value = Math.round(value) - 1;
-            else
-                selectMin.value = Math.round(value)
-        }
-    });
-
-    selectMin.addEventListener('change', function(){
-        handlesSlider.noUiSlider.set([this.value, null]);
-    });
-
-    selectMax.addEventListener('change', function(){
-        handlesSlider.noUiSlider.set([null, this.value]);
-    });
-
-
-
-
-
-    var selectPopuMin = document.getElementById('popuMin');
-
-    for ( var i = 18; i <= 100; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectPopuMin.appendChild(option);
-    }
-
-    var handlesPopu = document.getElementById('slider-popu');
-
-    noUiSlider.create(handlesPopu, {
-        start: [ 18, 100 ],
+    noUiSlider.create(scoreSlider, {
+        start: [0, 100],
         range: {
-            'min': [  18 ],
-            'max': [ 100 ]
-        }
+            'min': [0],
+            'max': [100]
+        },
+        format: wNumb({ decimals: 0 }),
+        tooltips: [true, true],
+        margin: 1,
+        connect: true
     });
 
-    var selectPopuMax = document.getElementById('popuMax');
-
-    for ( var i = 19; i <= 100; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectPopuMax.appendChild(option);
-    }
-
-    handlesPopu.noUiSlider.on('update', function( values, handle ) {
-    var value = values[handle];
-        if ( handle ) {
-            if (values[0] === values[1])
-                selectPopuMax.value = Math.round(value) + 1;
-            else 
-                selectPopuMax.value = Math.round(value);
-        }
-        else {
-            if (values[0] === values[1])
-                selectPopuMin.value = Math.round(value) - 1;
-            else
-                selectPopuMin.value = Math.round(value)
-        }
-    });
-
-    popuMin.addEventListener('change', function(){
-        handlesPopu.noUiSlider.set([this.value, null]);
-    });
-
-    popuMax.addEventListener('change', function(){
-        handlesPopu.noUiSlider.set([null, this.value]);
-    });
-
-
-
-
-
-
-
-    var selectLoca = document.getElementById('distance');
-
-    for ( var i = 0; i <= 1000; i++ ){
-	    var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-
-	    selectLoca.appendChild(option);
-    }
-
-    var handlesLoca = document.getElementById('slider-loca');
-
-    noUiSlider.create(handlesLoca, {
-        start: [ 0 ],
+    noUiSlider.create(distanceSlider, {
+        start: [0],
         range: {
-            'min': [  0 ],
-            'max': [ 1000 ]
-        }
+            'min': [0],
+            'max': [1000]
+        },
+        format: wNumb({ decimals: 0 }),
+        tooltips: true,
+        margin: 1,
+        connect: true
     });
 
-    handlesLoca.noUiSlider.on('update', function( values, handle ) {
-    var value = values[handle];
-        selectLoca.value = Math.round(value);
+    ageSlider.noUiSlider.on('update', function(values) {
+        $('#minAge').val(values[0]);
+        $('#maxAge').val(values[1]);
     });
 
-    selectLoca.addEventListener('change', function(){
-        handlesLoca.noUiSlider.set([this.value]);
+    scoreSlider.noUiSlider.on('update', function (values) {
+        $('#minScore').val(values[0]);
+        $('#maxScore').val(values[1]);
     });
+
+    distanceSlider.noUiSlider.on('update', function (value) {
+        $('#distance').val(value);
+    });
+
 </script>
 
 <% include perm/Footer %>

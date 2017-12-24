@@ -52,7 +52,7 @@ class SearchHelper {
     };
 
     filterInterests(interests) {
-        if (this.notEmpty(min) || this.notEmpty(max))
+        if (Array.isArray(interests) && interests.length > 0)
             Object.assign(this.query, { interest: { $all: interests }});
     };
 
@@ -124,7 +124,7 @@ class SearchHelper {
     };
 
     notEmpty(value) {
-        if (!value && value !==0)
+        if (isNaN(value) || (!value && value !==0))
             return false;
         else
             return true;

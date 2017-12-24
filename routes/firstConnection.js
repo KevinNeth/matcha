@@ -30,15 +30,10 @@ const upload = multer({
 
 
 router.get('/',  async (req, res) => {
-	let errors = req.session.errors;
-
-	req.session.errors = [];
 	try {
 		let user = await User.get(req.session.login);
 		if (user.firstConnection === true) {
-			res.render('firstConnection', {
-				errors: errors
-			});	
+			res.render('firstConnection');
 		} else {
 			res.redirect('/home');				
 		}
@@ -48,12 +43,11 @@ router.get('/',  async (req, res) => {
 });
 
 router.post('/submit', async (req, res) => {
-	req.session.errors = [];
     const newPic = upload.single('profilpic');
     newPic(req, res, async (err) => {
 		console.log(err);
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files may be uploaded");
             res.redirect('/firstConnection');
         }
         else {
@@ -63,7 +57,7 @@ router.post('/submit', async (req, res) => {
 						firstname: req.body.firstname,
 						lastname: req.body.lastname,
 						bio: req.body.bio,
-						interest: req.body.interest.split(" "),
+						interest: req.body.interest.trim().split(/\s\s+/g),
 						profilepic: req.file.filename,
 						profilepicpath: req.file.path,
 						firstConnection: false

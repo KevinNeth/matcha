@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../controllers/auth');
 const db = require("../models/db.js");
 const User = require("../models/user.js");
 const multer = require('multer');
@@ -18,7 +19,7 @@ const geocoder = NodeGeocoder(options);
 let imageFilter = function (req, file, cb) {
     // accept image only
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/)) {
-        return cb(new Error('Only image files are allowed!'), false);
+        return cb(new Error('Only image files are allowed'), false);
     }
     cb(null, true);
 };
@@ -43,75 +44,57 @@ function validEmail(email) {
 	return regex.test(email);
 }
 
-router.get('/', async (req, res) => {
-    let errors = [];
-    let success = [];
-    if (req.session.errors) {
-        errors = req.session.errors;
-        req.session.errors = [];
-    }
-    if (req.session.errors) {
-        success = req.session.success;
-        req.session.success = [];
-    }
-    if (req.session.login === undefined)
-        res.redirect('/logIn');
-    else {
-        const user = await db.findOne("users", { login: req.session.login });
-        res.render("myaccount", {
-            errors: errors,
-            success: success,
-            login: user.login,
-            email: user.email,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            gender: user.gender,
-            birthday: user.birthday,
-            orientation: user.orientation,
-            location: user.tmpAddress,
-            bio: user.bio,
-            interest: user.interest,
-            profilepic: user.profilepic,
-            pic1: user.pic1,
-            pic2: user.pic2,
-            pic3: user.pic3,
-            pic4: user.pic4
-        });
-    }
+router.get('/', auth, async (req, res) => {
+    let user = req.user;
+    res.render("myaccount", {
+        login: user.login,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        gender: user.gender,
+        birthday: user.birthday,
+        orientation: user.orientation,
+        location: user.tmpAddress,
+        bio: user.bio,
+        interest: user.interest,
+        profilepic: user.profilepic,
+        pic1: user.pic1,
+        pic2: user.pic2,
+        pic3: user.pic3,
+        pic4: user.pic4
+    });
 });
 
-router.post('/submit', async (req, res) => {
-    req.session.errors = [];
-    req.session.success = [];
+router.post('/submit', auth, async (req, res) => {
     const change = Object.keys(req.body)[0];
     const modif = req.body[change];
+    let error = false;
+
     if (modif.length < 1 && change !== 'email')
-        req.session.errors.push({msg: 'Too short modif'});
-    if (change === "gender") {
-        if (modif !== "man" && modif !== "woman")
-            req.session.errors.push({msg: "Don't try to modif me !"});
-    }
-    if (change === "orientation") {
-        if (modif !== "man" && modif !== "woman" && modif !== "both")
-            req.session.errors.push({msg: "Don't try to modif me !"});
-    }
-    if (change === 'email')
-        if (!validEmail(modif))
-            req.session.errors.push({msg: 'Invalid email.'});
-    if (req.session.errors.length === 0) {
+        error = 'Invalid entry';
+    else if (change === "gender" && modif !== "man" && modif !== "woman")
+        error = 'Invalid entry';
+    else if (change === "orientation" && modif !== "man" && modif !== "woman" && modif !== "both")
+        error = 'Invalid entry';
+    else if (change === 'email' && !validEmail(modif))
+        error = 'Invalid email';
+
+    if (error === false) {
         try {
             await db.updateOne("users", { login: req.session.login }, { $set: { [change] : modif }});
+            req.flash('success', 'Successfully updated ' + change);            
         }
         catch(e) {
+            req.flash('error', 'An error occurred');
             console.log(e);
         }
-        req.session.success.push({msg: "Update done !"});
+    } else {
+        req.flash('error', error);
     }
     res.redirect('/myaccount');
-    
 });
 
-router.post("/deleteInterest", async (req, res) => {
+router.post("/deleteInterest", auth, async (req, res) => {
     try {
         let user = await User.get(req.session.login);
         let interest = user.interest;
@@ -123,143 +106,131 @@ router.post("/deleteInterest", async (req, res) => {
     }
 });
 
-router.post("/addInterest", async (req, res) => {
+router.post("/addInterest", auth, async (req, res) => {
     try {
         let user = await User.get(req.session.login);
         let interest = user.interest;
         let newinterest = req.body.interest;
-        newinterest = newinterest.trim().replace(/\s\s+/g, ' ').split(" ");
+        newinterest = newinterest.trim().split(/\s\s+/g);
         await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
         res.redirect('/myaccount');
     }
     catch(e) {
         console.log(e);
     }
-})
+});
 
-router.post("/profilepic", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
+router.post("/profilepic", auth, async (req, res) => {
     const newPic = upload.single('profilepic');
     newPic(req, res, async (err) => {
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files are allowed");
             res.redirect('/myaccount');
         }
         else {
             try {
                 await db.updateOne("users", { login: req.session.login }, { $set: { profilepic: req.file.filename, profilepicpath: req.file.path } });
-                req.session.success.push({msg: "Profile picture change !"});
+                req.flash('success', "Profile picture successfully changed");
                 res.redirect('/myaccount');
             }
             catch (e) {
-                req.session.errors.push({msg: "Un probleme est survenu"});
-                res.redirect('/myaccount');
+                req.flash('error', 'An error occurred');
                 console.log(e);
+                res.redirect('/myaccount');
             }
         }
     })
 })
 
-router.post("/addpic1", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
+router.post("/addpic1", auth, async (req, res) => {
     const newPic = upload.single('pic1');
     newPic(req, res, async (err) => {
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files are allowed");
             res.redirect('/myaccount');
         }
         else {
             try {
                 await db.updateOne("users", { login: req.session.login }, { $set: { pic1: req.file.filename } });
-                req.session.success.push({msg: "1st picture change !"});
+                req.flash('success', "Photo successfully changed");
                 res.redirect('/myaccount');
             }
             catch (e) {
-                req.session.errors.push({msg: "Un probleme est survenu"});
-                res.redirect('/myaccount');
+                req.flash('error', 'An error occurred');
                 console.log(e);
+                res.redirect('/myaccount');
             }
         }
     })
 })
 
 router.post("/addpic2", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
     const newPic = upload.single('pic2');
     newPic(req, res, async (err) => {
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files are allowed");
             res.redirect('/myaccount');
         }
         else {
             try {
                 await db.updateOne("users", { login: req.session.login }, { $set: { pic2: req.file.filename } });
-                req.session.success.push({msg: "2nd picture change !"});
+                req.flash('success', "Photo successfully changed");
                 res.redirect('/myaccount');
             }
             catch (e) {
-                req.session.errors.push({msg: "Un probleme est survenu"});
-                res.redirect('/myaccount');
+                req.flash('error', 'An error occurred');
                 console.log(e);
+                res.redirect('/myaccount');
             }
         }
     })
 })
 
 router.post("/addpic3", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
     const newPic = upload.single('pic3');
     newPic(req, res, async (err) => {
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files are allowed");
             res.redirect('/myaccount');
         }
         else {
             try {
                 await db.updateOne("users", { login: req.session.login }, { $set: { pic3: req.file.filename } });
-                req.session.success.push({msg: "3rd picture change !"});
+                req.flash('success', "Photo successfully changed");
                 res.redirect('/myaccount');
             }
             catch (e) {
-                req.session.errors.push({msg: "Un probleme est survenu"});
-                res.redirect('/myaccount');
+                req.flash('error', 'An error occurred');
                 console.log(e);
+                res.redirect('/myaccount');
             }
         }
     })
 })
 
 router.post("/addpic4", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
     const newPic = upload.single('pic4');
     newPic(req, res, async (err) => {
         if (err) {
-            req.session.errors.push({msg: "Only image allow !"});
+            req.flash('error', "Only image files are allowed");
             res.redirect('/myaccount');
         }
         else {
             try {
                 await db.updateOne("users", { login: req.session.login }, { $set: { pic4: req.file.filename } });
-                req.session.success.push({msg: "4th picture change !"});
+                req.flash('success', "Photo successfully changed");
                 res.redirect('/myaccount');
             }
             catch (e) {
-                req.session.errors.push({msg: "Un probleme est survenu"});
-                res.redirect('/myaccount');
+                req.flash('error', 'An error occurred');
                 console.log(e);
+                res.redirect('/myaccount');
             }
         }
     })
 })
 
 router.post("/modifLocation", async (req, res) => {
-    req.session.success = [];
-    req.session.errors = [];
     const info = await geocoder.geocode(req.body.location);
     if (info[0]) {
         console.log('ici');
@@ -277,11 +248,11 @@ router.post("/modifLocation", async (req, res) => {
                 }
             }
         });
-        req.session.success.push({msg: "Address change !"});
+        req.flash('success', "Address successfully changed");
         res.redirect('/myaccount');
     }
     else {
-        req.session.errors.push({msg: "Localisation invalide !"});
+        req.flash('error', "Invalid location");
         res.redirect('/myaccount');
     }
 })
