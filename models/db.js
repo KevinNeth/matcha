@@ -64,7 +64,7 @@ findOneById = async (collectionName, id) => {
 
 findOneAndUpdate = async (collectionName, condition, update) => {
     let collection = await prepare(collectionName);
-    return collection.findOneAndUpdate(condition, update, { returnNewDocument: true });
+    return collection.findOneAndUpdate(condition, update, { returnOriginal: false });
 }
 
 findSort = async (collectionName, findCondition, sortCondition) => {

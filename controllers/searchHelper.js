@@ -8,7 +8,7 @@ class SearchHelper {
             login: { $ne: this.user.login },
             firstConnection: false,
             orientation: { $in: [this.user.gender, "both"] },
-            blocker: { $ne: this.user.login },
+            blockedBy: { $ne: this.user.login },
             gender: ((this.user.orientation === "both") ? { $in: ["woman", "man"] } : this.user.orientation )
         };
         this.sortOption = {};
@@ -78,7 +78,7 @@ class SearchHelper {
     };
 
     sortLocation() {
-        if (!this.query.location) {
+        if (!this.query.location && this.user.location) {
             Object.assign(this.query, {
                 location: {
                     $nearSphere: {

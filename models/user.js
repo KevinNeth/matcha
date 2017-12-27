@@ -1,137 +1,140 @@
 const db = require('./db');
 const notify = require('../controllers/notifications');
 
-/* {
-    online: [socket ID if online || false if offline]
-} */
-
-get = async (login) => {
-    let user = await db.findOne('users', { login: login });
-    if (!user)
-        throw new Error('No user found.');
-    return user;
-};
-
-lookup = async (login, searcher) => {
-    let user = await db.findOne('users', {
-        login: login,
-        firstConnection: false,
-        blocker: { $ne: this.searcher },
-    });
-    if (!user)
-        throw new Error('No user found.');
-    return user;
-};
-
-age = (birthday) => {
-    let diff = Date.now() - birthday.getTime();
-    let age = new Date(diff);
-    return Math.abs(age.getUTCFullYear() - 1970);
-};
-
-// when user connects with socket.io
-comesOnline = async (login) => {
-    try {
-        await db.updateOne('users', {
-            login: login
-        }, { $set: { online: true } });
-    } catch (e) {
-        console.log(e);
+class User {
+    constructor(info) {
+        Object.assign(this, info);
+        this.scorePoints = {
+            like: 5,
+            unlike: -5,
+            view: 1
+        };
     }
-};
 
-//when user disconnects from socket.io
-goesOffline = async (login) => {
-    try {
-        await db.updateOne('users', {
-            login: login
-        }, { $set: { online: false } });
-    } catch (e) {
-        console.log(e);
-    }
-};
-
-isOnline = async (login) => {
-    try {
-        let user = await module.exports.get(login);
-        if (user.online)
-            return user.online;
-        else
-            return false;
-    } catch (e) {
-        console.log(e);
-        return false;
-    }
-};
-
-isBlocked = (blocked, blockedBy) => {
-    if (blocked.blocker && blocked.blocker.includes(blockedBy)) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-isLiked = (liked, likedBy) => {
-    if (liked.liker && liked.liker.includes(likedBy)) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-scorePoints = {
-    like: 5,
-    unlike: -5,
-    view: 1
-};
-
-newScore = (user, action) => {
-    let oldScore = user.score || 0;
-    return { score: (oldScore + scorePoints[action]) };
-};
-
-addLike = async (to, from) => {
-    try {
-        let target = await module.exports.lookup(to, from),
-            type = (target.like && Array.isArray(target.like) && target.like.includes(from)) ? 'mutual' : 'like';
-
-        if (!(target.liker && Array.isArray(target.liker) && target.liker.includes(from))) {
-            await Promise.all([
-                db.updateOne('users', { login: from }, { $addToSet: { like: to } }),
-                db.updateOne('users', { login: to }, { $addToSet: { liker: from }, $set: newScore(target, 'like') }),
-                notify(type, to, from)
-            ]);
+    // lookup methods
+    static async find(condition) {
+        try {
+            let info = await db.findOne('users', condition);
+            if (!info)
+                throw new Error('No user found.');
+            return new User(info);
+        } catch (e) {
+            throw new Error('No user found.');
         }
-    } catch (e) { throw e }
-};
+    }
 
-removeLike = async (to, from) => {
-    try {
-        let target = await module.exports.lookup(to, from);
-        if (target.liker && Array.isArray(target.liker) && target.liker.includes(from)) {
-            console.log("here");
-            if (target.like && Array.isArray(target.like) && target.like.includes(from)) {
-                await notify('unlike', to, from);
-            }
-            await Promise.all([
-                db.updateOne('users', { login: from }, { $pull: { like: to } }),
-                db.updateOne('users', { login: to }, { $pull: { liker: from }, $set: newScore(target, 'unlike') })
-            ]);
+    static async get(login) {
+        return User.find({ login: login });
+    }
+
+    async lookup(target) {
+        return User.find({
+            login: target,
+            firstConnection: false,
+            blockedBy: { $ne: this.login }
+        });
+    }
+
+    // update methods
+    async update(info) {
+        try {
+            let result = await db.findOneAndUpdate('users', { login: this.login }, info);
+            Object.assign(this, result.value);
+        } catch (e) {
+            console.log("Error updating user: " + e);
         }
-    } catch (e) { console.log(e); }
-};
+    }
 
-view = async (to, from) => {
-    try {
-        let target = await module.exports.lookup(to, from);
-        await Promise.all([
-            db.updateOne('users', { login: to }, { $addToSet: { viewers: from }, $set: newScore(target, 'view') }),
-            notify('view', to, from)
-        ]);
-    } catch (e) { console.log(e); }
-};
+    async set(property, value) {
+        await this.update({ $set: { [property]: value } });
+    }
 
-module.exports = {
-    get, find, comesOnline, goesOffline, isOnline, addLike, removeLike, view, isBlocked, isLiked, age
-};
+    // interaction info methods
+    hasLiked(target) {
+        return (this.liked && Array.isArray(this.liked) && this.liked.includes(target));
+    }
+
+    isLikedBy(target) {
+        return (this.likedBy && Array.isArray(this.likedBy) && this.likedBy.includes(target));
+    }
+
+    hasBlocked(target) {
+        return (this.blocked && Array.isArray(this.blocked) && this.blocked.includes(target));        
+    }
+
+    isBlockedBy(target) {
+        return (this.blockedBy && Array.isArray(this.blockedBy) && this.blockedBy.includes(target));        
+    }
+
+    matchedWith(target) {
+        return (this.hasLiked(target) && this.isLikedBy(target));
+    }
+
+    // user action methods
+    async comesOnline() {
+        await this.set('online', true);
+    }
+
+    async goesOffline() {
+        await this.set('online', false);
+    }
+
+    async like(to) {
+        if (!(this.hasLiked(to))) {        
+            try {
+                let target = await this.lookup(to),
+                    type = target.hasLiked(this.login) ? 'mutual' : 'like';
+                    
+                if (!(target.hasBlocked(this.login)))
+                    notify(type, target.login, this.login);
+
+                target.update({ $addToSet: { likedBy: this.login }, ...target.setScore('like') });
+                await this.update({ $addToSet: { liked: target.login}});
+            } catch (e) { console.log(e); }
+        }
+    }
+
+    async unlike(to) {
+        if (this.hasLiked(to)) {        
+            try {
+                let target = await this.lookup(to);
+
+                if (target.hasLiked(this.login) && !(target.hasBlocked(this.login)))
+                    notify('unlike', target.login, this.login);
+
+                target.update({ $pull: { likedBy: this.login }, ...target.setScore('like') });
+                await this.update({ $pull: {liked: target.login }});
+            } catch (e) { console.log(e); }
+        }
+    }
+
+    async view(to) {
+        try {
+            let target = await this.lookup(to);
+            
+            if (!(target.hasBlocked(this.login)))
+                notify('view', target.login, this.login);
+            
+            target.update({ $addToSet: { viewedBy: this.login }, ...target.setScore('view') });
+            return target;
+        } catch (e) { throw e }
+    }
+
+    // utility methods
+    get age() {
+        let diff = Date.now() - this.birthday.getTime();
+        let age = new Date(diff);
+        return Math.abs(age.getUTCFullYear() - 1970);
+    }
+
+    setScore(action) {
+        let oldScore = this.score || 0;
+        return { $set: { score: ( oldScore + this.scorePoints[action])}};
+    }
+
+    async test() {
+        this.update({ "$$set": "$$why" });
+    }
+}
+
+module.exports = User;
