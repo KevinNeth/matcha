@@ -52,17 +52,26 @@ router.post('/submit', async (req, res) => {
         }
         else {
 			try {
-				await db.updateOne('users', { login: req.session.login }, {
-					$set: {
-						firstname: req.body.firstname,
-						lastname: req.body.lastname,
-						bio: req.body.bio,
-						interest: req.body.interest.trim().split(/\s\s+/g),
-						profilepic: req.file.filename,
-						profilepicpath: req.file.path,
-						firstConnection: false
-					}
-				});
+				let checkspace = req.body.interest;
+				let newinterest = req.body.interest;
+				if (checkspace.trim().replace(/\s+/g, "").length) {
+					newinterest = newinterest.trim().replace(/\s+/g, " ").split(" ");
+					await db.updateOne('users', { login: req.session.login }, {
+						$set: {
+							firstname: req.body.firstname,
+							lastname: req.body.lastname,
+							bio: req.body.bio,
+							interest: newinterest,
+							profilepic: req.file.filename,
+							profilepicpath: req.file.path,
+							firstConnection: false
+						}
+					});
+				}
+				else {
+					req.flash("error", "Write a valide word");
+					res.redirect('/firstConnection');
+				}
 				res.redirect('/home');
 			} catch(e) {
 				console.log("MongoDB connection error.");

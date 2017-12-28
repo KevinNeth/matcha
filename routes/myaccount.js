@@ -109,10 +109,15 @@ router.post("/deleteInterest", auth, async (req, res) => {
 router.post("/addInterest", auth, async (req, res) => {
     try {
         let user = await User.get(req.session.login);
-        let interest = user.interest;
+        let checkspace = req.body.interest;
         let newinterest = req.body.interest;
-        newinterest = newinterest.trim().split(/\s\s+/g);
-        await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
+        if (checkspace.trim().replace(/\s+/g, "").length) {
+            newinterest = newinterest.trim().replace(/\s+/g, " ").split(" ");
+            await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
+        }
+        else {
+            req.flash("error", "Write a valide word");
+        }
         res.redirect('/myaccount');
     }
     catch(e) {
