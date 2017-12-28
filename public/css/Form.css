@@ -15,6 +15,7 @@ option {
     border: 1px solid;
     border-radius: 5px;
     padding-bottom: 20px;
+    border-color: black !important;
 }
 
 .border2 {

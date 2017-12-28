@@ -12,6 +12,16 @@
     text-decoration: none; 
 }
 
+.btn-primary {
+    background-color: #900C3F;
+    border-color: #900C3F;
+}
+
+.btn-primary:hover {
+    background-color: #770933;
+    border-color: #770933;
+}
+
 @media (max-width: 768px) {
     #logo {
         font-family: Matcha;

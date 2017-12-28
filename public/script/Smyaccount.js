@@ -38,7 +38,7 @@ allchange.forEach(function (change) {
 
         let span = document.createElement("span");
         span.setAttribute("class", "input-group-btn");
-        span.setAttribute("style", "height: 37px");
+        span.setAttribute("style", "height: 38px");
         span.appendChild(input);
 
         inputdiv = document.createElement("div");
