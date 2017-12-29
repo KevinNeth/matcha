@@ -20,3 +20,7 @@ body {
 #textfooter {
     margin-bottom: 0px;
 }
+
+#divfooter {
+    text-align: right;
+}

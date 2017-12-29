@@ -24,53 +24,68 @@ function validPassword(pwd) {
 // 1er check des inputs
 
 router.post('/submit', (req, res, next) => {
-	console.log("purer");
-	req.session.errors = [];
-	if (!validEmail(req.body.email))
-		req.session.errors.push({msg: 'Invalid email.'});
-	if (req.body.login.length < 4)
-		req.session.errors.push({msg: 'Your login must contain at least 5 characters'});
-	if (!validPassword(req.body.password))
-		req.session.errors.push({msg: 'Your password must contain at least 6 characters with at least 1 uppercase 1 lowercase and 1 alphanumeric.'});
-	if (req.body.password.localeCompare(req.body.confirm))
-		req.session.errors.push({msg: 'Password confirmation error.'});
+	req.session.numErr = 0;
+	if (!validEmail(req.body.email)) {
+		req.flash("error", "Invalid email");
+		req.session.numErr += 1;
+	}
+	if (req.body.login.length < 4) {
+		req.flash("error", 'Your login must contain at least 5 characters');
+		req.session.numErr += 1;
+	}
+	if (!validPassword(req.body.password)) {
+		req.flash("error", 'Your password must contain at least 6 characters with at least 1 uppercase 1 lowercase and 1 alphanumeric.');
+		req.session.numErr += 1;
+	}
+	if (req.body.password.localeCompare(req.body.confirm)) {
+		req.flash("error", 'Password confirmation error.');
+		req.session.numErr += 1;
+	}
 	next();
 });
 
 // 2eme check des inputs par rapport a la base de donnee
 
 router.post('/submit', async (req, res, next) => {
-	console.log("purermdrxd");
 	let valueLog = await db.findOne('users', {login: req.body.login.toLowerCase()});
 	let valueEmail = await db.findOne('users', {email: req.body.email.toLowerCase()});
 
-	if (valueLog)
-		req.session.errors.push({msg: 'Login is already taken'});
-	if (valueEmail)
-		req.session.errors.push({msg: 'Email is already taken'});
-	if (req.session.errors.length === 0)
+	if (valueLog) {
+		req.flash("error", 'Login is already taken');
+		req.session.numErr += 1;
+	}
+	if (valueEmail) {
+		req.flash("error", 'Email is already taken');
+		req.session.numErr += 1;
+	}
+	if (req.session.numErr === 0)
 		next();
-	else
-		res.redirect('/');
+	else {
+		res.redirect('/signup');
+	}
 })
 
 // Insert les infos verifier.
 
 router.post('/submit', async (req, res) => {
-	// console.log(req.body.birthday);
-	console.log("putain");
-	let info = {
-		login: req.body.login,
-		email: req.body.email,
-		password: passwordHash.generate(req.body.password),
-		gender: req.body.gender,
-		orientation: req.body.orientation,
-		birthday: new Date(req.body.birthday),
-		firstConnection: true
-	};
-	req.flash('success', "Registration completed successfully, please log in");
-	db.insertOne('users', info);
-	res.redirect('/login');
+	if (!req.body.login.trim().replace(/\s+/g, "").length) {
+		req.flash("error", "Invalid login");
+		res.redirect("/signup");
+	}
+	else {
+		let info = {
+			login: req.body.login.toLowerCase(),
+			email: req.body.email,
+			password: passwordHash.generate(req.body.password),
+			gender: req.body.gender,
+			orientation: req.body.orientation,
+			birthday: new Date(req.body.birthday),
+			firstConnection: true
+		};
+		req.flash('success', "Registration completed successfully, please log in");
+		db.insertOne('users', info);
+		res.redirect('/login');
+	}
 })
 
 module.exports = router;

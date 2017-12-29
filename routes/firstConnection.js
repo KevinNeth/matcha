@@ -52,10 +52,16 @@ router.post('/submit', async (req, res) => {
         }
         else {
 			try {
-				let checkspace = req.body.interest;
-				let newinterest = req.body.interest;
-				if (checkspace.trim().replace(/\s+/g, "").length) {
-					newinterest = newinterest.trim().replace(/\s+/g, " ").split(" ");
+				if (!req.body.interest.trim().replace(/\s+/g, "").length ||
+				!req.body.firstname.trim().replace(/\s+/g, "").length ||
+				!req.body.lastname.trim().replace(/\s+/g, "").length ||
+				!req.body.bio.trim().replace(/\s+/g, "").length ||
+				!req.file) {
+					req.flash("error", "Invalid input");
+					res.redirect('/firstConnection');
+				}
+				else {
+					let newinterest = req.body.interest.trim().replace(/\s+/g, " ").split(" ");
 					await db.updateOne('users', { login: req.session.login }, {
 						$set: {
 							firstname: req.body.firstname,
@@ -67,12 +73,8 @@ router.post('/submit', async (req, res) => {
 							firstConnection: false
 						}
 					});
+					res.redirect('/home');
 				}
-				else {
-					req.flash("error", "Write a valide word");
-					res.redirect('/firstConnection');
-				}
-				res.redirect('/home');
 			} catch(e) {
 				console.log("MongoDB connection error.");
 				res.redirect('/firstConnection');
@@ -80,11 +82,5 @@ router.post('/submit', async (req, res) => {
         }
     })
 });
-
-router.post('/addPicture', upload.single('profilpic'), async (req, res) => {
-	console.log(req.body.pictrure);
-	upload.single(req.body.picture);
-	console.log(req.file);
-})
 
 module.exports = router;

@@ -13,7 +13,8 @@ router.get('/', (req, res) => {
 
 router.post('/submit', async (req, res, next) => {
 	try {
-		let user = await User.get(req.body.login);
+		let login = req.body.login.toLowerCase();
+		let user = await User.get(login);
 		if (passwordHash.verify(req.body.password, user.password) === true) {
 			req.session.login = user.login;
 			req.flash('success', 'Welcome back, ' + user.login);

@@ -25,10 +25,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <% var date = new Date(); date.setFullYear(date.getFullYear() - 18); %>
-                    <% var max = date.toISOString().substr(0,10) %>
+                    <% var datemax = new Date(); datemax.setFullYear(datemax.getFullYear() - 18); %>
+                    <% var max = datemax.toISOString().substr(0,10) %>
+                    <% var datemin = new Date(); datemin.setFullYear(datemin.getFullYear() - 100); %>
+                    <% var min = datemin.toISOString().substr(0,10) %>
                     <label for="birthday">I was born on</label>
-                    <input class="form-control" type="date" name="birthday" max="<%= max %>" required>
+                    <input class="form-control" type="date" name="birthday" max="<%= max %>" min="<%= min %>" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email adress</label>
