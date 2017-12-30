@@ -1,17 +1,15 @@
-# matcha
+# Matcha
 
 TODO LIST
 
-- Trier les suggestions
+- Trier les suggestions.
 
-- Methode de recherche
+- Methode de recherche.
   
-- Page profile
+- Page profile (Score).
 
-- Search bar users
+- Chat.
 
-- Chat
+- Notification.
 
-- Notification
-
-- Birthdate date in DB
+- Like(Problem).
