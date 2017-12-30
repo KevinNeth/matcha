@@ -35,7 +35,9 @@ router.get('/forceGetPos', function(req, res, next){
         request('http://freegeoip.net/json/', function(error, response, body) {
             let data = JSON.parse(body);
             request('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + data.latitude + ',' + data.longitude, async function(error, response, body){
+                console.log(body);
                 let infos = JSON.parse(body);
+                console.log(body);
                 await db.updateOne('users', { login: req.session.login }, {
                     $set: {
                         tmpAddress: infos['results'][0]['formatted_address'],
