@@ -70,7 +70,9 @@ router.post('/submit', auth, async (req, res) => {
     const modif = req.body[change];
     let error = false;
 
-    if (modif.length < 1 && change !== 'email')
+    if (!req.body[change].trim().replace(/\s+/g, "").length)
+        error = "Invalid entry";
+    else if (modif.length < 1 && change !== 'email')
         error = 'Invalid entry';
     else if (change === "gender" && modif !== "man" && modif !== "woman")
         error = 'Invalid entry';
@@ -116,7 +118,7 @@ router.post("/addInterest", auth, async (req, res) => {
             await db.updateOne("users", { login: req.session.login }, { $addToSet: { interest: { $each: newinterest }}});
         }
         else {
-            req.flash("error", "Write a valide word");
+            req.flash("error", "Invalid entry");
         }
         res.redirect('/myaccount');
     }
@@ -236,25 +238,31 @@ router.post("/addpic4", async (req, res) => {
 })
 
 router.post("/modifLocation", async (req, res) => {
-    const info = await geocoder.geocode(req.body.location);
-    if (info[0]) {
-        console.log('ici');
-        await db.updateOne("users", { login: req.session.login }, {
-             $set: {
-                tmpAddress: info[0].formattedAddress,
-                tmpLat: info[0].latitude,
-                tmpLng: info[0].longitude,
-                location: {
-                    type: "Point",
-                    coordinates: [
-                        parseFloat(info[0].longitude),
-                        parseFloat(info[0].latitude)
-                    ]
+    if (req.body.location) {
+        const info = await geocoder.geocode(req.body.location);
+        if (info[0]) {
+            console.log('ici');
+            await db.updateOne("users", { login: req.session.login }, {
+                 $set: {
+                    tmpAddress: info[0].formattedAddress,
+                    tmpLat: info[0].latitude,
+                    tmpLng: info[0].longitude,
+                    location: {
+                        type: "Point",
+                        coordinates: [
+                            parseFloat(info[0].longitude),
+                            parseFloat(info[0].latitude)
+                        ]
+                    }
                 }
-            }
-        });
-        req.flash('success', "Address successfully changed");
-        res.redirect('/myaccount');
+            });
+            req.flash('success', "Address successfully changed");
+            res.redirect('/myaccount');
+        }
+        else {
+            req.flash('error', "Invalid location");
+            res.redirect('/myaccount');
+        }
     }
     else {
         req.flash('error', "Invalid location");

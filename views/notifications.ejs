@@ -7,7 +7,7 @@
         <div class="card-header">
             Notifications
         </div>
-        <div class="card-body">
+        <div class="card-body" style="overflow-x:scroll;">
             <ul id="notifications" class="list-group">
                 <% notifications.forEach(function(notification) { %>
                     <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>

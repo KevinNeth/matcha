@@ -26,6 +26,14 @@ function validPassword(pwd) {
 router.post('/submit', (req, res, next) => {
 	req.session.numErr = 0;
 
+	if (req.body.gender !== "man" && req.body.gender !== "woman") {
+		req.flash("error", "Stop trying voodoo magic, Harry -_-");
+		req.session.numErr += 1;
+	}
+	if (req.body.orientation !== "man" && req.body.orientation !== "woman" && req.body.orientation !== "both") {
+		req.flash("error", "Stop trying voodoo magic, Harry -_-");
+		req.session.numErr += 1;
+	}
 	if (!validEmail(req.body.email)) {
 		req.flash("error", "Invalid email");
 		req.session.numErr += 1;
@@ -51,14 +59,6 @@ router.post('/submit', async (req, res, next) => {
 	let valueLog = await db.findOne('users', {login: req.body.login.toLowerCase()});
 	let valueEmail = await db.findOne('users', {email: req.body.email.toLowerCase()});
 
-	if (req.body.gender !== "man" && req.body.gender !== "woman") {
-		req.flash("error", "Stop trying voodoo magic, Harry -_-");
-		req.session.numErr += 1;
-	}
-	if (req.body.orientation !== "man" && req.body.orientation !== "woman" && req.body.orientation !== "both") {
-		req.flash("error", "Stop trying voodoo magic, Harry -_-");
-		req.session.numErr += 1;
-	}
 	if (valueLog) {
 		req.flash("error", 'Login is already taken');
 		req.session.numErr += 1;
