@@ -2,11 +2,19 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
 const request = require('request');
-// const socketIO = require('../core/controllers/socket');
 const passwordHash = require('password-hash');
+const NodeGeocoder = require('node-geocoder');
+
+const options = {
+    provider: 'google',
+    httpAdapter: 'https',
+    apiKey: 'AIzaSyAs78IwViXHXBxA3UjO0ZvfrFntqA1F4mU',
+    formatter: null
+};
+
+const geocoder = NodeGeocoder(options);
 
 router.post('/getAddress', async (req, res) => {
-    console.log("GETADRESS");
     await db.updateOne('users', { login: req.session.login }, { $set: {
         tmpAddress: req.body.tmpAddress, 
         tmpLat: req.body.tmpLat,
@@ -14,7 +22,6 @@ router.post('/getAddress', async (req, res) => {
     }});
     let user = await db.findOne('users', { login: req.session.login });
     if (user['location'] === undefined) {
-        console.log("GETADRESSSSSSS");
         await db.updateOne('users', { login: req.session.login }, { $set: {
             location: {
                 type: "Point",
@@ -32,15 +39,12 @@ router.post('/getAddress', async (req, res) => {
 
 router.get('/forceGetPos', function(req, res, next){
     if (req.session.login !== undefined) {
-        request('http://freegeoip.net/json/', function(error, response, body) {
+        request('http://freegeoip.net/json/', (error, response, body) => {
             let data = JSON.parse(body);
-            request('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + data.latitude + ',' + data.longitude, async function(error, response, body){
-                console.log(body);
-                let infos = JSON.parse(body);
-                console.log(body);
+            geocoder.reverse({lat: data.latitude, lon: data.longitude}, async (err, res) => {
                 await db.updateOne('users', { login: req.session.login }, {
                     $set: {
-                        tmpAddress: infos['results'][0]['formatted_address'],
+                        tmpAddress: res[0].formattedAddress,
                         tmpLat: data.latitude,
                         tmpLng: data.longitude
                     }
