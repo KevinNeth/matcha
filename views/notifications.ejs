@@ -1,7 +1,5 @@
 <% include perm/SmallHeader %>
 
-<% var text = { message: ' sent you a message.', like: ' liked your profile.', visit: ' visited your profile.', mutual: ' liked you back!', unlike: ' no longer likes you. Sorry.' }; %>
-
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -12,7 +10,7 @@
                 <% notifications.forEach(function(notification) { %>
                     <% var link = ((notification.type === 'message') ? ('/chat/' + notification.from) : ('/profile/' + notification.from)); %>
                     <a href="<%= link %>"><li class="list-group-item">
-                        <%= (notification.from + text[notification.type]) %>
+                        <%= (notification.from + notification.text) %>
                     </li></a>
                 <% }); %>
             </ul>
@@ -27,24 +25,9 @@
     $(function () {
         var socket = io();
 
-        socket.on('message', function (from) {
-            $('#notifications').prepend('<a href="/chat/' + from + '"><li class="list-group-item">' + from + ' sent you a message.</li></a>' );
-        });
-
-        socket.on('like', function (from) {
-            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + ' liked your profile.</li></a>');
-        });
-
-        socket.on('view', function (from) {
-            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + ' visited your profile.</li></a>');
-        });
-
-        socket.on('mutual', function (from) {
-            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + '  liked you back!.</li></a>');
-        });
-
-        socket.on('unlike', function (from) {
-            $('#notifications').prepend('<a href="/profile/' + from + '"><li class="list-group-item">' + from + '  no longer likes you. Sorry.</li></a>');
+        socket.on('notification', function (type, from, text) {
+            var link = ((type === 'message') ? ('/chat/' + from) : ('/profile/' + from));
+            $('#notifications').prepend('<a href="' + link + '"><li class="list-group-item">' + (from + text) + '</li></a>' );
         });
     });
 </script>

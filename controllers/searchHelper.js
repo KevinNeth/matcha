@@ -57,7 +57,7 @@ class SearchHelper {
     };
 
     filterDistance(max) {
-        if (this.notEmpty(max) && this.user.location) {
+        if (max && this.notEmpty(max) && this.user.location) {
             Object.assign(this.query, {
                 location: {
                     $nearSphere: {

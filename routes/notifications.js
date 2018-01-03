@@ -3,6 +3,7 @@ let router = express.Router();
 const Conversation = require('../models/conversation');
 const Notification = require('../models/notification');
 const User = require('../models/user');
+const auth = require('../controllers/auth');
 
 router.get('/', async (req, res) => {
     if (!req.session.login)

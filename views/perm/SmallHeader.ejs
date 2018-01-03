@@ -33,8 +33,9 @@
                 </li>
                 <li class="nav-item active" id="navbutt">
                     <a class="nav-link" href="/notifications">Notifications 
-                        <% if (!unread) { var unread = 0; } %>
-                        <span id="unread-count" class="badge badge-pill badge-danger"><%= unread %></span>
+                        <% var count = 0; %>
+                        <% if (this.unread) { count = unread; } %>
+                        <span id="unread-count" class="badge badge-pill badge-danger"><%= count %></span>
                     </a>
                 </li>
                 <li class="nav-item active" id="navbutt">

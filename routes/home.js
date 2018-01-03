@@ -20,6 +20,9 @@ router.get('/', auth, async (req, res, next) => {
 			search.filterInterests(interest);
 		}
 		search.sort(query.sort);
+		console.log(search.query);
+		console.log(search.sortOption);
+		console.log(req.user.location);
 		let results = await search.results();
 		res.render('home', { info: results });
 	} catch (e) {

@@ -4,11 +4,12 @@ const db = require('./db');
 types: message, like, visit, mutual, unlike
 */
 
-add = async (type, to, from) => {
+add = async (type, to, from, text) => {
     let notification = {
         type: type,
         to: to,
         from: from,
+        text: text,
         unread: true,
         time: new Date()
     };

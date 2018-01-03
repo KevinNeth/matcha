@@ -9,7 +9,7 @@ io.on('connection', async (socket) => {
 
         if (user) {
             socket.join(login);        
-            await user.comesOnline();
+            user.comesOnline();
         } else {
             console.log("Unauthorized connection attempt.");
             socket.disconnect('Unauthorized');
@@ -18,13 +18,13 @@ io.on('connection', async (socket) => {
         socket.on('disconnect', () => {
             io.of('/').in(login).clients(async function (err, clients) {
                 if (clients.length < 1) {
-                    await user.goesOffline();
+                    user.goesOffline();
                 }
             });
         });
 
         socket.on('message-send', async (data) => {
-            if (login) {
+            if (user) {
                 let to = data.to,
                     message = {
                         author: login,
@@ -33,11 +33,14 @@ io.on('connection', async (socket) => {
                     };
 
                 if (to && message.text && message.text !== "") {
-                    await Promise.all([
-                        Conversation.addMessage(to, login, message),
-                        notify('message', data.to, login, message.text)
-                    ]);
-                    io.to(login).emit('message-sent', message.text);
+                    try {
+                        await Conversation.addMessage(to, login, message);
+                        if (!(user.isBlockedBy(to)))
+                            notify('message', data.to, login, message.text);
+                        io.to(login).emit('message-sent', message.text);
+                    } catch(e) {
+                        console.log("Message not sent: " + e);
+                    }
                 }
             }
         });
