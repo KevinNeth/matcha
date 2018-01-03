@@ -115,8 +115,8 @@ function light(e) {
         // // console.log(user.setScore('like'));
         // // await user.update({$set: {orientation: "man"}});
         // console.log(user);
-        let user = await User.get('fake');
-        console.log(user);
+        let user = await User.get('womanman1');
+        console.log(user.matchedWith('nlowe'));
     } catch(e) {
         console.log(e);
     }

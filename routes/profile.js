@@ -27,7 +27,9 @@ router.get('/user/:login', auth, async (req, res) => {
                 pic3: user.pic3,
                 pic4: user.pic4,
                 score: user.score,
-                isLike: user.isLikedBy(req.user.login)
+                online: user.online,
+                isLike: req.user.hasLiked(user.login),
+                match: req.user.matchedWith(user.login)
             });
         } catch(e) {
             console.log(e);

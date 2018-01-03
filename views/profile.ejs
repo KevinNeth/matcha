@@ -4,23 +4,34 @@
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
             <img src= "/uploads/<%= profilepic %>" class="img-thumbnail"/>
+            <% if (match) { %>
+                <a href="/chat/<%= user %>"><button class="deleteInter btn btn-primary">Send a Message</button></a>
+            <% } %>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
             <div class="border row" id="prodiv_info">
                 <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
-                    <h4 class="card-title"><%= login %></h4><br>
+                    <div class="card-title">
+                        <h4 style="display:inline"><%= login %> </h4>
+                        <% if (match) { %>
+                            <span class="badge badge-pill badge-danger">You're a match!</span>
+                        <% } %>
+                        <% if (online) { %>
+                            <span class="badge badge-pill badge-success">Online</span>                        
+                        <% } %>
+                    </div>
                     <%= firstname %> <%= lastname %><br>
                     Age: <%= age %><br>
                     I'm a <%= gender %><br>
-                    Interest by: <%= orientation %><br>
+                    Interested in: <%= orientation %><br>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <% if (isLike !== true) { %>
-                        <a href="/profile/addLike/<%= user %>" method="post">
+                        <a href="/profile/addLike/<%= user %>">
                             <img src="/img/empty heart.jpg" alt="emptyheart" class="img-fluid">
                         </a>
                     <% } else { %>
-                        <a href="/profile/disLike/<%= user %>" method="post">
+                        <a href="/profile/disLike/<%= user %>">
                             <img src="/img/heart.jpg" alt="heart" class="img-fluid">
                         </a>
                     <% } %>
