@@ -17,9 +17,8 @@ io.on('connection', async (socket) => {
 
         socket.on('disconnect', () => {
             io.of('/').in(login).clients(async function (err, clients) {
-                if (clients.length < 1) {
+                if (clients.length < 1)
                     user.goesOffline();
-                }
             });
         });
 

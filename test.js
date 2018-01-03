@@ -3,7 +3,9 @@ const User = require('./models/user.js');
 const Conversation = require('./models/conversation.js');
 const SearchHelper = require('./controllers/searchHelper');
 
-
+function light(e) {
+    console.log(e);
+}
 
 (async () => {
     // try {
@@ -88,8 +90,8 @@ const SearchHelper = require('./controllers/searchHelper');
 //         results.sort(sortCommon);
 //         // let results = await users.find({}, { $project: { common: {$size: { $setIntersection: [["lol"], ['lol']]}}}}).toArray();
 //         console.log(results);
-        let name = '';
-        let user = await User.get(req.session.login);
+        // let name = '';
+        // let user = await User.get(req.session.login);
         // let search = new SearchHelper(user);
         // search.filterScore(undefined, 100);
         // console.log(search.query);
@@ -100,6 +102,20 @@ const SearchHelper = require('./controllers/searchHelper');
         // console.log(results);
         // let maxi = await db.max('users', 'shit');
         // console.log(maxi);
+        // let user1 = await User.get('womanman1');
+        // let user2 = await User.get('nlowe');
+
+        // user1.like('nlowe');
+        // user2.like('womanman1');
+        // // let search = await user.lookup('womanman1');
+        // // await user.like('womanman3');
+        // user.update({"$$set": "$$why"});
+        // console.log("test");
+        // // user.set('lolz', 'no');
+        // // console.log(user.setScore('like'));
+        // // await user.update({$set: {orientation: "man"}});
+        // console.log(user);
+        let user = await User.get('fake');
         console.log(user);
     } catch(e) {
         console.log(e);
