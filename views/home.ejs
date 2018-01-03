@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="home-search">
-                <label>Popularity</label>
+                <label>Popularity (score)</label>
             </div>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -114,10 +114,10 @@
     });
 
     noUiSlider.create(scoreSlider, {
-        start: [0, 100],
+        start: [0, <%= maxScore %>],
         range: {
             'min': [0],
-            'max': [100]
+            'max': [<%= maxScore %>]
         },
         format: wNumb({ decimals: 0 }),
         tooltips: [true, true],

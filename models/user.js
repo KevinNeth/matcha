@@ -102,7 +102,7 @@ class User {
                 if (target.hasLiked(this.login) && !(target.hasBlocked(this.login)))
                     notify('unlike', target.login, this.login);
 
-                target.update({ $pull: { likedBy: this.login }, ...target.setScore('like') });
+                target.update({ $pull: { likedBy: this.login }, ...target.setScore('unlike') });
                 await this.update({ $pull: {liked: target.login }});
             } catch (e) { console.log(e); }
         }
@@ -115,7 +115,10 @@ class User {
             if (!(target.hasBlocked(this.login)))
                 notify('view', target.login, this.login);
             
-            target.update({ $addToSet: { viewedBy: this.login }, ...target.setScore('view') });
+            let viewed = await db.findOne("users", {login: target.login, viewedBy: this.login});
+            if (!viewed) {
+                target.update({ $addToSet: { viewedBy: this.login }, ...target.setScore('view') });
+            }
             return target;
         } catch (e) { throw e }
     }

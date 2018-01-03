@@ -53,5 +53,10 @@ app.use('/profile', require("./routes/profile"));
 app.use('/myaccount', require("./routes/myaccount"));
 app.use('/notifications', require("./routes/notifications"));
 
+app.use((req, res, next) => {
+    res.status(404);
+    res.render('error');
+});
+
 server.listen(8080);
 console.log("Listening...");

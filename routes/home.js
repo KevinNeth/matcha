@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../controllers/auth');
 const SearchHelper = require('../controllers/searchHelper');
+const db = require('../models/db');
 
 router.get('/', auth, async (req, res, next) => {
 	try {
@@ -24,7 +25,11 @@ router.get('/', auth, async (req, res, next) => {
 		console.log(search.sortOption);
 		console.log(req.user.location);
 		let results = await search.results();
-		res.render('home', { info: results });
+		let maxScore = await db.max("users", "score");
+		res.render('home', {
+			info: results,
+			maxScore: maxScore
+		});
 	} catch (e) {
 		console.log(e);
 		res.redirect('/login');
