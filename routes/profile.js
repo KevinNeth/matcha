@@ -52,7 +52,7 @@ router.get('/addLike/:login', auth, async (req, res) => {
         res.redirect("/myaccount");
     else {
         try {
-            await req.user.liketest(req.params.login);
+            await req.user.like(req.params.login);
             res.redirect('/profile/user/' + req.params.login);                
         } catch(e) {
             console.log(e);
