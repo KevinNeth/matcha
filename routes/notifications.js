@@ -5,7 +5,7 @@ const Notification = require('../models/notification');
 const User = require('../models/user');
 const auth = require('../controllers/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     if (!req.session.login)
         res.redirect('/home');
     else {

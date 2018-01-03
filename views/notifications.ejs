@@ -26,7 +26,7 @@
         var socket = io();
 
         socket.on('notification', function (type, from, text) {
-            var link = ((type === 'message') ? ('/chat/' + from) : ('/profile/' + from));
+            var link = ((type === 'message') ? ('/chat/' + from) : ('/profile/user/' + from));
             $('#notifications').prepend('<a href="' + link + '"><li class="list-group-item">' + (from + text) + '</li></a>' );
         });
     });
