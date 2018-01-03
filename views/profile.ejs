@@ -70,6 +70,14 @@
             </div>
         <% } %>
     </div>
+    <div class="row justify-content-center">
+        <% if (score) { %>
+            <h1><%= score %></h1>
+        <% } else { %>
+            <h1>0</h1>
+        <% } %>
+        <img id="img-score" src="/img/star-icon.png"/>
+    </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class= "prodiv-map" id="map"></div>

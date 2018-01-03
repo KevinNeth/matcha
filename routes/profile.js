@@ -10,7 +10,6 @@ router.get('/user/:login', auth, async (req, res) => {
     else {
         try {
             const user = await req.user.view(req.params.login);
-            // console.log(user);
             res.render("profile", {
                 login: user.login,
                 firstname: user.firstname,
@@ -27,6 +26,7 @@ router.get('/user/:login', auth, async (req, res) => {
                 pic2: user.pic2,
                 pic3: user.pic3,
                 pic4: user.pic4,
+                score: user.score,
                 isLike: user.isLikedBy(req.user.login)
             });
         } catch(e) {
@@ -52,7 +52,7 @@ router.get('/addLike/:login', auth, async (req, res) => {
         res.redirect("/myaccount");
     else {
         try {
-            await req.user.like(req.params.login);
+            await req.user.liketest(req.params.login);
             res.redirect('/profile/user/' + req.params.login);                
         } catch(e) {
             console.log(e);
