@@ -33,7 +33,7 @@ class SearchHelper {
         let sortOptions = {
             age: this.sortAge,
             score: this.sortScore,
-            location: this.sortLocation,
+            distance: this.sortLocation,
             interest: this.sortInterests
         };
         if (option && sortOptions[option])
@@ -69,12 +69,12 @@ class SearchHelper {
         }
     };
 
-    sortAge(order = 1) {
-        this.sortOption = { birthday: (order * -1) };
+    sortAge() {
+        this.sortOption = { birthday: -1 };
     };
 
-    sortScore(order = 1) {
-        this.sortOption = { score: order };        
+    sortScore() {
+        this.sortOption = { score: 1 };
     };
 
     sortLocation() {
@@ -128,7 +128,7 @@ class SearchHelper {
             return false;
         else
             return true;
-    }
+    };
 
     //standard query helpers
     location() {

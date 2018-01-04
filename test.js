@@ -115,8 +115,11 @@ function light(e) {
         // // console.log(user.setScore('like'));
         // // await user.update({$set: {orientation: "man"}});
         // console.log(user);
-        let user = await User.get('womanman1');
-        console.log(user.matchedWith('nlowe'));
+        let user = await User.get('nlowe');
+        let query = new SearchHelper(user);
+        query.sort('interest');
+        let results = await query.results();
+        console.log(results);
     } catch(e) {
         console.log(e);
     }

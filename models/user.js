@@ -134,10 +134,6 @@ class User {
         let oldScore = this.score || 0;
         return { $set: { score: ( oldScore + this.scorePoints[action])}};
     }
-
-    async test() {
-        this.update({ "$$set": "$$why" });
-    }
 }
 
 module.exports = User;
