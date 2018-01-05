@@ -7,24 +7,37 @@ const db = require('../models/db');
 router.get('/', auth, async (req, res, next) => {
 	try {
 		let query = req.query;
+		console.log("-----");
 		console.log(query);
+		console.log("-----");
 		let search = new SearchHelper(req.user);
 
-		if (query.minAge || query.maxAge)
+		console.log(query.minAge);
+		if (query.minAge && query.maxAge) {
 			search.filterAge(query.minAge, query.maxAge);
-		if (query.minScore || query.maxScore)
-			search.filterScore(query.minScore, query.maxScore);
-		if (query.distance)
+			console.log("age");
+		}
+		if (query.minScore && query.maxScore) {
+			search.filterScore(parseInt(query.minScore), parseInt(query.maxScore));
+			console.log("Score");
+		}
+		if (query.distance) {
 			search.filterDistance(query.distance);
+			console.log("distance");
+		}
 		if (query.interest) {
 			let interest = query.interest.trim().split(/\s\s+/g);
 			search.filterInterests(interest);
 		}
 		search.sort(query.sort);
-		console.log(search.query);
-		console.log(search.sortOption);
-		console.log(req.user.location);
+		// console.log(search.query);
+		// console.log("-----");
+		// console.log(search.sortOption);
+		// console.log("-----");
+		// console.log(req.user.location);
+		// console.log("-----");
 		let results = await search.results();
+		console.log(results);
 		let maxScore = await db.max("users", "score");
 		res.render('home', {
 			info: results,
@@ -37,3 +50,22 @@ router.get('/', auth, async (req, res, next) => {
 });
 
 module.exports = router;
+
+// good basic
+
+// { login: { '$ne': 'manwoman1' },
+// firstConnection: false,
+// orientation: { '$in': [ 'man', 'both' ] },
+// blockedBy: { '$ne': 'manwoman1' },
+// gender: 'woman' }
+
+// problem
+
+// { login: { '$ne': 'manwoman1' },
+// firstConnection: false,
+// orientation: { '$in': [ 'man', 'both' ] },
+// blockedBy: { '$ne': 'manwoman1' },
+// gender: 'woman',
+// score: { '$gte': '0', '$lte': '170' },
+// location:
+//  { '$nearSphere': { '$geometry': [Object], '$maxDistance': 596000 } } }
