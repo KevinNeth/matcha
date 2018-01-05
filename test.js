@@ -116,10 +116,9 @@ function light(e) {
         // // await user.update({$set: {orientation: "man"}});
         // console.log(user);
         let user = await User.get('nlowe');
-        let query = new SearchHelper(user);
-        query.sort('interest');
-        let results = await query.results();
-        console.log(results);
+        let target = await user.view('womanman1');
+        console.log(target);
+        // console.log(user;
     } catch(e) {
         console.log(e);
     }

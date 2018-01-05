@@ -14,7 +14,7 @@ router.get('/', auth, async (req, res, next) => {
 
 		console.log(query.minAge);
 		if (query.minAge && query.maxAge) {
-			search.filterAge(query.minAge, query.maxAge);
+			search.filterAge(parseInt(query.minAge), parseInt(query.maxAge));
 			console.log("age");
 		}
 		if (query.minScore && query.maxScore) {
@@ -22,7 +22,7 @@ router.get('/', auth, async (req, res, next) => {
 			console.log("Score");
 		}
 		if (query.distance) {
-			search.filterDistance(query.distance);
+			search.filterDistance(parseInt(query.distance));
 			console.log("distance");
 		}
 		if (query.interest) {

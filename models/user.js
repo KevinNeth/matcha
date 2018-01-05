@@ -70,6 +70,10 @@ class User {
         return (this.hasLiked(target) && this.isLikedBy(target));
     }
 
+    wasViewedBy(target) {
+        return (this.viewedBy && Array.isArray(this.viewedBy) && this.viewedBy.includes(target));
+    }
+
     // user action methods
     async comesOnline() {
         await this.set('online', true);
@@ -111,16 +115,13 @@ class User {
     async view(to) {
         try {
             let target = await this.lookup(to);
-            
-            if (!(target.hasBlocked(this.login)))
-                notify('view', target.login, this.login);
-            
-            let viewed = await db.findOne("users", {login: target.login, viewedBy: this.login});
-            if (!viewed) {
-                target.update({ $addToSet: { viewedBy: this.login }, ...target.setScore('view') });
+            if (!(target.wasViewedBy(this.login))) {
+                if (!(target.hasBlocked(this.login)))
+                    notify('view', target.login, this.login);
+                target.update({ $addToSet: { viewedBy: this.login }, ...target.setScore('view') });                
             }
             return target;
-        } catch (e) { throw e }
+        } catch (e) { throw e; }
     }
 
     // utility methods
