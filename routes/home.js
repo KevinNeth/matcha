@@ -26,8 +26,10 @@ router.get('/', auth, async (req, res, next) => {
 			console.log("distance");
 		}
 		if (query.interest) {
-			let interest = query.interest.trim().split(/\s\s+/g);
-			search.filterInterests(interest);
+			if (query.interest.trim().replace(/\s+/g, "").length) {
+				let interest = query.interest.trim().replace(/\s+/g, " ").split(" ");
+				search.filterInterests(interest);
+			}
 		}
 		search.sort(query.sort);
 		// console.log(search.query);
