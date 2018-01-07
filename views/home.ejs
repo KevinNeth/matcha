@@ -52,21 +52,23 @@
     </div>
         <h1>Suggestion</h1>
         <div class="container border" style="padding-top:20px;">
+            <form action="/" method="get">
                 <div class="row text-center">
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <button type="submit" name="location" class="btn btn-primary">Location</button>
+                        <button type="submit" name="suggestion" value="location" class="btn btn-primary">Location</button>
                     </div>
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <button type="submit" name="age" class="btn btn-primary">Age</button>
+                        <button type="submit" name="suggestion" value="birthday" class="btn btn-primary">Age</button>
                     </div>
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <button type="submit" name="popularity" class="btn btn-primary">Popularity</button>
+                        <button type="submit" name="suggestion" value="score" class="btn btn-primary">Popularity</button>
                     </div>
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <button type="submit" name="interest" class="btn btn-primary">Interest</button>
+                        <button type="submit" name="suggestion" value ="interest" class="btn btn-primary">Interest</button>
                     </div>
                 </div>
-            </div>
+            </form>
+        </div>
     <div class="container" style="padding-top:20px;">
         <% if (info === "No data") { %>
             <p>NO DATA</p> 

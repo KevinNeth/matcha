@@ -31,9 +31,9 @@ class SearchHelper {
 
     sort(option) {
         let sortOptions = {
-            age: this.sortAge,
+            birthday: this.sortAge,
             score: this.sortScore,
-            distance: this.sortLocation,
+            location: this.sortLocation,
             interest: this.sortInterests
         };
         if (option && sortOptions[option])
@@ -74,7 +74,7 @@ class SearchHelper {
     };
 
     sortScore() {
-        this.sortOption = { score: 1 };
+        this.sortOption = { score: -1 };
     };
 
     sortLocation() {
@@ -82,7 +82,7 @@ class SearchHelper {
             Object.assign(this.query, {
                 location: {
                     $nearSphere: {
-                        $geometry: this.user.location
+                        $geometry: this.user.location,
                     }
                 }
             });
