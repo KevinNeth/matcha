@@ -1,6 +1,7 @@
 const Conversation = require('../models/conversation');
 const User = require('../models/user');
 const notify = require('./notifications.js');
+const escape = require('escape-html');
 
 io.on('connection', async (socket) => {
     try {
@@ -8,7 +9,7 @@ io.on('connection', async (socket) => {
             login = user.login;
 
         if (user) {
-            socket.join(login);        
+            socket.join(login);
             user.comesOnline();
         } else {
             console.log("Unauthorized connection attempt.");
@@ -28,7 +29,7 @@ io.on('connection', async (socket) => {
                     message = {
                         author: login,
                         time: new Date(),
-                        text: data.text
+                        text: escape(data.text)
                     };
 
                 if (to && message.text && message.text !== "") {

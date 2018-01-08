@@ -1,4 +1,5 @@
 const Notification = require('../models/notification');
+const escape = require('escape-html');
 
 text = {
     message: ' sent you a message.',
@@ -11,8 +12,8 @@ text = {
 module.exports = async (type, to, from, data = {}) => {
     try {
         if (type === 'message')
-            io.to(to).emit('message', from, data);
-        io.to(to).emit('notification', type, from, text[type]);
+            io.to(to).emit('message', escape(from), escape(data));
+        io.to(to).emit('notification', type, escape(from), escape(text[type]));
         await Notification.add(type, to, from, text[type]);
     } catch(e) {
         console.log("Notification error: " + e);

@@ -13,6 +13,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.7",
+    "escape-html": "^1.0.3",
     "express": "^4.15.4",
     "express-flash": "0.0.2",
     "express-session": "^1.15.5",

@@ -41,6 +41,24 @@ class SearchHelper {
     };
     
     //custom query filters
+    filterName(name) {
+        if (name) {
+            let names = name.split(' '),
+            queries = [];
+
+            names.forEach((name) => {
+                queries.push(new RegExp('.*' + name + '.*', 'i'));
+            });
+            Object.assign(this.query, {
+                $or: [
+                    { login: { $in: queries }},
+                    { firstname: { $in: queries }},
+                    { lastname: { $in: queries }}
+                ]
+            });
+        }
+    }
+
     filterAge(min, max) {
         if (this.notEmpty(min) || this.notEmpty(max))
             Object.assign(this.query, { birthday: this.between(this.yearsOld(max), this.yearsOld(min)) });
