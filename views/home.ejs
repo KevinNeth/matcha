@@ -70,11 +70,12 @@
             </form>
         </div>
     <div class="container" style="padding-top:20px;">
-        <% if (info === "No data") { %>
-            <p>NO DATA</p> 
-            <% }
-            else { 
-                for(var i=0; i < info.length; i++) { %>
+        <% if (info.length === 0) { %>
+            <div class="border text-center">
+                <p>We couldn't find any users matching what you're looking for.</p> 
+            </div>
+            <% } else { %>
+                <% for(var i=0; i < info.length; i++) { %>
                 <div class="row border" id ="bordersug">
                     <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                         <img src="/uploads/<%= info[i]['profilepic'] %>" class="img-thumbnail home-imgprofile">
