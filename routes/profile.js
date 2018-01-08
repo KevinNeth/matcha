@@ -10,7 +10,6 @@ router.get('/user/:login', auth, async (req, res) => {
     else {
         try {
             const user = await req.user.view(req.params.login);
-            console.log(user.lastConnection.toLocaleString());
             res.render("profile", {
                 login: user.login,
                 firstname: user.firstname,
@@ -34,7 +33,6 @@ router.get('/user/:login', auth, async (req, res) => {
                 match: req.user.matchedWith(user.login)
             });
         } catch(e) {
-            console.log("anselme");
             console.log(e);
             req.flash('error', "User not found");
             res.redirect('/home');
@@ -95,5 +93,23 @@ router.get('/block/:login', auth, async (req, res) => {
         }
     }
 });
+
+router.get('/report/:login', auth, async (req, res) => {
+    if (req.session.login === req.params.login)
+        res.redirect("/myaccount");
+    else {
+        try {
+            await db.insertOne('reports', { login: req.params.login });
+            req.flash('success', "Thank you for reporting " + req.params.login + ", an admin will check this account");
+            res.redirect('/home');
+        } catch (e) {
+            console.log(e);
+            req.flash('error', "User not found");
+            res.redirect('/home');
+        }
+    }
+});
+
+
 
 module.exports = router;
