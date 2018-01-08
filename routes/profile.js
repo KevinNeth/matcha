@@ -32,6 +32,7 @@ router.get('/user/:login', auth, async (req, res) => {
                 match: req.user.matchedWith(user.login)
             });
         } catch(e) {
+            console.log("anselme");
             console.log(e);
             req.flash('error', "User not found");
             res.redirect('/home');
