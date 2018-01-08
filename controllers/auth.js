@@ -7,7 +7,6 @@ module.exports = async (req, res, next) => {
         if (user.firstConnection === false) {
             req.user = user;
             res.locals.unread = await Notification.unreadCount(req.session.login);
-            console.log("User: " + req.user.login + ", Unread: " + res.locals.unread);
             next();
         } else {
             res.redirect('/firstConnection');
