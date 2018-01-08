@@ -60,10 +60,10 @@
 
         socket.on('message-sent', function(message) {
             $('#messages').append('<div class="text-right"><div class="message-bubble message-sent">' + message + '</div></div>');
-            $('#messages').scrollTop($('#messages')[0].scrollHeight); 
+            $('#messages').scrollTop($('#messages')[0].scrollHeight);
         });
 
-        socket.on('message', function (from, text) {
+        socket.on('message', function (from, message) {
             console.log(from, message);
             if (from === to) {
                 $('#messages').append('<div class="text-left"><div class="message-bubble message-received">' + message + '</div></div>');

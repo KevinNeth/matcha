@@ -80,17 +80,16 @@
                         <img src="/uploads/<%= info[i]['profilepic'] %>" class="img-thumbnail home-imgprofile">
                     </div>
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 home-imgprofile">
-                        <a href="/profile/user/<%= info[i]['login'] %>"><b><%= info[i]['login'] %></b></a><br>
-                        Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %><br>
-                        Bio : <%= info[i]['bio'].slice(0, 30) %> ...<br>
-                        Score : <%= info[i]['score'] %><br>
-                        Interests : 
+                        <a href="/profile/user/<%= info[i]['login'] %>"><h4><%= info[i]['login'] %></h4></a>
+                        <p>Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %></p>
+                        <p>Bio : <%= info[i]['bio'].slice(0, 30) %> ...</p>
+                        <p>Score : <%= info[i]['score'] %></p>
+                        <p>Interests : 
                             <% var arrInter = info[i]['interest']; 
                             for(var j=0; j < arrInter.length; j++) { %>
                                 #<%= arrInter[j] %>
                             <% } %>
-                        <br>
-                        <a href="/profile/user/<%= info[i]['login'] %>">View profile</a>
+                        </p>
                     </div>
                 </div>
             <% }
