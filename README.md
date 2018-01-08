@@ -2,8 +2,5 @@
 
 TODO LIST
 
-- Trier les suggestions.
-
-- Methode de recherche.
-
-- Chat.
+- Compatibility score for suggestions (N8)
+- List of users who have viewed and liked you on myaccount (KNETH)

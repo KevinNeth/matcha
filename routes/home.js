@@ -18,18 +18,14 @@ router.get('/', auth, async (req, res, next) => {
 		if (query.minScore && query.maxScore) {
 			search.filterScore(parseInt(query.minScore), parseInt(query.maxScore));
 		}
-		if (query.distance) {
-			search.filterDistance(parseInt(query.distance));
-		}
+		search.filterDistance(parseInt(query.distance || 1000));
 		if (query.interest) {
 			if (query.interest.trim().replace(/\s+/g, "").length) {
 				let interest = query.interest.trim().replace(/\s+/g, " ").split(" ");
 				search.filterInterests(interest);
 			}
 		}
-		if (query.suggestion) {
-			search.sort(query.suggestion);
-		}
+		search.sort(query.suggestion || 'interest');
 		let results = await search.results();
 		let maxScore = await db.max("users", "score");
 		res.render('home', {
