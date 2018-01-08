@@ -29,7 +29,7 @@ io.on('connection', async (socket) => {
                     message = {
                         author: login,
                         time: new Date(),
-                        text: escape(data.text)
+                        text: data.text
                     };
 
                 if (to && message.text && message.text !== "") {
@@ -37,7 +37,7 @@ io.on('connection', async (socket) => {
                         await Conversation.addMessage(to, login, message);
                         if (!(user.isBlockedBy(to)))
                             notify('message', data.to, login, message.text);
-                        io.to(login).emit('message-sent', message.text);
+                        io.to(login).emit('message-sent', escape(message.text));
                     } catch(e) {
                         console.log("Message not sent: " + e);
                     }
