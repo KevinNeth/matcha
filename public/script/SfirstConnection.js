@@ -15,7 +15,6 @@ function success(pos) {
         if (xhr.status === 200 || xhr.status === 0) {
           var string = xhr.responseText;
           var address = JSON.parse(string);
-          console.log(address);
           var tmpAddress = address['results'][0]['formatted_address'];
           insertTmpAddress(tmpAddress, crd.latitude, crd.longitude);
         }

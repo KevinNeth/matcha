@@ -241,7 +241,6 @@ router.post("/modifLocation", async (req, res) => {
     if (req.body.location) {
         const info = await geocoder.geocode(req.body.location);
         if (info[0]) {
-            console.log('ici');
             await db.updateOne("users", { login: req.session.login }, {
                  $set: {
                     tmpAddress: info[0].formattedAddress,

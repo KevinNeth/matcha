@@ -8,7 +8,6 @@ const User = await db.prepare('users');
 
 connect = async () => {
     let mongoUri = 'mongodb://' + options.user + ':' + options.pwd + '@' + options.host + ':' + options.port + '/' + options.dbName;
-    // console.log(mongoUri);
     return mongo.connect(mongoUri);
 };
 

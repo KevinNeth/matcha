@@ -5,7 +5,6 @@ const Conversation = require('../models/conversation');
 const User = require('../models/user');
 
 router.get('/:to', auth, async (req, res) => {
-    console.log(req.params);
     try {
         if (!(req.user.matchedWith(req.params.to)) || req.user.isBlockedBy(req.params.to))
             throw new Error('You are not authorized to chat with this user');

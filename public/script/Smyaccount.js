@@ -68,9 +68,7 @@ let changeGO = Array.from(document.getElementsByClassName('changeGO'));
 changeGO.forEach(function (change) {
     change.addEventListener("click", function () {
         let parent = change.parentNode.parentNode;
-        console.log(parent);
         let id = change.id;
-        console.log(id);
         while (parent.hasChildNodes()) {
             parent.removeChild(parent.lastChild);
         }
