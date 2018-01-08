@@ -17,6 +17,7 @@ class SearchHelper {
     async results() {
         try {
             if (this.sortOption instanceof Function) {
+                this.sortLocation();
                 let results = await db.find('users', this.query);
                 return this.sortOption(results);
             } else {
@@ -34,7 +35,8 @@ class SearchHelper {
             birthday: this.sortAge,
             score: this.sortScore,
             location: this.sortLocation,
-            interest: this.sortInterests
+            interest: this.sortInterests,
+            compatibility: this.sortCompatibility
         };
         if (option && sortOptions[option])
             (sortOptions[option]).call(this);
@@ -57,7 +59,7 @@ class SearchHelper {
                 ]
             });
         }
-    }
+    };
 
     filterAge(min, max) {
         if (this.notEmpty(min) || this.notEmpty(max))
@@ -117,6 +119,19 @@ class SearchHelper {
             results.sort(sorter);
             return results;
         };
+    };
+
+    sortCompatibility() {
+        this.sortOption = function(results) {
+            let sorter = (a, b) => b.compatibility - a.compatibility;
+            let tags = this.user.interest || [];
+            for (let i = 0; i < results.length; i++) {
+                results[i]['common'] = (results[i]['interest']) ? ((Array.from(results[i]['interest'])).filter((tag) => tags.includes(tag)).length) : 0;
+                results[i]['compatibility'] = ((results.length - i) * 5) + (results[i]['common'] * 10) + (results[i]['score'] * 2);
+            }
+            results.sort(sorter);
+            return results;
+        }
     };
 
     //utility functions

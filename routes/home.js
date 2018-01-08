@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res, next) => {
 				search.filterInterests(interest);
 			}
 		}
-		search.sort(query.suggestion || 'interest');
+		search.sort(query.suggestion || 'compatibility');
 		let results = await search.results();
 		let maxScore = await db.max("users", "score");
 		res.render('home', {
