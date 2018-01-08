@@ -47,7 +47,6 @@
                 to: to,
                 text: $('#message-text').val()
             };
-            console.log(message);
             socket.emit('message-send', message);
             $('#message-text').val('');
             return false;

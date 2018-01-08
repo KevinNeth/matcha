@@ -115,10 +115,16 @@ function light(e) {
         // // console.log(user.setScore('like'));
         // // await user.update({$set: {orientation: "man"}});
         // console.log(user);
-        let user = await User.get('nlowe');
-        let target = await user.view('womanman1');
-        console.log(target);
+        // let user = await User.get('nlowe');
+        // let target = await user.view('womanman1');
+        // console.log(target);
         // console.log(user;
+        let user = await User.get('nlowe');
+        let search = new SearchHelper(user);
+        search.filterName('lisa tran');
+        console.log(search.query);
+        let results = await search.results();
+        console.log(results);
     } catch(e) {
         console.log(e);
     }

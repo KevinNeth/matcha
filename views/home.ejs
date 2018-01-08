@@ -1,9 +1,10 @@
 <% include perm/SmallHeader %>
 
 <div class="container">
-    <h1>Search</h1>
+    <h2>Filters</h2>
     <div class="border">
         <form method="get">
+            <input id="searchQuery" type="hidden" name="query" value="<%= searchQuery %>">
             <div class="home-search">
                 <label>Age</label>
             </div>
@@ -39,20 +40,19 @@
                 </div>
                     <div class="row" style="margin-bottom:20px;">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <input name="interest" type="text" class="form-control" placeholder="Enter tags separated by spaces">
+                            <input name="interest" type="text" class="form-control" placeholder="Enter tags separated by spaces" value="<%= filterInterests %>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <input class="btn btn-block btn-primary" type="submit" value="Search">
+                            <input class="btn btn-block btn-primary" type="submit" value="Filter">
                         </div>
                     </div>
             </div>
-        </form>
     </div>
-        <h1>Suggestion</h1>
+    <br>
+        <h3>Sort By</h3>    
         <div class="container border" style="padding-top:20px;">
-            <form action="/" method="get">
                 <div class="row text-center">
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                         <button type="submit" name="suggestion" value="location" class="btn btn-primary">Location</button>
@@ -80,8 +80,10 @@
                         <img src="/uploads/<%= info[i]['profilepic'] %>" class="img-thumbnail home-imgprofile">
                     </div>
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 home-imgprofile">
+                        <a href="/profile/user/<%= info[i]['login'] %>"><b><%= info[i]['login'] %></b></a><br>
                         Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %><br>
                         Bio : <%= info[i]['bio'].slice(0, 30) %> ...<br>
+                        Score : <%= info[i]['score'] %><br>
                         Interests : 
                             <% var arrInter = info[i]['interest']; 
                             for(var j=0; j < arrInter.length; j++) { %>
@@ -99,12 +101,16 @@
 <script src="/script/nouislider.js"></script>
 <script src="/script/wNumb.js"></script>
 <script>
+    $('#searchInput').change(function(e) {
+        $('#searchQuery').val($('#searchInput').val());
+    });
+
     var ageSlider = document.getElementById('age-slider'),
         scoreSlider = document.getElementById('score-slider'),
         distanceSlider = document.getElementById('distance-slider');
 
     noUiSlider.create(ageSlider, {
-        start: [ 18, 100 ],
+        start: [ <%= filterMinAge %>, <%= filterMaxAge %> ],
         range: {
             'min': [  18 ],
             'max': [ 100 ]
@@ -116,7 +122,7 @@
     });
 
     noUiSlider.create(scoreSlider, {
-        start: [0, <%= maxScore %>],
+        start: [ <%= filterMinScore %>, <%= filterMaxScore %> ],
         range: {
             'min': [0],
             'max': [<%= maxScore %>]
@@ -128,7 +134,7 @@
     });
 
     noUiSlider.create(distanceSlider, {
-        start: [1000],
+        start: [<%= filterDistance %>],
         range: {
             'min': [0],
             'max': [1000]

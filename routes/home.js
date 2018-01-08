@@ -9,6 +9,9 @@ router.get('/', auth, async (req, res, next) => {
 		let query = req.query;
 		let search = new SearchHelper(req.user);
 
+		if (query.query) {
+			search.filterName(query.query);
+		}
 		if (query.minAge && query.maxAge) {
 			search.filterAge(parseInt(query.minAge), parseInt(query.maxAge));
 		}
@@ -31,7 +34,14 @@ router.get('/', auth, async (req, res, next) => {
 		let maxScore = await db.max("users", "score");
 		res.render('home', {
 			info: results,
-			maxScore: maxScore
+			maxScore: maxScore,
+			searchQuery: query.query || '',
+			filterMinAge: query.minAge || 18,
+			filterMaxAge: query.maxAge || 100,
+			filterMinScore: query.minScore || 0,
+			filterMaxScore: query.maxScore || maxScore,
+			filterDistance: query.distance || 0,
+			filterInterests: query.interest || ''
 		});
 	} catch (e) {
 		console.log(e);
