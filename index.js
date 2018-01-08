@@ -3,6 +3,7 @@ const app = express();
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
+const db = require('./models/db');
 io = require('socket.io').listen(server);
 
 const session = require('express-session')({
@@ -33,7 +34,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 require('./controllers/incoming');
 
 //Routes de base
@@ -59,4 +59,9 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(8080);
-console.log("Listening...");
+server.on('listening', async () => {
+    console.log("Listening...");
+    try {
+        await db.updateMany('users', {}, { $set: { online: false }});
+    } catch(e) { throw e; }
+});

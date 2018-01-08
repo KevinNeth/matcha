@@ -76,11 +76,17 @@ class User {
 
     // user action methods
     async comesOnline() {
-        await this.set('online', true);
+        this.update({ $set: {
+            online: true,
+            lastConnection: new Date()
+        }});
     }
 
     async goesOffline() {
-        await this.set('online', false);
+        this.update({ $set: {
+            online: true,
+            lastConnection: new Date()
+        }});
     }
 
     async like(to) {
@@ -108,6 +114,17 @@ class User {
 
                 target.update({ $pull: { likedBy: this.login }, ...target.setScore('unlike') });
                 await this.update({ $pull: {liked: target.login }});
+            } catch (e) { console.log(e); }
+        }
+    }
+
+    async block(to) {
+        if (!(this.hasBlocked(to))) {
+            try {
+                let target = await this.lookup(to);
+
+                target.update({ $addToSet: { blockedBy: this.login }});
+                await this.update({ $addToSet: { blocked: target.login } });
             } catch (e) { console.log(e); }
         }
     }

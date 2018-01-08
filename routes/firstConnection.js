@@ -70,7 +70,8 @@ router.post('/submit', async (req, res) => {
 							interest: newinterest,
 							profilepic: req.file.filename,
 							profilepicpath: req.file.path,
-							firstConnection: false
+							firstConnection: false,
+							lastConnection: new Date()
 						}
 					});
 					res.redirect('/home');

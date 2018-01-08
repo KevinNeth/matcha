@@ -66,7 +66,6 @@ router.get('/addLike/:login', auth, async (req, res) => {
 });
 
 router.get('/disLike/:login', auth, async (req, res) => {
-    console.log('ici');
     if (req.session.login === req.params.login)
         res.redirect("/myaccount");
     else {
@@ -86,7 +85,6 @@ router.get('/block/:login', auth, async (req, res) => {
     else {
         try {
             await req.user.block(req.params.login);
-            const user = await db.findOne('users', { login: req.params.login });
             req.flash('success', "You have successfully blocked " + req.params.login);
             res.redirect('/home');
         } catch (e) {
