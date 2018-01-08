@@ -10,6 +10,7 @@ router.get('/user/:login', auth, async (req, res) => {
     else {
         try {
             const user = await req.user.view(req.params.login);
+            console.log(user.lastConnection.toLocaleString());
             res.render("profile", {
                 login: user.login,
                 firstname: user.firstname,
@@ -28,6 +29,7 @@ router.get('/user/:login', auth, async (req, res) => {
                 pic4: user.pic4,
                 score: user.score,
                 online: user.online,
+                lastConnection: (user.lastConnection ? user.lastConnection.toLocaleString() : false),
                 isLike: req.user.hasLiked(user.login),
                 match: req.user.matchedWith(user.login)
             });

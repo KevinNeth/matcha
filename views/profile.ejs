@@ -18,6 +18,8 @@
                         <% } %>
                         <% if (online) { %>
                             <span class="badge badge-pill badge-success">Online</span>                        
+                        <% } else if (lastConnection) { %>
+                            <span class="badge badge-pill badge-secondary">Last seen: <%= lastConnection %></span>
                         <% } %>
                     </div>
                     <%= firstname %> <%= lastname %><br>
