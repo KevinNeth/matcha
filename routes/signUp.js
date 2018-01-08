@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
 });
 
 function validEmail(email) {
+	console.log("emailbit");
 	let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return regex.test(email);
 }
@@ -21,6 +22,11 @@ function validPassword(pwd) {
 	return regex.test(pwd);
 }
 
+function validLogin(login) {
+	console.log("test");
+	let regex = /^[a-z0-9]+$/i;
+	return regex.test(login);
+}
 // 1er check des inputs
 
 router.post('/submit', (req, res, next) => {
@@ -36,6 +42,10 @@ router.post('/submit', (req, res, next) => {
 	}
 	if (!validEmail(req.body.email)) {
 		req.flash("error", "Invalid email");
+		req.session.numErr += 1;
+	}
+	if (!validLogin(req.body.login)) {
+		req.flash("error", "Invalid login");
 		req.session.numErr += 1;
 	}
 	if (req.body.login.length < 4) {
