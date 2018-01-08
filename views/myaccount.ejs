@@ -89,6 +89,30 @@
                     </div>
                 </div>
             </form>
+            <h1>Who liked me ?</h1>
+            <div class="row myacc-divinter">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <%  for(var i=0; i < liker.length; i++) { %>
+                        <a href="/profile/user/<%= liker[i] %>">
+                            <button class="btn btn-primary">
+                                <%= liker[i] %>
+                            </button>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+            <h1>Who viewed me ?</h1>
+            <div class="row myacc-divinter">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <%  for(var i=0; i < viewer.length; i++) { %>
+                        <a href="/profile/user/<%= viewer[i] %>">
+                            <button class="btn btn-primary">
+                                <%= viewer[i] %>
+                            </button>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <% if (!pic1) { %>
