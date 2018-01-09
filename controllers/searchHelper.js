@@ -123,11 +123,11 @@ class SearchHelper {
 
     sortCompatibility() {
         this.sortOption = function(results) {
-            let sorter = (a, b) => b.compatibility - a.compatibility;
+            let sorter = (a, b) => b['compatibility'] - a['compatibility'];
             let tags = this.user.interest || [];
             for (let i = 0; i < results.length; i++) {
                 results[i]['common'] = (results[i]['interest']) ? ((Array.from(results[i]['interest'])).filter((tag) => tags.includes(tag)).length) : 0;
-                results[i]['compatibility'] = ((results.length - i) * 5) + (results[i]['common'] * 10) + (results[i]['score'] * 2);
+                results[i]['compatibility'] = (((results.length || 0) - i) * 5) + ((results[i]['common'] || 0) * 10) + ((results[i]['score'] || 0) * 2);
             }
             results.sort(sorter);
             return results;

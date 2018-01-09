@@ -81,10 +81,14 @@
                         <img src="/uploads/<%= info[i]['profilepic'] %>" class="img-thumbnail home-imgprofile">
                     </div>
                     <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 home-imgprofile">
-                        <a href="/profile/user/<%= info[i]['login'] %>"><h4><%= info[i]['login'] %></h4></a>
+                        <a href="/profile/user/<%= info[i]['login'] %>" style="text-decoration: none; color: inherit"><h4><%= info[i]['login'] %>
+                        <% if (typeof info[i]['compatibility'] !== 'undefined') { %>
+                            <span class="badge badge-pill badge-danger"><%= info[i]['compatibility'] %></span>
+                        <% } %>
+                        </h4></a>
                         <p>Name : <%= info[i]['firstname'] %> <%= info[i]['lastname'] %></p>
                         <p>Bio : <%= info[i]['bio'].slice(0, 30) %> ...</p>
-                        <p>Score : <%= info[i]['score'] %></p>
+                        <p>Popularity : <%= info[i]['score'] || '0' %></p>
                         <p>Interests : 
                             <% var arrInter = info[i]['interest']; 
                             for(var j=0; j < arrInter.length; j++) { %>
