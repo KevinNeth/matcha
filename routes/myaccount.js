@@ -132,8 +132,8 @@ router.post("/addInterest", auth, async (req, res) => {
 router.post("/profilepic", auth, async (req, res) => {
     const newPic = upload.single('profilepic');
     newPic(req, res, async (err) => {
-        if (err) {
-            req.flash('error', "Only image files are allowed");
+        if (err || !req.file) {
+            req.flash('error', "Please upload an image file (jpg/png)");
             res.redirect('/myaccount');
         }
         else {
@@ -154,8 +154,8 @@ router.post("/profilepic", auth, async (req, res) => {
 router.post("/addpic1", auth, async (req, res) => {
     const newPic = upload.single('pic1');
     newPic(req, res, async (err) => {
-        if (err) {
-            req.flash('error', "Only image files are allowed");
+        if (err || !req.file) {
+            req.flash('error', "Please upload an image file (jpg/png)");
             res.redirect('/myaccount');
         }
         else {
@@ -176,8 +176,8 @@ router.post("/addpic1", auth, async (req, res) => {
 router.post("/addpic2", async (req, res) => {
     const newPic = upload.single('pic2');
     newPic(req, res, async (err) => {
-        if (err) {
-            req.flash('error', "Only image files are allowed");
+        if (err || !req.file) {
+            req.flash('error', "Please upload an image file (jpg/png)");
             res.redirect('/myaccount');
         }
         else {
@@ -198,8 +198,8 @@ router.post("/addpic2", async (req, res) => {
 router.post("/addpic3", async (req, res) => {
     const newPic = upload.single('pic3');
     newPic(req, res, async (err) => {
-        if (err) {
-            req.flash('error', "Only image files are allowed");
+        if (err || !req.file) {
+            req.flash('error', "Please upload an image file (jpg/png)");
             res.redirect('/myaccount');
         }
         else {
@@ -220,8 +220,8 @@ router.post("/addpic3", async (req, res) => {
 router.post("/addpic4", async (req, res) => {
     const newPic = upload.single('pic4');
     newPic(req, res, async (err) => {
-        if (err) {
-            req.flash('error', "Only image files are allowed");
+        if (err || !req.file) {
+            req.flash('error', "Please upload an image file (jpg/png)");
             res.redirect('/myaccount');
         }
         else {
