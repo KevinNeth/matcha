@@ -33,7 +33,7 @@ router.post('/submit', async (req, res) => {
 			from: '"Matcha" <42matcha2017@gmail.com>',
 			to: req.body.email,
 			subject: 'Hello - Reset Password - Matcha',
-			html: '<p>Hello</p><br><p>To reset your password, click the link below<p><a href="' + req.hostname + '/reset/' + user._id + '">Reset password</a><br><br><br>Team Matcha'
+			html: '<p>Hello</p><br><p>To reset your password, click the link below<p><a href="http://localhost:8080/reset/' + user._id + '">Reset password</a><br><br><br>Team Matcha'
 		}
 
 		transporter.sendMail(mailOptions, (error, info) => {
