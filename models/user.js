@@ -84,7 +84,7 @@ class User {
 
     async goesOffline() {
         this.update({ $set: {
-            online: true,
+            online: false,
             lastConnection: new Date()
         }});
     }
